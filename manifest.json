@@ -1,0 +1,6 @@
+{
+  "name": "music_s",
+  "short_name": "music_s",
+  "start_url": "/",
+  "display": "standalone"
+}
