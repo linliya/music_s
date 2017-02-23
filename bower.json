@@ -3,7 +3,11 @@
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "paper-tabs": "^1.8.0"
+    "paper-tabs": "^1.8.0",
+    "paper-toolbar": "^1.1.7",
+    "paper-input": "^1.1.23",
+    "paper-styles": "^1.1.5",
+    "iron-icons": "^1.2.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

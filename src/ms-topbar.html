@@ -1,24 +1,90 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+
 
 
 <dom-module id="ms-topbar">
   <template>
     <style>
+      html, body, div, header {
+        margin: 0;
+        padding: 0;
+      }
+
+      #wrap {
+        background: #2e2e2e;
+        height: 64px;
+      }
+
+      header {
+        width: 1000px;
+        margin: 0 auto;
+      }
+
+      #logo {
+        width: 200px;
+      }
+
+      paper-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        text-align: center;
+        --paper-toolbar-background: #2e2e2e;
+      }
+
       paper-tabs {
+        --paper-tabs-selection-bar-color: #BDBDBD;
         width: 400px;
-        height: 100px;
+      }
+
+      #searchBox {
+        width: 320px;
+        position: relative;
+      }
+
+      #search {
+        box-sizing: border-box;
+        width: 300px;
+        padding-left: 40px;
+        padding-right: 16px;
+        line-height: 40px;
+        border: none;
+        border-radius: 4px;
+        margin: 0;
+        margin-bottom: 8px;
+        background: #ccc;
+        font-family: var(--theme-font);
+        font-size: 16px;
+        color: var(--theme-blue-grey);
+      }
+
+      iron-icon {
+        position: absolute;
+        left: 20px;
+        top: 10px;
       }
     </style>
+
     <div id="wrap">
-      <h1 id="logo">
-        <a href="#">logo</a>
-      </h1>
-      <paper-tabs selected="0">
-        <paper-tab>发现音乐</paper-tab>
-        <paper-tab>我的音乐</paper-tab>
-      </paper-tabs>
+      <header>
+        <paper-toolbar>
+          <span id="logo">logo</span>
+          <paper-tabs selected="0" noink>
+            <paper-tab>发现音乐</paper-tab>
+            <paper-tab>我的音乐</paper-tab>
+          </paper-tabs>
+          <div id="searchBox">
+            <input id="search" type="text" placeholder="search">
+            <iron-icon icon="search"></iron-icon>
+          </div>
+        </paper-toolbar>
+      </header>
     </div>
   </template>
   <script>
