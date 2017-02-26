@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="ms-content-top-item">
+  <template>
+    <style>
+      ul li {
+        list-style: none;
+        width: 170px;
+        height: 240px;
+        flex: auto;
+      }
+
+      ul li a {
+        display: inline-block;
+        position: relative;
+      }
+
+      .imgBottom {
+        display: inline-block;
+        width: 100%;
+        height: 26px;
+        background: rgba(0, 0, 0, 0.6);
+        position: absolute;
+        bottom: 4px;
+        border-top: 1px solid #000;
+        z-index: 10;
+        color: #f00;
+        font-size: 12px;
+        line-height: 26px;
+      }
+    </style>
+
+    <li>
+      <a href="#">
+        <img src="../../images/test.jpg">
+        <span class="imgBottom">
+          <iron-icon icon="hardware:headset"></iron-icon>
+          <span>[[listenerNum]]</span>
+        </span>
+      </a>
+    </li>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-content-top-item',
+      properties: {
+        listenerNum: {
+          type: String,
+          value: '100万'
+        }
+      }
+    });
+  </script>
+</dom-module>
