@@ -1,0 +1,271 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+
+
+
+<dom-module id="ms-content-bottom">
+  <template>
+    <style>
+      #wrap {
+        width: 1000px;
+        margin: 0 auto;
+        border: 1px solid blue;
+        background: #fff;
+      }
+
+      paper-toolbar {
+        width: 700px;
+        --paper-toolbar-background: #fff;
+        color: #333;
+        position: relative;
+      }
+
+      #more {
+        position: absolute;
+        right: 20px;
+        font-size: 12px;
+      }
+
+      #more iron-icon {
+        width: 16px;
+        color: #f00;
+      }
+
+      #list {
+        width: 650px;
+        display: flex;
+        margin-left: 40px;
+        border: 1px solid #ddd;
+
+      }
+
+      paper-listbox {
+        margin: 0;
+        padding: 0;
+        width: 230px;
+        --paper-listbox-background-color: #f4f4f4;
+        border-right: 1px solid #ddd;
+      }
+
+      span.titleSpe{
+        color: #f00;
+      }
+
+      span.song {
+        padding-left: 4px;
+      }
+
+      span.song:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+
+      paper-item {
+        min-height: 32px;
+        font-size: 12px;
+      }
+
+      paper-item:nth-child(2n) {
+        background: #e8e8e8;
+      }
+
+      .listTitle img {
+        width: 80px;
+        height: 80px;
+        padding: 15px 10px 20px 15px;
+      }
+
+      .listTitle {
+        display: flex;
+        justify-content: space-around;
+        font-size: 14px;
+      }
+
+      .listTitle a {
+        display: inline-block;
+        text-decoration: none;
+        color: #333;
+        padding-top: 30px;
+        font-weight: bold;
+      }
+
+
+    </style>
+    <div id="wrap">
+
+      <paper-toolbar>
+        <paper-icon-button icon="av:album"></paper-icon-button>
+        <span>榜单</span>
+        <span id="more">更多<iron-icon icon="arrow-forward"></iron-icon></span>
+      </paper-toolbar>
+
+      <div id="list">
+        <paper-listbox>
+          <div class="listTitle">
+            <img src="../images/left.jpg">
+            <div class="text">
+              <a href="#">音乐飙升榜</a>
+              <iron-icon icon="av:play-circle-outline"></iron-icon>
+              <iron-icon icon="av:queue-play-next"></iron-icon>
+            </div>
+          </div>
+          <paper-item>
+            <span class="titleSpe">1</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">2</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">3</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>4</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>5</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>6</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>7</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>8</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>9</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>10</span>
+            <span class="song">歌名</span>
+          </paper-item>
+        </paper-listbox>
+
+        <paper-listbox>
+          <div class="listTitle">
+            <img src="../images/center.jpg">
+            <div class="text">
+              <a href="#">音乐新歌榜</a>
+              <iron-icon icon="av:play-circle-outline"></iron-icon>
+              <iron-icon icon="av:queue-play-next"></iron-icon>
+            </div>
+          </div>
+          <paper-item>
+            <span class="titleSpe">1</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">2</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">3</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>4</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>5</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>6</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>7</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>8</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>9</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>10</span>
+            <span class="song">歌名</span>
+          </paper-item>
+        </paper-listbox>
+
+        <paper-listbox>
+          <div class="listTitle">
+            <img src="../images/last.jpg">
+            <div class="text">
+              <a href="#">音乐原创榜</a>
+              <iron-icon icon="av:play-circle-outline"></iron-icon>
+              <iron-icon icon="av:queue-play-next"></iron-icon>
+            </div>
+          </div>
+          <paper-item>
+            <span class="titleSpe">1</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">2</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span class="titleSpe">3</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>4</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>5</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>6</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>7</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>8</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>9</span>
+            <span class="song">歌名</span>
+          </paper-item>
+          <paper-item>
+            <span>10</span>
+            <span class="song">歌名</span>
+          </paper-item>
+        </paper-listbox>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-content-bottom'
+    });
+  </script>
+</dom-module>
