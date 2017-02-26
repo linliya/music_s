@@ -23,7 +23,6 @@
         width: 1000px;
         height: 50px;
         margin: 0 auto;
-        border: 1px solid #fff;
       }
 
       #logo {
@@ -33,7 +32,6 @@
       paper-toolbar {
         display: flex;
         align-items: center;
-        justify-content: space-around;
         text-align: center;
         --paper-toolbar-background: #2e2e2e;
         height: 50px;
@@ -78,7 +76,7 @@
       <header>
         <paper-toolbar>
           <span id="logo">logo</span>
-          <paper-tabs selected="0" noink>
+          <paper-tabs selected="0" noink no-bar>
             <paper-tab active>发现音乐</paper-tab>
             <paper-tab>我的音乐</paper-tab>
           </paper-tabs>

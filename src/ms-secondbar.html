@@ -1,0 +1,48 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+<dom-module id="ms-secondbar">
+  <template>
+    <style>
+      #wrap {
+        height: 35px;
+        background-color: #ba0b0b;
+        position: relative;
+      }
+
+      #content {
+        width: 1000px;
+        color: #fff;
+        margin: 0 auto;
+        padding-left: 400px;
+      }
+
+      paper-tab, paper-tabs {
+        height: 35px;
+      }
+
+      paper-tabs {
+        position: absolute;
+        width: 600px;
+        font-size: 12px;
+      }
+
+    </style>
+    <div id="wrap">
+      <div id="content">
+        <paper-tabs selected="0" noink no-bar>
+          <paper-tab focused>推荐</paper-tab>
+          <paper-tab>排行榜</paper-tab>
+          <paper-tab>歌单</paper-tab>
+          <paper-tab>歌手</paper-tab>
+        </paper-tabs>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-secondbar'
+    });
+  </script>
+</dom-module>

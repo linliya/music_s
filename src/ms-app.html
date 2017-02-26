@@ -1,28 +1,27 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <link rel="import" href="./ms-topbar.html">
+<link rel="import" href="./ms-secondbar.html">
+<link rel="import" href="./ms-nav.html">
+
 
 <dom-module id="ms-app">
   <template>
     <style>
       :host {
         display: block;
+        font-family: '微软雅黑';
       }
     </style>
     <ms-topbar></ms-topbar>
+    <ms-secondbar></ms-secondbar>
+    <ms-nav></ms-nav>
   </template>
 
   <script>
     Polymer({
 
-      is: 'ms-app',
-
-      properties: {
-        prop1: {
-          type: String,
-          value: 'ms-app',
-        },
-      },
+      is: 'ms-app'
 
     });
   </script>
