@@ -5,39 +5,55 @@
 <dom-module id="ms-secondbar">
   <template>
     <style>
+
       #wrap {
-        height: 35px;
         background-color: #ba0b0b;
-        position: relative;
       }
 
-      #content {
+      paper-toolbar {
         width: 1000px;
-        color: #fff;
         margin: 0 auto;
-        padding-left: 460px;
+        height: 35px;
+        --paper-toolbar-background: #ba0b0b;
+        display: flex;
+        align-items: center;
       }
 
       paper-tab, paper-tabs {
-        height: 35px;
+        height: 28px;
       }
 
       paper-tabs {
-        position: absolute;
-        width: 600px;
         font-size: 12px;
+        width: 400px;
+        padding-left: 268px;
+      }
+
+      paper-tab {
+        margin-right: 38px;
+      }
+
+      #activeTab {
+        border-radius: 20px;
+        background: #8e0303;
+        font-weight: bold;
+      }
+
+      paper-tab:hover {
+        border-radius: 20px;
+        background: #8e0303;
       }
 
     </style>
     <div id="wrap">
-      <div id="content">
+      <paper-toolbar>
         <paper-tabs selected="0" noink no-bar>
-          <paper-tab focused>推荐</paper-tab>
+          <paper-tab id="activeTab" pressed>推荐</paper-tab>
           <paper-tab>排行榜</paper-tab>
           <paper-tab>歌单</paper-tab>
           <paper-tab>歌手</paper-tab>
         </paper-tabs>
-      </div>
+      </paper-toolbar>
     </div>
   </template>
   <script>

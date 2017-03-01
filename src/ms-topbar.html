@@ -42,6 +42,14 @@
         width: 400px;
       }
 
+      #activeTab {
+        font-weight: bold;
+      }
+
+      paper-tab:hover {
+        background: #242323;
+      }
+
       #searchBox {
         width: 220px;
         height: 30px;
@@ -76,8 +84,8 @@
       <header>
         <paper-toolbar>
           <span id="logo">logo</span>
-          <paper-tabs selected="0" noink no-bar>
-            <paper-tab active>发现音乐</paper-tab>
+          <paper-tabs id="tabs" selected="0" noink no-bar>
+            <paper-tab id="activeTab" active>发现音乐</paper-tab>
             <paper-tab>我的音乐</paper-tab>
           </paper-tabs>
           <div id="searchBox">
