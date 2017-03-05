@@ -11,7 +11,8 @@
     "paper-icon-button": "^1.1.4",
     "iron-icon": "^1.0.12",
     "paper-listbox": "^1.1.2",
-    "paper-item": "^1.2.1"
+    "paper-item": "^1.2.1",
+    "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^1.2.9"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

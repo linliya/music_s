@@ -1,19 +1,33 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/l2t-paper-slider/l2t-paper-slider.html">
+
 <dom-module id="ms-nav">
   <template>
     <style>
       #wrap {
         width: 100%;
-        height: 380px;
+        height: 336px;
         border: 1px solid #000;
+      }
+
+      l2t-paper-slider {
+        --paper-slide-width: 730px;
+        --paper-slide-height: 336px;
+        --paper-slide-dot-selected: #c00c0c;
+        --paper-slide-dot-styles: {
+            width: 8px;
+            height: 8px;
+        }
       }
 
       #content {
         position: relative;
         width: 1000px;
-        height: 380px;
-        border: 1px solid #000;
+        height: 336px;
         margin: 0 auto;
+        display: flex;
+        justify-content: center;
       }
 
       span {
@@ -21,33 +35,87 @@
         height: 64px;
         background: #eee;
         font-size: 30px;
-        margin-top: -32px;
-        line-height: 64px;
-        text-align: center;
+        margin-top: -52px;
+        cursor: pointer;
       }
 
       #pre {
         position: absolute;
         left: -50px;
         top: 50%;
+        background: url('../images/banner.png') no-repeat;
+        background-position: 0 -430px;
       }
 
       #next {
         position: absolute;
         right: -50px;
         top: 50%;
+        background: url('../images/banner.png') no-repeat;
+        background-position: 0 -580px;
       }
     </style>
+
     <div id="wrap">
       <div id="content">
-        <span id="pre">&lt;</span>
-        <span id="next">&gt;</span>
+        <l2t-paper-slider id="slider" total-slides="6" auto-progress>
+          <paper-slide style="background: url('../images/bannerImg1.png');"></paper-slide>
+          <paper-slide style="background: url('../images/bannerImg2.png');"></paper-slide>
+          <paper-slide style="background: url('../images/bannerImg3.png');"></paper-slide>
+          <paper-slide style="background: url('../images/bannerImg4.png');"></paper-slide>
+          <paper-slide style="background: url('../images/bannerImg5.png');"></paper-slide>
+          <paper-slide style="background: url('../images/bannerImg6.png');"></paper-slide>
+        </l2t-paper-slider>
+        <span id="pre" on-tap="prev"></span>
+        <span id="next"on-tap="next"></span>
       </div>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'ms-nav'
+      is: 'ms-nav',
+      properties: {
+        position: {
+          type: Number,
+          notify: true,
+          observer: '_observerPosition'
+        },
+
+        bgSrc: {
+          type: String,
+          notify: true,
+          computed: '_computedBg(position)'
+        }
+      },
+
+      _observerPosition() {
+        return this.$.slider.position;
+      },
+
+      _computedBg(position) {
+        switch (position) {
+          case 0:
+            return '../images/bannerBg1.png';
+          case 1:
+            return '../images/bannerBg2.png';
+          case 2:
+            return '../images/bannerBg3.png';
+          case 3:
+            return '../images/bannerBg4.png';
+          case 4:
+            return '../images/bannerBg5.png';
+          case 5:
+            return '../images/bannerBg6.png';
+        }
+      },
+
+      prev() {
+        this.$.slider.movePrev();
+      },
+
+      next() {
+        this.$.slider.moveNext();
+      }
     });
   </script>
 </dom-module>
