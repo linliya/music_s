@@ -1,0 +1,126 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<dom-module id="ms-register-dialog">
+  <template>
+    <style>
+      paper-dialog {
+        margin: 0;
+        padding: 0;
+        border-radius: 3px 3px 0 0;
+        width: 530px;
+        height: 300px;
+      }
+
+      paper-dialog > header {
+        margin: 0;
+      }
+
+      header {
+        box-sizing: border-box;
+        background-color: #2d2d2d;
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);
+        line-height: 38px;
+        color: #fff;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header iron-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: -8px;
+        cursor: pointer;
+      }
+
+      #content {
+        width: 250px;
+        margin: 0 auto;
+      }
+
+      paper-button {
+        width: 250px;
+        margin-top:20px;
+        color: #fff;
+        background: var(--paper-blue-500);
+      }
+
+      #text {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      a {
+        text-decoration: none;
+        color: #333;
+        font-size: 12px;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      #register {
+        color: var(--paper-blue-700);
+      }
+    </style>
+    <paper-dialog id="loginDialog" opened="{{opened}}" with-backdrop no-cancel-on-outside-click>
+      <header>
+        <span>用户注册</span>
+        <iron-icon icon="close" on-tap="close"></iron-icon>
+      </header>
+      <div id="content">
+        <paper-input label="请输入手机号"
+                     auto-validate
+                     required
+                     pattern="[[_phoneReg]]"
+                     error-message="请输入正确的手机号"></paper-input>
+        <paper-input label="请输入密码"
+                     type="password"
+                     auto-validate
+                     required
+                     pattern="[[_pwdReg]]"
+                     error-message="密码由6-16位数字和字母组成"></paper-input>
+        <paper-button raised>下一步</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-register-dialog',
+      properties: {
+        opened: {
+          type: Boolean,
+          notify: true
+        },
+
+        _phoneReg: {
+          type: String,
+          value: '^1(3|4|5|7|8)[0-9][0-9]{8}$',
+          notify: true
+        },
+
+        _pwdReg: {
+          type: String,
+          value: '[a-zA-Z0-9_]{6,16}',
+          notify: true
+        }
+      },
+
+      open() {
+        this.opened = true;
+      },
+
+      close() {
+        this.opened = false;
+      }
+    });
+  </script>
+</dom-module>
