@@ -9,7 +9,7 @@
         width: 100%;
         height: 336px;
         border: 1px solid #000;
-        background: url('../images/bannerBg1.png');
+        background-image: url('../images/bannerBg1.png');
       }
 
       l2t-paper-slider {
@@ -63,10 +63,11 @@
     <div id="wrap">
       <div id="content">
         <div id="container">
-          <l2t-paper-slider id="slider" total-slides="3" auto-progress>
+          <l2t-paper-slider id="slider" total-slides="3" auto-progress position="[[position]]" on-change="_handleChange">
             <paper-slide style="background: url('../images/bannerImg1.jpg')"></paper-slide>
             <paper-slide style="background: url('../images/bannerImg2.jpg');"></paper-slide>
             <paper-slide style="background: url('../images/bannerImg3.jpg');"></paper-slide>
+
           </l2t-paper-slider>
           <span id="pre" on-tap="prev"></span>
           <span id="next"on-tap="next"></span>
@@ -78,6 +79,28 @@
     Polymer({
       is: 'ms-nav',
       properties: {
+        position: {
+          type: Number,
+          notify: true
+        },
+
+        bgSrc: {
+          type: String,
+          notify: true,
+          computed: '_computedPosition(position)'
+        }
+      },
+
+      _computedPosition(position) {
+        if(position === 1) {
+          return '../images/bannerBg2.png';
+        } else if(position === 2)  {
+          return '../images/bannerBg3.png';
+        }
+      },
+
+      _handleChange() {
+        this.$.wrap.style.backgroundImage = this.bgSrc;
       },
 
       prev() {

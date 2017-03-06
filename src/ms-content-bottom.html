@@ -4,11 +4,10 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 
-
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
 
 <dom-module id="ms-content-bottom">
   <template>
@@ -31,6 +30,7 @@
         position: absolute;
         right: 20px;
         font-size: 12px;
+        cursor: pointer;
       }
 
       #more iron-icon {
@@ -87,6 +87,7 @@
         display: flex;
         justify-content: space-around;
         font-size: 14px;
+        outline: none;
       }
 
       .listTitle a {
@@ -97,12 +98,28 @@
         font-weight: bold;
       }
 
+      #avIcon {
+        padding-right: 10px;
+        color: #b50b0b;
+      }
+
+      .icons {
+        margin-top: 4px;
+      }
+
+      .icons iron-icon {
+        color: #333;
+        width: 20px;
+        height: 20px;
+        margin-right: 4px;
+        cursor: pointer;
+      }
 
     </style>
     <div id="wrap">
 
       <paper-toolbar>
-        <paper-icon-button icon="av:album"></paper-icon-button>
+        <iron-icon icon="av:album" id="avIcon"></iron-icon>
         <span>榜单</span>
         <span id="more">更多<iron-icon icon="arrow-forward"></iron-icon></span>
       </paper-toolbar>
@@ -113,8 +130,10 @@
             <img src="../images/left.jpg">
             <div class="text">
               <a href="#">音乐飙升榜</a>
-              <iron-icon icon="av:play-circle-outline"></iron-icon>
-              <iron-icon icon="av:queue-play-next"></iron-icon>
+              <div class="icons">
+                <iron-icon icon="av:play-circle-outline"></iron-icon>
+                <iron-icon icon="av:queue-play-next"></iron-icon>
+              </div>
             </div>
           </div>
           <paper-item>
@@ -164,8 +183,10 @@
             <img src="../images/center.jpg">
             <div class="text">
               <a href="#">音乐新歌榜</a>
-              <iron-icon icon="av:play-circle-outline"></iron-icon>
-              <iron-icon icon="av:queue-play-next"></iron-icon>
+              <div class="icons">
+                <iron-icon icon="av:play-circle-outline"></iron-icon>
+                <iron-icon icon="av:queue-play-next"></iron-icon>
+              </div>
             </div>
           </div>
           <paper-item>
@@ -215,8 +236,10 @@
             <img src="../images/last.jpg">
             <div class="text">
               <a href="#">音乐原创榜</a>
-              <iron-icon icon="av:play-circle-outline"></iron-icon>
-              <iron-icon icon="av:queue-play-next"></iron-icon>
+              <div class="icons">
+                <iron-icon icon="av:play-circle-outline"></iron-icon>
+                <iron-icon icon="av:queue-play-next"></iron-icon>
+              </div>
             </div>
           </div>
           <paper-item>
