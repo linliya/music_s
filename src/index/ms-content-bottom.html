@@ -1,29 +1,29 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
 
 <dom-module id="ms-content-bottom">
   <template>
     <style>
       #wrap {
-        width: 1000px;
+        width: 960px;
         margin: 0 auto;
-        border: 1px solid blue;
         background: #fff;
       }
 
       paper-toolbar {
-        width: 700px;
+        width: 960px;
         --paper-toolbar-background: #fff;
         color: #333;
         position: relative;
+        padding: 0 8px 0 12px;
       }
 
       #more {
@@ -39,17 +39,15 @@
       }
 
       #list {
-        width: 650px;
+        width: 960px;
         display: flex;
-        margin-left: 40px;
-        border: 1px solid #ddd;
-
+        justify-content: center;
       }
 
       paper-listbox {
         margin: 0;
         padding: 0;
-        width: 230px;
+        width: 300px;
         --paper-listbox-background-color: #f4f4f4;
         border-right: 1px solid #ddd;
       }
@@ -85,7 +83,6 @@
 
       .listTitle {
         display: flex;
-        justify-content: space-around;
         font-size: 14px;
         outline: none;
       }
@@ -95,7 +92,10 @@
         text-decoration: none;
         color: #333;
         padding-top: 30px;
-        font-weight: bold;
+      }
+
+      .text {
+        margin-left: 10px;
       }
 
       #avIcon {
@@ -127,7 +127,7 @@
       <div id="list">
         <paper-listbox>
           <div class="listTitle">
-            <img src="../images/left.jpg">
+            <img src="../../images/left.jpg">
             <div class="text">
               <a href="#">音乐飙升榜</a>
               <div class="icons">
@@ -180,7 +180,7 @@
 
         <paper-listbox>
           <div class="listTitle">
-            <img src="../images/center.jpg">
+            <img src="../../images/center.jpg">
             <div class="text">
               <a href="#">音乐新歌榜</a>
               <div class="icons">
@@ -233,7 +233,7 @@
 
         <paper-listbox>
           <div class="listTitle">
-            <img src="../images/last.jpg">
+            <img src="../../images/last.jpg">
             <div class="text">
               <a href="#">音乐原创榜</a>
               <div class="icons">
