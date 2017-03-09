@@ -1,11 +1,152 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
+<link rel="import" href=".././index/ms-footer.html">
+
 
 <dom-module id="ms-me-edit">
   <template>
-    <style></style>
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    <style>
+      ms-topbar:after {
+        content: '';
+        display: block;
+        border-bottom: 4px solid #ba0b0b;
+      }
+
+      #wrap {
+        width: 960px;
+        margin: 0px auto;
+        border: 1px solid #ccc;
+        background: #fff;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        color: #666;
+        font-size: 14px;
+      }
+
+      header {
+        width: 900px;
+        padding: 0 20px;
+        margin: 0 auto;
+      }
+
+      h3 {
+        border-bottom: 1px solid #ddd;
+        padding: 8px 0;
+        font-size: 24px;
+        color: #333;
+        font-weight: normal;
+        font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+      }
+
+      #msg {
+        display: flex;
+        justify-content: space-around;
+        width: 480px;
+      }
+
+      #text section{
+        display: flex;
+        justify-content: flex-start;
+        line-height: 28px;
+        margin-bottom: 10px;
+      }
+
+      #text section span {
+        width: 50px;
+        margin: 0 10px 0 30px;
+      }
+
+      #text input[type='date'] {
+        width: 169px;
+      }
+
+      #save {
+        width: 60px;;
+        height:28px;
+        border: none;
+        outline: none;
+        color: #fff;
+        border-radius: 4px;
+        background: #3677d8;
+        margin: 10px 0 30px 30px;
+        cursor: pointer;
+      }
+
+      #save:hover {
+        background: #1e63c1;
+      }
+
+      #photo {
+        height: 140px;
+        position: relative;
+        text-align: center;
+      }
+
+      #changePhoto {
+        width: 140px;
+        height: 28px;
+        background: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        line-height: 28px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      #changePhoto:hover {
+        text-decoration: underline;
+      }
+
+
+    </style>
+    <ms-topbar></ms-topbar>
+
+    <div id="wrap">
+      <header>
+        <h3>个人设置</h3>
+      </header>
+
+      <section id="msg">
+        <section id="text">
+          <section>
+            <span>昵称:</span>
+            <input is="iron-input">
+          </section>
+
+          <section>
+            <span>爱好:</span>
+            <textarea name="name" rows="6" cols="19"></textarea>
+          </section>
+
+          <section>
+            <span>性别:</span>
+            <input type="radio" name="sex" checked="">男
+            <input type="radio" name="sex">女
+            <input type="radio" name="sex">保密
+          </section>
+
+          <section>
+            <span>生日:</span>
+            <input type="date" id="date">
+          </section>
+
+          <section>
+            <span>地区:</span>
+            <input>
+          </section>
+          <button type="button" name="button" id="save">保存</button>
+        </section>
+
+        <section id="photo">
+          <img src="../../images/me_photo.jpg" width="140px" height="140px">
+          <span id="changePhoto">更换头像</span>
+        </section>
+      </section>
+    </div>
   </template>
   <script>
     Polymer({

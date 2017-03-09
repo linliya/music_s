@@ -18,7 +18,7 @@
     </app-route>
 
     <iron-pages attr-for-selected="id" selected="{{_routeData.page}}" id="selector">
-      <ms-me-detail route="{{tail}}" id="detail"></ms-me-detail>
+      <ms-me-detail is-login="{{isLogin}}" route="{{tail}}" id="detail"></ms-me-detail>
       <ms-me-edit route="{{tail}}" id="edit"></ms-me-edit>
       <ms-me-music route="{{tail}}" id="music"></ms-me-music>
     </iron-pages>

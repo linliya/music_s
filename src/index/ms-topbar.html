@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+ <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
@@ -22,8 +22,8 @@
       }
 
       #wrap {
-        background: #2e2e2e;
         height: 60px;
+        background: url('../../images/topbar.png') repeat-x 0px -90px;
       }
 
       header {
@@ -36,25 +36,48 @@
         width: 200px;
       }
 
-      paper-toolbar {
+      header {
         display: flex;
         align-items: center;
         text-align: center;
-        --paper-toolbar-background: #2e2e2e;
+        --paper-toolbar-background: transparent;
         height: 60px;
       }
 
-      paper-tabs {
-        --paper-tabs-selection-bar-color: #BDBDBD;
+      #tabs {
         width: 400px;
+        line-height: 60px;
+        color: #fff;
+
       }
 
       #activeTab {
         font-weight: bold;
+        position: relative;
       }
 
-      paper-tab:hover {
-        background: #242323;
+      #tabs a {
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        line-height: 60px;
+        font-size: 14px;
+        padding: 0 40px;
+      }
+
+      #tabs a:hover {
+        height: 58px;
+        background: url('../../images/topbar.png') no-repeat 0px -162px;
+      }
+
+      #tabs i {
+        background: url('../../images/topbar.png') no-repeat -224px 6px;
+        width: 16px;
+        height: 16px;
+        display: block;
+        position: absolute;
+        left: 60px;
+        bottom: 0;
       }
 
       #searchBox {
@@ -87,7 +110,8 @@
 
       paper-button {
         height: 30px;
-        font-size: 14px;
+        font-size: 12px;
+        color: #ddd;
       }
 
       paper-button:hover {
@@ -101,24 +125,21 @@
 
     <div id="wrap">
       <header>
-        <paper-toolbar>
-          <span id="logo">logo</span>
 
-          <paper-tabs id="tabs" selected="0" noink no-bar>
-            <paper-tab id="activeTab" active>发现音乐</paper-tab>
-            <paper-tab>我的音乐</paper-tab>
-          </paper-tabs>
+        <span id="logo">logo</span>
+        <div id="tabs">
+          <a href="/main" id="activeTab" class="tab" active>发现音乐<i></i></a>
+          <a href="/me/music" class="tab">我的音乐</a>
+        </div>
 
-          <div id="searchBox">
-            <input id="search" type="text" placeholder="search">
-            <iron-icon icon="search"></iron-icon>
-          </div>
+        <div id="searchBox">
+          <input id="search" type="text" placeholder="search">
+          <iron-icon icon="search"></iron-icon>
+        </div>
 
-          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleLogin">登录</paper-button>
-          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
+        <paper-button hidden$="[[isLogin]]" noink on-tap="_handleLogin">登录</paper-button>
+        <paper-button hidden$="[[isLogin]]" noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
 
-
-        </paper-toolbar>
       </header>
       <ms-login-dialog id="loginDialog"></ms-login-dialog>
       <ms-register-dialog id="registerDialog"></ms-login-dialog>

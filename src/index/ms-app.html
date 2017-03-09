@@ -23,7 +23,7 @@
         tail="{{tail}}">
     </app-route>
 
-    <iron-pages attr-for-selected="id" selected="[[routeData.page]]">
+    <iron-pages attr-for-selected="id" selected="[[routeData.page]]" id="selector">
       <ms-main route="{{tail}}" id="main"></ms-main>
       <ms-me route="{{tail}}" id="me" is-login="[[isLogin]]"></ms-me>
     </iron-pages>
@@ -82,6 +82,12 @@
           path: {
             type: String,
             notify: true
+          }
+        },
+
+        attached() {
+          if(this.$.selector.selected === '') {
+            this.$.selector.select('main');
           }
         },
 

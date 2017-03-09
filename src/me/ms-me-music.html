@@ -1,11 +1,55 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
-
+<link rel="import" href=".././index/ms-footer.html">
 <dom-module id="ms-me-music">
   <template>
-    <style></style>
+    <style>
+      ms-topbar:after {
+        content: '';
+        display: block;
+        border-bottom: 4px solid #ba0b0b;
+      }
+      
+      #wrap {
+        width: 960px;
+        margin: 0px auto;
+        border: 1px solid #ccc;
+        background: #fff;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        color: #666;
+        font-size: 14px;
+      }
+
+      #disk {
+        width: 240px;
+        border-right: 1px solid #ccc;
+      }
+
+      #disk i {
+        background: url('../../images/icon.png')
+      }
+
+    </style>
     <ms-topbar></ms-topbar>
+    <div id="wrap">
+      <section id="disk">
+        <h3>
+          <i></i>
+          <span>我创建的歌单</span>
+        </h3>
+      </section>
+
+      <section>
+
+      </section>
+
+    </div>
+    <ms-footer></ms-footer>
+
   </template>
   <script>
     Polymer({
