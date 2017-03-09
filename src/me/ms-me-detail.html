@@ -1,0 +1,124 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href=".././index/ms-topbar.html">
+<dom-module id="ms-me-detail">
+  <template>
+    <style>
+      ms-topbar:after {
+        content: '';
+        display: block;
+        border-bottom: 4px solid #ba0b0b;
+      }
+
+      #wrap {
+        width: 960px;
+        margin: 0px auto;
+        border: 1px solid #ccc;
+        background: #fff;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        color: #666;
+        font-size: 14px;
+      }
+
+      #photo img {
+        padding: 4px;
+        border: 1px solid #ccc;
+        margin: 30px;
+      }
+
+      #detail {
+        width: 660px;
+      }
+
+      #detail h3 {
+        border-bottom: 1px solid #ddd;
+        padding: 8px 0;
+        font-size: 22px;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #name a {
+        font-size: 12px;
+        color: #666;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 5px;
+        font-weight: normal;
+        cursor: pointer;
+      }
+
+      #name a:hover {
+        background: #eee;
+      }
+
+      #music_disk {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding: 30px;
+      }
+
+      #music_disk div {
+        padding-right: 68px;
+      }
+
+      #music_disk h3 {
+        border-bottom: 2px solid #ba0b0b;
+        width: 880px;
+        font-size: 20px;
+        padding-bottom: 6px;
+      }
+    </style>
+
+    <ms-topbar is-login="[[isLogin]]"></ms-topbar>
+
+    <div id="wrap">
+      <div id="photo">
+        <img src="../../images/me_photo.jpg" alt="" width="188px" height="188px">
+      </div>
+
+      <div id="detail">
+        <h3 id="name">
+          姓名
+          <a href="/me/detail">编辑个人资料</a>
+        </h3>
+
+        <div>
+          <p id="area">所在地区: 广东省-广州市</p>
+          <p id="hobby">爱好: 听歌～</p>
+        </div>
+      </div>
+
+      <div id="music_disk">
+        <h3 id="title">我创建的歌单</h3>
+        <div>
+          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
+          <p>我喜欢的音乐</p>
+        </div>
+        <div>
+          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
+          <p>晴天</p>
+        </div>
+        <div>
+          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
+          <p>雨天</p>
+        </div>
+        <div>
+          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
+          <p>阴天</p>
+        </div>
+      </div>
+    </div>
+    </template>
+    <script>
+    Polymer({
+      is: 'ms-me-detail'
+    });
+    </script>
+</dom-module>

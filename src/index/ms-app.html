@@ -1,12 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 
-<link rel="import" href="./ms-topbar.html">
-<link rel="import" href="./ms-secondbar.html">
-<link rel="import" href="./ms-nav.html">
-<link rel="import" href="./ms-content-top/ms-content-top.html">
-<link rel="import" href="./ms-content-bottom.html">
-<link rel="import" href="./ms-footer.html">
-
+<link rel="import" href="./ms-main.html">
+<link rel="import" href=".././me/ms-me.html">
 
 <dom-module id="ms-app">
   <template>
@@ -16,19 +14,81 @@
         font-family: '微软雅黑';
       }
     </style>
-    <ms-topbar></ms-topbar>
-    <ms-secondbar></ms-secondbar>
-    <ms-nav></ms-nav>
-    <ms-content-top></ms-content-top>
-    <ms-content-bottom></ms-content-bottom>
-    <ms-footer></ms-footer>
+    <app-location id="location" path="{{path}}" route="{{route}}"></app-location>
+
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{tail}}">
+    </app-route>
+
+    <iron-pages attr-for-selected="id" selected="[[routeData.page]]">
+      <ms-main route="{{tail}}" id="main"></ms-main>
+      <ms-me route="{{tail}}" id="me" is-login="[[isLogin]]"></ms-me>
+    </iron-pages>
+
   </template>
 
   <script>
-    Polymer({
+    (function() {
+      'use strict';
 
-      is: 'ms-app'
+      Polymer({
 
-    });
+        is: 'ms-app',
+
+        properties: {
+          /**
+           * 是否已经登陆。
+           */
+          isLogin: {
+            type: Boolean,
+            notify: true,
+            computed: '_computeIsLogin(user)'
+          },
+
+          user: {
+            type: Object
+          },
+
+          /**
+           * 路由。
+           */
+          route: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * 路由数据。
+           */
+          routeData: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * 路由尾巴。
+           */
+          tail: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * App当前的url。
+           */
+          path: {
+            type: String,
+            notify: true
+          }
+        },
+
+        _computeIsLogin(user) {
+          return true;
+        }
+      });
+   })();
   </script>
 </dom-module>

@@ -23,12 +23,12 @@
 
       #wrap {
         background: #2e2e2e;
-        height: 50px;
+        height: 60px;
       }
 
       header {
         width: 960px;
-        height: 50px;
+        height: 60px;
         margin: 0 auto;
       }
 
@@ -41,7 +41,7 @@
         align-items: center;
         text-align: center;
         --paper-toolbar-background: #2e2e2e;
-        height: 50px;
+        height: 60px;
       }
 
       paper-tabs {
@@ -114,8 +114,9 @@
             <iron-icon icon="search"></iron-icon>
           </div>
 
-          <paper-button noink on-tap="_handleLogin">登录</paper-button>
-          <paper-button noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
+          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleLogin">登录</paper-button>
+          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
+
 
         </paper-toolbar>
       </header>

@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="./ms-me-detail.html">
+<link rel="import" href="./ms-me-music.html">
+<link rel="import" href="./ms-me-edit.html">
+
+<dom-module id="ms-me">
+  <template>
+    <style></style>
+
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        tail="{{tail}}"
+        data="{{_routeData}}">
+    </app-route>
+
+    <iron-pages attr-for-selected="id" selected="{{_routeData.page}}" id="selector">
+      <ms-me-detail route="{{tail}}" id="detail"></ms-me-detail>
+      <ms-me-edit route="{{tail}}" id="edit"></ms-me-edit>
+      <ms-me-music route="{{tail}}" id="music"></ms-me-music>
+    </iron-pages>
+  </template>
+    <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ms-me',
+
+        attached() {
+          if(this.$.selector.selected === undefined) {
+            this.$.selector.select('detail');
+          }
+        }
+
+      });
+
+    })();
+    </script>
+</dom-module>

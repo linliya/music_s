@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="./ms-topbar.html">
+<link rel="import" href="./ms-secondbar.html">
+<link rel="import" href="./ms-nav.html">
+<link rel="import" href="./ms-content-top/ms-content-top.html">
+<link rel="import" href="./ms-content-bottom.html">
+<link rel="import" href="./ms-footer.html">
+
+<dom-module id="ms-main">
+  <template>
+    <style>
+      :host {
+        display: block;
+        font-family: '微软雅黑';
+      }
+    </style>
+
+    <ms-topbar></ms-topbar>
+    <ms-secondbar></ms-secondbar>
+    <ms-nav></ms-nav>
+    <ms-content-top></ms-content-top>
+    <ms-content-bottom></ms-content-bottom>
+    <ms-footer></ms-footer>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'ms-main'
+
+    });
+  </script>
+</dom-module>
