@@ -1,0 +1,21 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="ms-player">
+  <template>
+    <style>
+      audio {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+      }
+    </style>
+    <div>
+      <audio src="some.mp3" controls="controls"></audio>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-player'
+    });
+  </script>
+</dom-module>

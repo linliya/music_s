@@ -5,6 +5,8 @@
 <link rel="import" href="./ms-me-detail.html">
 <link rel="import" href="./ms-me-music.html">
 <link rel="import" href="./ms-me-edit.html">
+<link rel="import" href="./ms-no-login.html">
+
 
 <dom-module id="ms-me">
   <template>
@@ -21,6 +23,7 @@
       <ms-me-detail is-login="{{isLogin}}" route="{{tail}}" id="detail"></ms-me-detail>
       <ms-me-edit route="{{tail}}" id="edit"></ms-me-edit>
       <ms-me-music route="{{tail}}" id="music"></ms-me-music>
+      <ms-no-login route="{{tail}}" id="noLogin"></ms-no-login>
     </iron-pages>
   </template>
     <script>

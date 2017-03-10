@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href=".././index/ms-topbar.html">
+<link rel="import" href=".././index/ms-login-dialog.html">
+<dom-module id="ms-no-login">
+  <template>
+    <style>
+      #wrap {
+        width: 960px;
+        height: 700px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        background: #fff;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #pic {
+        width: 400px;
+        height: 276px;
+        background: url('../../images/no_login.png') no-repeat;
+        margin: 80px;
+      }
+
+      h3, h4 {
+        margin: 0;
+        padding: 0;
+      }
+
+      #text {
+        margin-top: 120px;
+      }
+
+      #text h3 {
+        font-weight: normal;
+        font-size: 24px;
+        color: #333;
+        padding: 10px 0;
+      }
+
+      #text h4 {
+        line-height: 30px;
+        font-weight: normal;
+        font-size: 18px;
+        color: #666;
+      }
+
+      #text button {
+        width: 150px;
+        height: 42px;
+        color: #fff;
+        border-radius: 4px;
+        background: #2475c3;
+        border: none;
+        outline: none;
+        border: 1px solid #2475c3;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+
+    </style>
+    <ms-topbar></ms-topbar>
+    <ms-login-dialog id="login"></ms-login-dialog>
+    <div id="wrap">
+      <div id="pic">
+      </div>
+
+      <div id="text">
+        <h3>您尚未登录</h3>
+        <h4>登录后您可以随时查看并管理您的私藏音乐</h4>
+        <h4>方便随时随地收听</h4>
+        <button type="button" name="button" on-tap="_login">立即登录</button>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-no-login',
+
+      _login() {
+        this.$.login.open();
+      }
+    });
+  </script>
+</dom-module>
