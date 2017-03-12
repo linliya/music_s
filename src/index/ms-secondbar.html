@@ -1,60 +1,83 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 
 <dom-module id="ms-secondbar">
   <template>
     <style>
-
       #wrap {
-        background-color: #ba0b0b;
+        background: #ba0b0b;
+        height: 35px;
       }
 
-      paper-toolbar {
+      div, ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      #toolbar {
         width: 960px;
         margin: 0 auto;
         height: 35px;
-        --paper-toolbar-background: #ba0b0b;
+        line-height: 28px;
+        color: #fff;
+        font-size: 12px;
+        background: #ba0b0b;
         display: flex;
+        justify-content: center;
         align-items: center;
       }
 
-      paper-tab, paper-tabs {
-        height: 28px;
+      ul {
+        margin-left: -118px;
       }
 
-      paper-tabs {
-        font-size: 12px;
-        width: 400px;
-        padding-left: 230px;
-        position: relative;
-      }
-
-      paper-tab {
-        margin-right: 38px;
+      ul li {
+        width: 40px;
+        margin-right: 30px;
+        float: left;
+        text-align: center;
+        cursor: pointer;
+        padding: 0 8px;
       }
 
       #activeTab {
-        border-radius: 20px;
         background: #8e0303;
         font-weight: bold;
+        border-radius: 20px;
+        position: relative;
       }
 
-      paper-tab:hover {
+      #activeTab i {
+        width: 0px;
+        height:0px;
+        display: block;
+        position: absolute;
+        left: 19px;
+        top: -20px;
+        border-top: 8px solid transparent;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #ba0b0b;
+      }
+
+      li:hover {
         border-radius: 20px;
         background: #8e0303;
       }
 
     </style>
     <div id="wrap">
-      <paper-toolbar>
-        <paper-tabs selected="0" noink no-bar>
-          <paper-tab id="activeTab" pressed>推荐</paper-tab>
-          <paper-tab>排行榜</paper-tab>
-          <paper-tab>歌单</paper-tab>
-          <paper-tab>歌手</paper-tab>
-        </paper-tabs>
-      </paper-toolbar>
+      <div id="toolbar">
+        <ul id="tabs">
+          <li id="activeTab" pressed><i></i>推荐</li>
+          <li>排行榜</li>
+          <li>歌单</li>
+          <li>歌手</li>
+        </ul>
+      </ul>
     </div>
   </template>
   <script>

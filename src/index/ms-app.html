@@ -5,13 +5,17 @@
 
 <link rel="import" href="./ms-main.html">
 <link rel="import" href=".././me/ms-me.html">
+<link rel="import" href=".././music_detail/ms-music-detail.html">
+<link rel="import" href=".././music_detail/ms-disk-detail.html">
+
+
 
 <dom-module id="ms-app">
   <template>
     <style>
       :host {
         display: block;
-        font-family: '微软雅黑';
+        font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
       }
     </style>
     <app-location id="location" path="{{path}}" route="{{route}}"></app-location>
@@ -26,6 +30,8 @@
     <iron-pages attr-for-selected="id" selected="[[routeData.page]]" id="selector">
       <ms-main route="{{tail}}" id="main"></ms-main>
       <ms-me route="{{tail}}" id="me" is-login="[[isLogin]]"></ms-me>
+      <ms-music-detail id="musicDetail"></ms-music-detail>
+      <ms-disk-detail id="diskDetail"></ms-disk-detail>
     </iron-pages>
 
   </template>

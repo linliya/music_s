@@ -1,0 +1,187 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href=".././index/ms-topbar.html">
+<link rel="import" href=".././index/ms-secondbar.html">
+<link rel="import" href=".././music_detail/ms-music-comment.html">
+
+<dom-module id="ms-music-detail">
+  <template>
+    <style>
+      h3, p {
+        margin: 0;
+        padding: 0;
+      }
+
+      .clear:after {
+        content: '';
+        display: block;
+        clear: both;
+        width: 0;
+        height:0;
+      }
+      #wrap {
+        width: 960px;
+        margin: 0px auto;
+        padding: 30px 0 0 30px;
+        border: 1px solid #ccc;
+        background: #fff;
+        font-size: 14px;
+      }
+
+      #detail #photo img {
+        padding: 4px;
+        border: 1px solid #ccc;
+        margin-right: 20px;
+      }
+
+      #detail {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #detail h3 {
+        font-size: 20px;
+        color: #333;
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+      }
+
+      #text p {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        color: #999;
+        font-size: 12px;
+      }
+
+      #singer .singer_name, #disk .disk_name {
+        color: #0c73c2;
+      }
+
+      #text #name i {
+        display: inline-block;
+        width: 54px;
+        height: 26px;
+        background: url('../../images/icons.png') no-repeat 0 -461px;
+        padding-right: 8px;
+      }
+
+      #text button {
+        width: 66px;
+        height: 32px;
+        background: #fff;
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        color: #666;
+        display: flex;
+        align-items: center;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 0px 1px 0px #ddd;
+      }
+
+      #text button i {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 4px;
+      }
+
+      #text #play {
+        color: #fff;
+        background: #2475c3;
+        border: 1px solid #2475c3;
+      }
+
+      #text #play i {
+        background: url('../../images/icon.png') no-repeat 0px -59px;
+      }
+
+      #text #store i {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+
+      #text #comment i {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+
+      #text #download iron-icon {
+        width: 18px;
+        height: 18px;
+        padding-top: 4px;
+      }
+
+      #lyric {
+        margin: 50px 0 100px 0;
+      }
+
+      #lyric p {
+        color: #333;
+      }
+    </style>
+
+    <ms-topbar></ms-topbar>
+    <ms-secondbar></ms-secondbar>
+    <div id="wrap">
+      <section id="detail">
+        <div id="photo">
+          <img src="../../images/my_disk.jpg" alt="" width="188px" height="188px">
+        </div>
+
+        <div id="text">
+          <h3 id="name">
+            <i></i>我喜欢的音乐
+          </h3>
+
+          <div class="clear">
+            <p id="singer">
+              <span>歌手:<span class="singer_name"> 周杰伦</span></span>
+            </p>
+            <p id="disk">
+              <span>所属专辑:<span class="disk_name"> 跨时代</span></span>
+            </p>
+            <button type="button" name="button" id="play">
+              <i></i>
+              播放
+            </button>
+            <button type="button" name="button" id="store">
+              <i></i>
+              收藏
+            </button>
+            <button type="button" name="button" id="download">
+              <iron-icon icon="file-download"></iron-icon>
+              下载
+            </button>
+            <button type="button" name="button" id="comment">
+              <i></i>
+              (100)
+            </button>
+          </div>
+
+          <section id="lyric">
+            <p>歌词歌词</p>
+            <p>歌词歌词</p>
+            <p>歌词歌词</p>
+            <p>歌词歌词</p>
+            <p>歌词歌词</p>
+            <p>歌词歌词</p>
+          </section>
+        </div>
+      </section>
+
+      <ms-music-comment></ms-music-comment>
+
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-music-detail'
+    });
+  </script>
+</dom-module>

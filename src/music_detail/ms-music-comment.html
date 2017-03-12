@@ -1,0 +1,159 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="ms-music-comment">
+  <template>
+    <style>
+      div, h3, h4, textarea, section,ul, li, p {
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      #wrap {
+        width: 600px;
+      }
+
+      h3 {
+        border-bottom: 2px solid #ba0b0b;
+        padding-bottom: 2px;
+        font-size: 20px;
+        font-weight: normal;
+        line-height: 28px;
+      }
+
+      h3 span {
+        font-size: 12px;
+        color: #666;
+        margin: 0 0  -8px 20px;
+      }
+
+      #myComment {
+        height: 50px;
+        padding: 20px 0 40px 0;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      #myComment textarea {
+        outline: none;
+        resize: none;
+        width: 540px;
+        padding:4px 0 0 8px;
+        border-radius: 1px;
+        margin-left: 14px;
+      }
+
+      button {
+        width: 58px;
+        height: 32px;
+        color: #fff;
+        background: #2475c3;
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        float: right;
+       }
+
+       #latestComment {
+         margin-top: 50px;
+       }
+
+       #latestComment h4 {
+         border-bottom: 1px solid #a5a1a1;
+         padding-bottom: 2px;
+         font-size: 14px;
+         font-weight: normal;
+         line-height: 24px;
+       }
+
+       #latestComment ul li {
+         height: 40px;
+         padding: 14px 0 20px 0;
+         border-bottom: 1px dotted #a5a1a1;
+         display: flex;
+         justify-content: flex-start;
+       }
+
+       #latestComment .text{
+         color: #333;
+         margin: 0 8px;
+         position: relative;
+       }
+
+       #latestComment #name {
+         color: #2475c3;
+       }
+
+       #latestComment #time {
+         position: absolute;
+         left: 0px;
+         bottom: 0px;
+         color: #999;
+       }
+
+
+    </style>
+
+    <div id="wrap">
+      <h3>
+        评论
+        <span>共100条评论</span>
+      </h3>
+
+      <section id="comment">
+        <section  id="myComment">
+          <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
+          <textarea name="name" rows="4" cols="60" placeholder="评论"></textarea>
+        </section>
+        <button type="button" name="button">评论</button>
+      </section>
+
+      <section id="latestComment">
+        <h4>
+          最新评论(100)
+        </h4>
+
+        <ul>
+          <li>
+            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
+              <p><span id="time">16:50</span></p>
+            </div>
+          </li>
+          <li>
+            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
+              <p><span id="time">16:50</span></p>
+            </div>
+          </li>
+          <li>
+            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
+              <p><span id="time">16:50</span></p>
+            </div>
+          </li>
+          <li>
+            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
+              <p><span id="time">16:50</span></p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-music-comment'
+    });
+  </script>
+</dom-module>
