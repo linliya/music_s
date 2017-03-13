@@ -17,6 +17,11 @@
         list-style: none;
       }
 
+      a {
+        text-decoration: none;
+        color: #fff;
+      }
+
       #toolbar {
         width: 960px;
         margin: 0 auto;
@@ -72,9 +77,9 @@
     <div id="wrap">
       <div id="toolbar">
         <ul id="tabs">
-          <li id="activeTab" pressed><i></i>推荐</li>
-          <li>排行榜</li>
-          <li>歌单</li>
+          <a href="/main"><li id="activeTab"><i></i>推荐</li></a>
+          <a href="/toplist"><li>排行榜</li></a>
+          <li><a href="#"></a>歌单</li>
           <li></li>
         </ul>
       </ul>
