@@ -12,6 +12,11 @@
 <dom-module id="ms-content-bottom">
   <template>
     <style>
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
       #wrap {
         width: 960px;
         margin: 0 auto;
@@ -40,7 +45,7 @@
 
       #more iron-icon {
         width: 16px;
-        color: #ba0b0b;
+        color: #2783ca;
       }
 
       #list {
@@ -130,7 +135,7 @@
       <paper-toolbar>
         <iron-icon icon="av:album" id="avIcon"></iron-icon>
         <span>榜单</span>
-        <span id="more">更多<iron-icon icon="arrow-forward"></iron-icon></span>
+        <span id="more"><a href="/toplist">更多</a><iron-icon icon="arrow-forward"></iron-icon></span>
       </paper-toolbar>
 
       <div id="list">
