@@ -7,6 +7,10 @@
 <dom-module id="ms-me-edit">
   <template>
     <style>
+      textarea {
+        resize: none;
+      }
+
       ms-topbar:after {
         content: '';
         display: block;
@@ -114,7 +118,7 @@
         <section id="text">
           <section>
             <span>昵称:</span>
-            <input is="iron-input">
+            <input type="text">
           </section>
 
           <section>
@@ -136,7 +140,7 @@
 
           <section>
             <span>地区:</span>
-            <input>
+            <input type="text">
           </section>
           <button type="button" name="button" id="save">保存</button>
         </section>

@@ -4,7 +4,7 @@
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-secondbar.html">
 <link rel="import" href=".././music_detail/ms-music-comment.html">
-<link rel="import" href=".././music_detail/ms-disk-list.html">
+<link rel="import" href=".././music_disk/ms-disk-detail-list.html">
 
 
 <dom-module id="ms-disk-detail">
@@ -74,7 +74,7 @@
         padding-right: 8px;
       }
 
-      #text button {
+      #msg button {
         width: 66px;
         height: 32px;
         background: #fff;
@@ -91,35 +91,51 @@
         box-shadow: 0px 1px 0px #ddd;
       }
 
-      #text button i {
+      #msg button i {
         display: inline-block;
         width: 18px;
         height: 18px;
         margin-right: 4px;
       }
 
-      #text #play {
+      #msg #play {
         color: #fff;
         background: #2475c3;
         border: 1px solid #2475c3;
       }
 
-      #text #play i {
+      #msg #play i {
         background: url('../../images/icon.png') no-repeat 0px -59px;
       }
 
-      #text #store i {
+      #msg #store i {
         background: url('../../images/icons.png') no-repeat -44px -107px;
       }
 
-      #text #comment i {
+      #msg #comment i {
         background: url('../../images/icons.png') no-repeat -44px -107px;
       }
 
-      #text #download iron-icon {
+      #msg #download iron-icon {
         width: 18px;
         height: 18px;
         padding-top: 4px;
+      }
+
+      #tag {
+        margin-top: 20px;
+        color: #666;
+      }
+
+      #tag button {
+        width: 60px;
+        border: none;
+        outline: none;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 20px;
+        margin-left: 8px;
+        color: #666;
       }
 
       #intro {
@@ -127,7 +143,7 @@
       }
 
       #intro p {
-        color: #333;
+        color: #666;
       }
     </style>
 
@@ -144,7 +160,7 @@
             <i></i>我喜欢的歌单
           </h3>
 
-          <div class="clear">
+          <div class="clear" id="msg">
             <p id="author">
               <span><img src="../../images/my_disk.jpg" width="30px" height="30px"></span>
               <span class="author_name"> 云树人</span>
@@ -170,6 +186,12 @@
             </button>
           </div>
 
+          <div id="tag">
+            标签:
+            <button>华语</button>
+            <button>流行</button>
+          </div>
+
           <section id="intro">
             <p>介绍介绍</p>
             <p>介绍介绍</p>
@@ -180,7 +202,7 @@
         </div>
       </section>
 
-      <ms-disk-list></ms-disk-list>
+      <ms-disk-detail-list></ms-disk-detail-list>
       <ms-music-comment></ms-music-comment>
 
 

@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="ms-disk-list">
+<dom-module id="ms-disk-detail-list">
   <template>
     <style>
       div, h3, h4, textarea, section,ul, li, p {
@@ -15,7 +15,7 @@
 
       #wrap {
         width: 600px;
-        margin-bottom: 30px;
+        margin-bottom: 50px;
       }
 
       h3 {
@@ -30,6 +30,15 @@
         font-size: 12px;
         color: #666;
         margin: 0 0  -8px 20px;
+      }
+
+      h3 #playTime {
+        float: right;
+      }
+
+      h3 #playTime span {
+        color: #ba0b0b;
+        margin: 0;
       }
 
       #list {
@@ -106,6 +115,7 @@
       <h3>
         歌曲列表
         <span>100首歌</span>
+        <span id="playTime">播放：<span>23928538</span>次</span>
       </h3>
 
       <div id="list">
@@ -173,7 +183,7 @@
   </template>
   <script>
     Polymer({
-      is: 'ms-disk-list'
+      is: 'ms-disk-detail-list'
     });
   </script>
 </dom-module>
