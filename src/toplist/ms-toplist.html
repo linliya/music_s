@@ -1,0 +1,447 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+
+<link rel="import" href=".././index/ms-topbar.html">
+<link rel="import" href=".././index/ms-secondbar.html">
+
+<dom-module id="ms-toplist">
+  <template>
+    <style>
+      section, div,h3, h4, ul, p {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      .clear:after {
+        content: '';
+        display: block;
+        clear: both;
+        width: 0;
+        height:0;
+      }
+
+      #wrap {
+        width: 960px;
+        margin: 0 auto;
+        border: 1px solid #dedede;
+        background: #fff;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #sidebar {
+        width: 240px;
+        padding: 40px 0 20px 0;
+        background: #f9f9f9;
+        border-right: 1px solid #dedede;
+      }
+
+      #sidebar h3 {
+        padding: 0 10px 12px 15px;
+        font-size: 14px;
+        color: #000;
+      }
+
+      #sidebar ul li {
+        height: 64px;
+        font-size: 12px;
+        list-style: none;
+        padding-left: 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      ul li.active {
+        background: #e6e6e6;
+      }
+
+      ul li p {
+        margin: 8px 0 8px 10px;
+      }
+
+      ul li p.tip {
+        color: #999;
+      }
+
+      /*右边*/
+
+      #right #photo img {
+        padding: 4px;
+        border: 1px solid #ccc;
+        margin-right: 20px;
+      }
+
+      #right {
+        padding: 40px;
+      }
+
+      header {
+        display: flex;
+      }
+
+      #right h3 {
+        font-size: 20px;
+        color: #333;
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+      }
+
+      #text p {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        color: #999;
+        font-size: 12px;
+      }
+
+      #update span {
+        padding-right: 10px;
+      }
+
+      #msg button {
+        width: 66px;
+        height: 32px;
+        background: #fff;
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        color: #666;
+        display: flex;
+        align-items: center;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 0px 1px 0px #ddd;
+      }
+
+      #msg button i {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 4px;
+      }
+
+      #msg #play {
+        color: #fff;
+        background: #2475c3;
+        border: 1px solid #2475c3;
+      }
+
+      #msg #play i {
+        background: url('../../images/icon.png') no-repeat 0px -59px;
+      }
+
+      #msg #store i {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+
+      #msg #comment i {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+
+      #msg #download iron-icon {
+        width: 18px;
+        height: 18px;
+        padding-top: 4px;
+      }
+
+      /*歌曲列表*/
+
+      #rightList {
+        width: 670px;
+        margin-top: 40px;
+      }
+
+      #rightList h3 {
+        border-bottom: 2px solid #ba0b0b;
+        padding-bottom: 2px;
+        font-size: 20px;
+        font-weight: normal;
+        line-height: 28px;
+        position: relative;
+      }
+
+      #rightList h3 span {
+        font-size: 12px;
+        color: #666;
+        margin: 0 0  -8px 20px;
+      }
+
+      #rightList #playTime {
+        position: absolute;
+        right: 0;
+      }
+
+      #rightList #playTime span {
+        color: #ba0b0b;
+        margin: 0;
+      }
+
+      h4 span, ul li span {
+        display: inline-block;
+        padding-left: 6px;
+      }
+
+      h4 span {
+        border-left: 1px solid #d9d9d9;
+      }
+
+      h4 span:first-child {
+        border-left: none;
+      }
+
+      h4 {
+        color: #212121;
+        background: #f4f4f4;
+        font-weight: normal;
+        border-bottom: 1px solid #bab0b0;
+        display: flex;
+        justify-content: flex-start;
+        height: 32px;
+        line-height: 32px;
+        font-size: 12px;
+        border-left: 1px solid #d9d9d9;
+        border-right: 1px solid #d9d9d9;
+      }
+
+      h4 .num, ul li .num {
+        width: 80px;
+        color: #999;
+        padding-left: 8px;
+        display: flex;
+        align-items: center;
+      }
+
+      h4 .title, ul li .title {
+        width: 380px;
+      }
+
+      h4 .time, ul li .time {
+        display: flex;
+        align-items: center;
+        width: 91px;
+      }
+
+      h4 .singer, ul li .singer {
+        width: 100px;
+      }
+
+      #rightList ul li {
+        border: 1px solid #d9d9d9;
+        border-top: none;
+        line-height: 30px;
+        font-size: 12px;
+        color: #333;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #rightList ul li .num i {
+        width: 18px;
+        height: 18px;
+        margin-left: 32px;
+        display: inline-block;
+        background: url('../../images/icon.png') no-repeat -2px -88px;
+        cursor: pointer;
+      }
+
+      #rightList ul li .num i:hover {
+        background: url('../../images/icon.png') no-repeat -2px -113px;
+      }
+
+      #rightList ul li:nth-child(2n+1) {
+        background: #f7f7f7;
+      }
+
+      #rightList ul li .store, #rightList ul li iron-icon {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      #rightList ul li .store {
+        display: inline-block;
+        background: url('../../images/icons.png') no-repeat -44px -84px;
+        margin-right: 8px;
+      }
+
+      #rightList ul li iron-icon {
+        padding-top: 4px;
+        color: #999;
+      }
+
+      #rightList ul li .store:hover {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+      #rightList ul li iron-icon:hover {
+        color: #666;
+      }
+    </style>
+    <ms-topbar></ms-topbar>
+    <ms-secondbar id="secondbar"></ms-secondbar>
+
+    <div id="wrap">
+      <!-- 左边 -->
+      <section id="sidebar">
+        <h3>音乐榜单</h3>
+        <ul>
+          <li class="active">
+            <img src="../../images/left.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p>音乐飙升棒</p>
+              <p class="tip">持续更新中</p>
+            </div>
+          </li>
+
+          <li>
+            <img src="../../images/center.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p>音乐新歌榜</p>
+              <p class="tip">持续更新中</p>
+            </div>
+          </li>
+
+          <li>
+            <img src="../../images/last.jpg" alt="" width="40px" height="40px">
+            <div class="text">
+              <p>音乐原创榜</p>
+              <p class="tip">持续更新中</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 右边 -->
+      <section id="right">
+        <header>
+          <div id="photo">
+            <img src="../../images/left.jpg" alt="" width="150px" height="150px">
+          </div>
+
+          <div id="text">
+            <h3 id="name">
+              <i></i>音乐飙升榜
+            </h3>
+
+            <div class="clear" id="msg">
+              <p id="update">
+                <i></i>
+                <span class="update_name"> 最近更新: 03月12日</span>
+              </p>
+
+              <button type="button" name="button" id="play">
+                <i></i>
+                播放
+              </button>
+              <button type="button" name="button" id="store">
+                <i></i>
+                收藏
+              </button>
+              <button type="button" name="button" id="download">
+                <iron-icon icon="file-download"></iron-icon>
+                下载
+              </button>
+              <button type="button" name="button" id="comment">
+                <i></i>
+                (100)
+              </button>
+            </div>
+        </header>
+
+        <section id="rightList">
+          <h3>
+            歌曲列表
+            <span>100首歌</span>
+            <span id="playTime">播放：<span>23928538</span>次</span>
+          </h3>
+
+          <div id="list">
+            <h4>
+              <span class="num"></span>
+              <span class="title">标题</span>
+              <span class="time">时长</span>
+              <span class="singer">歌手</span>
+            </h4>
+            <ul>
+              <li>
+                <span class="num">1<i></i></span>
+                <span class="title">晴天</span>
+                <span class="time" hidden$="[[active]]">04:11</span>
+                <span class="time" hidden$="[[!active]]">
+                  <i class="store"></i>
+                  <iron-icon icon="file-download"></iron-icon>
+                </span>
+                <span class="singer">周杰伦</span>
+              </li>
+              <li>
+                <span class="num">2<i></i></span>
+                <span class="title">熟悉的陌生人</span>
+                <span class="time">03:12</span>
+                <span class="singer">洪卓立</span>
+              </li>
+              <li>
+                <span class="num">3<i></i></span>
+                <span class="title">说不出的秘密</span>
+                <span class="time">03:20</span>
+                <span class="singer">周杰伦</span>
+              </li>
+              <li>
+                <span class="num">4<i></i></span>
+                <span class="title">红尘客栈</span>
+                <span class="time">04:20</span>
+                <span class="singer">周杰伦</span>
+              </li>
+              <li>
+                <span class="num">5<i></i></span>
+                <span class="title">红尘客栈</span>
+                <span class="time">04:20</span>
+                <span class="singer">周杰伦</span>
+              </li>
+              <li>
+                <span class="num">6<i></i></span>
+                <span class="title">红尘客栈</span>
+                <span class="time">04:20</span>
+                <span class="singer">周杰伦</span>
+              </li>
+              <li>
+                <span class="num">7<i></i></span>
+                <span class="title">红尘客栈</span>
+                <span class="time">04:20</span>
+                <span class="singer">周杰伦</span>
+              </li>
+            </ul>
+        </section>
+      </section>
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-toplist',
+      properties: {
+        active: {
+          type: Boolean,
+          notify: true,
+          value: true
+        }
+      },
+
+      // listeners: {
+      //   'hover': ''
+      // }
+
+      // attached() {
+      //   let element = Polymer.dom(this.$.secondbar).querySelector('#activeTab');
+      //   element.style.background = '';
+      // }
+    });
+  </script>
+</dom-module>

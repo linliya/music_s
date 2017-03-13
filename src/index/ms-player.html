@@ -1,16 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<link rel="import" href="../../bower_components/paper-audio-player/paper-audio-player.html">
 <dom-module id="ms-player">
   <template>
     <style>
-      audio {
+      paper-audio-player {
+        width: 1000px;
+        height: 30px;
+        height: 30px;
         position: fixed;
         left: 0;
-        bottom: 0;
+        bottom: 20px;
       }
     </style>
     <div>
-      <audio src="some.mp3" controls="controls"></audio>
+      <paper-audio-player src="some.mp3"></paper-audio-player>
     </div>
   </template>
   <script>
