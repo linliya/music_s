@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="">
+
+<dom-module id="ms-page">
+  <template>
+    <style>
+      #wrap {
+        width: 900px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+      }
+
+      a {
+        float: left;
+        text-decoration: none;
+        color: #333;
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        height: 22px;
+        line-height: 22px;
+        padding: 0 8px;
+        background: #fff;
+        margin-left: 8px;
+      }
+
+      .selected {
+        background: #2783ca;
+        color: #fff;
+      }
+
+    </style>
+    <div id="wrap">
+      <div id="page">
+        <a href="#"><<上一页</a>
+        <a href="#" class="selected">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#" id="dot">...</a>
+        <a href="#">10</a>
+        <a href="#">11</a>
+        <a href="#">12</a>
+        <a href="#">下一页>></a>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-page'
+    });
+  </script>
+</dom-module>
