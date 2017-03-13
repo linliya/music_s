@@ -8,14 +8,16 @@
       #wrap {
         width: 100%;
         height: 336px;
-        background-image: url('../../images/bannerBg1.png');
+        /*background-image: url('../../images/bannerBg1.png');*/
+        /*background: #71c0ec;*/
+        background: rgba(93, 197, 255, 0.35);
       }
 
       l2t-paper-slider {
         cursor: pointer;
         --paper-slide-width: 960px;
         --paper-slide-height: 336px;
-        --paper-slide-dot-selected: #c00c0c;
+        --paper-slide-dot-selected: #2783ca;
         --paper-slide-dot-styles: {
             width: 8px;
             height: 8px;
@@ -62,10 +64,13 @@
     <div id="wrap">
       <div id="content">
         <div id="container">
-          <l2t-paper-slider id="slider" total-slides="3" auto-progress position="[[position]]" on-change="_handleChange">
-            <paper-slide style="background: url('../../images/bannerImg1.jpg')"></paper-slide>
-            <paper-slide style="background: url('../../images/bannerImg2.jpg');"></paper-slide>
-            <paper-slide style="background: url('../../images/bannerImg3.jpg');"></paper-slide>
+          <l2t-paper-slider id="slider" total-slides="6" auto-progress position="[[position]]" on-change="_handleChange">
+            <paper-slide style="background: url('../../images/bannerImg1.png')"></paper-slide>
+            <paper-slide style="background: url('../../images/bannerImg2.png');"></paper-slide>
+            <paper-slide style="background: url('../../images/bannerImg3.png');"></paper-slide>
+            <paper-slide style="background: url('../../images/bannerImg4.png');"></paper-slide>
+            <paper-slide style="background: url('../../images/bannerImg5.png');"></paper-slide>
+            <paper-slide style="background: url('../../images/bannerImg6.png');"></paper-slide>
 
           </l2t-paper-slider>
           <span id="pre" on-tap="prev"></span>
