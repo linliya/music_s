@@ -20,7 +20,11 @@
     "paper-menu-button": "PolymerElements/paper-menu-button#^1.5.2",
     "paper-menu": "PolymerElements/paper-menu#^1.2.2",
     "iron-dropdown": "PolymerElements/iron-dropdown#^1.5.5",
-    "paper-audio-player": "gorork/paper-audio-player#^1.1.1"
+    "paper-audio-player": "gorork/paper-audio-player#^1.1.1",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
+    "iron-form": "PolymerElements/iron-form#^1.1.4",
+    "tk-app-local-user": "cloudgz/tk-app-local-user#^0.1.3",
+    "tk-confirm-dialog": "cloudgz/tk-confirm-dialog#^0.3.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

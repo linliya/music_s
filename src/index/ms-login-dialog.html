@@ -4,6 +4,8 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
@@ -75,6 +77,15 @@
         color: var(--paper-blue-700);
       }
     </style>
+
+    <iron-ajax  id="ajax"
+                url="[[serverUrl]]/user/login"
+                handle-as="json"
+                method="POST"
+                content-type="application/json"
+                on-response="_handleResponse"
+                on-error="_handleError"></iron-ajax>
+
     <paper-dialog id="loginDialog" opened="{{opened}}" with-backdrop no-cancel-on-outside-click>
       <header>
         <span>用户登录</span>
@@ -82,24 +93,29 @@
       </header>
 
       <div id="content">
-        <paper-input label="请输入手机号"
-                     auto-validate
-                     required
-                     pattern="[[_phoneReg]]"
-                     error-message="请输入正确的手机号"></paper-input>
-        <paper-input label="请输入密码"
-                     type="password"
-                     auto-validate
-                     required
-                     pattern="[[_pwdReg]]"
-                     error-message="密码由6-16位数字和字母组成"></paper-input>
+        <form is="iron-form" id="ajaxForm">
+          <paper-input label="请输入用户名"
+                       name="username"
+                       auto-validate
+                       required
+                       pattern="[[_userNameReg]]"
+                       error-message="用户名由6-16位数字和字母组成"></paper-input>
+          <paper-input label="请输入密码"
+                       name="password"
+                       type="password"
+                       auto-validate
+                       required
+                       on-keydown="_checkPress"
+                       pattern="[[_pwdReg]]"
+                       error-message="密码由6-16位数字和字母组成"></paper-input>
 
-        <div id="text">
-          <a href="#">忘记密码?</a>
-          <a href="#" id="register" on-tap="_openRegister">没有帐号，立即注册</a>
-        </div>
+          <div id="text">
+            <a href="#">忘记密码?</a>
+            <a href="#" id="register" on-tap="_openRegister">没有帐号，立即注册</a>
+          </div>
 
-        <paper-button raised>登录</paper-button>
+          <paper-button raised on-tap="login">登录</paper-button>
+        </form>
       </div>
     </paper-dialog>
 
@@ -109,11 +125,17 @@
     Polymer({
       is: 'ms-login-dialog',
       properties: {
+        serverUrl: {
+          type: String,
+          value: 'http://localhost:3000'
+        },
+
         opened: {
           type: Boolean,
           notify: true
         },
-        _phoneReg: {
+
+        _userNameReg: {
           type: String,
           value: '[a-zA-Z0-9_]{6,16}',
           notify: true
@@ -137,9 +159,39 @@
       _openRegister() {
         this.close();
         this.$.registerDialog.open();
+      },
+
+      login() {
+        if (this.$.ajaxForm.validate() === false) {
+          return;
+        }
+
+        let data = this.$.ajaxForm.serialize();
+        this.$.ajax.body = data;
+
+        this.$.ajax.generateRequest();
+      },
+
+      _handleResponse(e) {
+        console.log('登录成功');
+        this.fire('ms-login-success', e.detail.response, {bubble: false});
+        this.close();
+      },
+
+      _handleError(e) {
+        if(e.detail.request.status === 404) {
+          console.log('用户名不存在');
+        } else if (e.detail.request.status === 400) {
+          console.log('密码错误');
+        }
+      },
+
+      // Enter的情况触发登录
+      _checkPress(e) {
+        if (e.keyCode === 13) {
+          this.login();
+        }
       }
-
-
     });
   </script>
 </dom-module>

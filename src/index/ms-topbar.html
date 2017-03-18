@@ -6,8 +6,10 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-
+<link rel="import" href="../../bower_components/tk-app-local-user/tk-app-local-user.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/tk-confirm-dialog/tk-confirm-dialog.html">
 
 <link rel="import" href="./ms-login-dialog.html">
 <link rel="import" href="./ms-register-dialog.html">
@@ -21,15 +23,19 @@
         padding: 0;
       }
 
+      li {
+        list-style: none;
+      }
+
+      a {
+        text-decoration: none;
+        color: #000;
+      }
+
       #wrap {
         height: 60px;
         background: url('../../images/topbar.png') repeat-x 0px -90px;
-      }
-
-      header {
-        width: 960px;
-        height: 60px;
-        margin: 0 auto;
+        position: relative;
       }
 
       #logo {
@@ -37,11 +43,13 @@
       }
 
       header {
+        width: 960px;
+        height: 60px;
+        margin: 0 auto;
         display: flex;
         align-items: center;
         text-align: center;
         --paper-toolbar-background: transparent;
-        height: 60px;
       }
 
       #tabs {
@@ -73,7 +81,7 @@
       #searchBox {
         width: 220px;
         height: 30px;
-        margin-left: 140px;
+        margin-left: 100px;
         position: relative;
       }
 
@@ -109,8 +117,29 @@
       }
 
       #registerBtn {
-        margin-left: -30px;
+        margin-left: -20px;
       }
+
+      #username, #button {
+        position: absolute;
+        font-size: 13px;
+        width: 160px;
+        right: 20px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+      }
+
+      paper-item {
+        width: 50px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      paper-item a:hover {
+        text-decoration: underline;
+      }
+
     </style>
 
     <div id="wrap">
@@ -127,18 +156,60 @@
           <iron-icon icon="search"></iron-icon>
         </div>
 
-        <paper-button hidden$="[[isLogin]]" noink on-tap="_handleLogin">登录</paper-button>
-        <paper-button hidden$="[[isLogin]]" noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
+        <div id="button">
+          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleLogin">登录</paper-button>
+          <paper-button hidden$="[[isLogin]]" noink on-tap="_handleRegister" id="registerBtn">注册</paper-button>
+        </div>
+
+        <div id="username" hidden$="[[!isLogin]]">
+          <span hidden$="[[!isLogin]]">
+            [[user.username]]
+          </span>
+
+          <paper-menu-button horizontal-align="right" no-overlap vertical-align="top">
+            <paper-icon-button icon="account-circle" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+              <paper-item><a href="/me">个人中心</a></paper-item>
+              <paper-item><a on-tap="_openDialog">登出</a></paper-item>
+            </paper-menu>
+          </paper-menu-button>
+        </div>
 
       </header>
-      <ms-login-dialog id="loginDialog"></ms-login-dialog>
+
+      <ms-login-dialog id="loginDialog" on-ms-login-success="_handleUserLogin"></ms-login-dialog>
       <ms-register-dialog id="registerDialog"></ms-login-dialog>
+      <tk-app-local-user id="localUser"></tk-app-local-user>
 
     </div>
+
+    <tk-confirm-dialog id="dialog"
+                       close-by-cancel
+                       title="是否退出登陆？"
+                       on-tk-confirm-dialog-confirm="_dealConfirm">
+    </tk-confirm-dialog>
+    
   </template>
   <script>
     Polymer({
       is: 'ms-topbar',
+      properties: {
+        user: {
+          type: Object
+        },
+
+        isLogin: {
+          type: Boolean,
+          notify: true,
+          computed: '_computeIsLogin(user)'
+        }
+      },
+
+      attached() {
+        this._initLogoutListen();
+        let user = this.$.localUser.getUser();
+        this.user = user;
+      },
 
       _handleLogin() {
         this.$.loginDialog.open();
@@ -147,6 +218,35 @@
       _handleRegister() {
         this.$.registerDialog.open();
       },
+
+      _handleUserLogin(event) {
+        this.user = event.detail;
+        this.$.localUser.saveUser(this.user);
+      },
+
+      _initLogoutListen() {
+        window.addEventListener('logout', () => {
+          this.user = null;
+          this.$.localUser.clearUser();
+        });
+      },
+
+      _computeIsLogin(user) {
+        if (user) {
+          return true;
+        }
+
+        return false;
+      },
+
+      _openDialog() {
+        this.$.dialog.opened = true;
+      },
+
+      _dealConfirm() {
+        this.fire('logout', null, null);
+        this.$.dialog.opened = false;
+      }
     });
   </script>
 </dom-module>
