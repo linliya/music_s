@@ -11,6 +11,9 @@
 
 <link rel="import" href="./ms-register-dialog.html">
 
+<link rel="import" href="../behavior/ms-connect-behavior.html">
+
+
 <dom-module id="ms-login-dialog">
   <template>
     <style>
@@ -124,12 +127,9 @@
   <script>
     Polymer({
       is: 'ms-login-dialog',
-      properties: {
-        serverUrl: {
-          type: String,
-          value: 'http://localhost:3000'
-        },
+      behaviors: [Polymer.msConnectBehavior],
 
+      properties: {
         opened: {
           type: Boolean,
           notify: true

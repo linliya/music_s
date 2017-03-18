@@ -178,7 +178,7 @@
       </header>
 
       <ms-login-dialog id="loginDialog" on-ms-login-success="_handleUserLogin"></ms-login-dialog>
-      <ms-register-dialog id="registerDialog"></ms-login-dialog>
+      <ms-register-dialog id="registerDialog" on-ms-register-success="_handleUserRegister"></ms-login-dialog>
       <tk-app-local-user id="localUser"></tk-app-local-user>
 
     </div>
@@ -188,7 +188,7 @@
                        title="是否退出登陆？"
                        on-tk-confirm-dialog-confirm="_dealConfirm">
     </tk-confirm-dialog>
-    
+
   </template>
   <script>
     Polymer({
@@ -219,8 +219,13 @@
         this.$.registerDialog.open();
       },
 
-      _handleUserLogin(event) {
-        this.user = event.detail;
+      _handleUserLogin(e) {
+        this.user = e.detail;
+        this.$.localUser.saveUser(this.user);
+      },
+
+      _handleUserRegister(e) {
+        this.user = e.detail;
         this.$.localUser.saveUser(this.user);
       },
 

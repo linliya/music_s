@@ -1,0 +1,72 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+  /**
+   * "msConnectBehavior"用于提供与服务器通信所需要的信息。包括：
+   *
+   * - 服务器地址
+   * - 根据用户token生成的验证header
+   *
+   * 一个元素继承该behavior后，使用iron-ajax时就可以这样：
+   * ```
+   * <iron-ajax url="[[serverUrl]]/your/url" headers="[[authHeader]]" on-error="fireUnauthorizationEvent">
+   * <iron-ajax>
+   * ```
+   *
+   * @polymerBehavior Polymer.msConnectBehavior
+   */
+  Polymer.msConnectBehavior = {
+    properties: {
+      /**
+       * 服务器地址。
+       * 使用的是window._msServerUrl的值。
+       */
+      serverUrl: {
+        type: String,
+        readOnly: true,
+        value: function() {
+          return window._msServerUrl;
+        }
+      },
+
+      /**
+       * 登陆用户。
+       */
+      loginUser: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * 服务器权限验证所需要的请求header，依赖loginUser。
+       * {"Authorization": "Token ${loginUser.token}"}
+       */
+      authHeader: {
+        type: Object,
+        notify: true,
+        computed: '_computeAuthHeader(loginUser)'
+      }
+    },
+
+    /**
+     * @event ms-server-unauthorization 服务器未验证
+     */
+
+    /**
+     * 触发一个冒泡的"ms-server-unauthorization"事件。
+     */
+    fireUnauthorizationEvent() {
+      this.fire('ms-server-unauthorization', null, {bubbles: true});
+    },
+
+    _computeAuthHeader(loginUser) {
+      if (!loginUser) {
+        return null;
+      }
+
+      return {
+        Authorization: 'Token ' + loginUser.token
+      };
+    }
+  };
+</script>
