@@ -169,7 +169,7 @@
           <paper-menu-button horizontal-align="right" no-overlap vertical-align="top">
             <paper-icon-button icon="account-circle" class="dropdown-trigger"></paper-icon-button>
             <paper-menu class="dropdown-content">
-              <paper-item><a href="/me">个人中心</a></paper-item>
+              <paper-item><a href="/me/detail">个人中心</a></paper-item>
               <paper-item><a on-tap="_openDialog">登出</a></paper-item>
             </paper-menu>
           </paper-menu-button>
@@ -201,6 +201,7 @@
         isLogin: {
           type: Boolean,
           notify: true,
+          value: false,
           computed: '_computeIsLogin(user)'
         }
       },
@@ -222,11 +223,13 @@
       _handleUserLogin(e) {
         this.user = e.detail;
         this.$.localUser.saveUser(this.user);
+        parent.location.reload();
       },
 
       _handleUserRegister(e) {
         this.user = e.detail;
         this.$.localUser.saveUser(this.user);
+        parent.location.reload();
       },
 
       _initLogoutListen() {

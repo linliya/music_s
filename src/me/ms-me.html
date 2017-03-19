@@ -20,10 +20,10 @@
     </app-route>
 
     <iron-pages attr-for-selected="id" selected="{{_routeData.page}}" id="selector">
-      <ms-me-detail is-login="{{isLogin}}" route="{{tail}}" id="detail"></ms-me-detail>
-      <ms-me-edit route="{{tail}}" id="edit"></ms-me-edit>
-      <ms-me-music route="{{tail}}" id="music"></ms-me-music>
-      <ms-no-login route="{{tail}}" id="noLogin"></ms-no-login>
+      <ms-me-detail id="detail" is-login="{{isLogin}}" route="{{tail}}"></ms-me-detail>
+      <ms-me-edit id="edit" route="{{tail}}"></ms-me-edit>
+      <ms-me-music id="music" route="{{tail}}"></ms-me-music>
+      <ms-no-login id="noLogin" route="{{tail}}"></ms-no-login>
     </iron-pages>
   </template>
     <script>

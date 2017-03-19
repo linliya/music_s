@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/tk-app-local-user/tk-app-local-user.html">
 
 <link rel="import" href="./ms-main.html">
 <link rel="import" href=".././me/ms-me.html">
@@ -17,7 +18,7 @@
     <style>
       :host {
         display: block;
-        font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+        font-family: "Microsoft Yahei";
       }
     </style>
     <app-location id="location" path="{{path}}" route="{{route}}"></app-location>
@@ -28,14 +29,15 @@
         data="{{routeData}}"
         tail="{{tail}}">
     </app-route>
+    <tk-app-local-user id="localUser"></tk-app-local-user>
 
     <iron-pages attr-for-selected="id" selected="[[routeData.page]]" id="selector">
-      <ms-main route="{{tail}}" id="main"></ms-main>
-      <ms-me route="{{tail}}" id="me" is-login="[[isLogin]]"></ms-me>
-      <ms-music-detail id="musicDetail"></ms-music-detail>
-      <ms-disk-detail id="diskDetail"></ms-disk-detail>
-      <ms-toplist id="toplist"></ms-toplist>
-      <ms-playlist id="playlist"></ms-playlist>
+      <ms-main route="{{tail}}" id="main" user="[[user]]"></ms-main>
+      <ms-me route="{{tail}}" id="me" user="[[user]]"></ms-me>
+      <ms-music-detail id="musicDetail" user="[[user]]"></ms-music-detail>
+      <ms-disk-detail id="diskDetail" user="[[user]]"></ms-disk-detail>
+      <ms-toplist id="toplist" user="[[user]]"></ms-toplist>
+      <ms-playlist id="playlist" user="[[user]]"></ms-playlist>
     </iron-pages>
 
   </template>
@@ -50,14 +52,8 @@
 
         properties: {
           /**
-           * 是否已经登陆。
+           * 是否存在登录用户
            */
-          isLogin: {
-            type: Boolean,
-            notify: true,
-            computed: '_computeIsLogin(user)'
-          },
-
           user: {
             type: Object
           },
@@ -99,10 +95,17 @@
           if(this.$.selector.selected === '') {
             this.$.selector.select('main');
           }
+
+          this._initLogoutListen();
+          let user = this.$.localUser.getUser();
+          this.user = user;
         },
 
-        _computeIsLogin(user) {
-          return true;
+        _initLogoutListen() {
+          window.addEventListener('logout', () => {
+            this.user = null;
+            this.$.localUser.clearUser();
+          });
         }
       });
    })();

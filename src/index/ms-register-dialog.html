@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
 
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
@@ -95,7 +97,7 @@
                        name="username"
                        auto-validate
                        required
-                       pattern="[[_phoneReg]]"
+                       pattern="[a-zA-Z0-9_]{6,16}"
                        error-message="用户名由6-16位数字和字母组成"></paper-input>
           <paper-input id="password"
                        label="请输入密码"
@@ -116,8 +118,12 @@
                        error-message="两次输入密码不一致"></paper-input>
           <paper-button raised on-tap="_register">注册</paper-button>
         </form>
+
+        <paper-toast id="toast" vertical-align="top"></paper-toast>
+
       </div>
     </paper-dialog>
+
   </template>
   <script>
     Polymer({
@@ -142,6 +148,12 @@
 
       close() {
         this.opened = false;
+      },
+
+      _toast(msg) {
+        let toast = this.$.toast;
+        toast.text = msg;
+        toast.open();
       },
 
       // 提交表单数据
@@ -176,14 +188,17 @@
 
       // 提交数据成功时服务器的反馈
       _handleResponse(e) {
-        this.$.ironForm.reset();
-        this.close();
         this.fire('ms-register-success', e.detail.response, null);
+        this._toast('注册成功!');
+        setTimeOut(() => {
+          this.close();
+        }, 4000);
+        this.$.ironForm.reset();
       },
 
       _handleError(e) {
         if(e.detail.request.status === 403) {
-          console.log('用户名已存在，请直接登录');
+          this._toast('用户名已存在，请直接登录');
         }
       },
 

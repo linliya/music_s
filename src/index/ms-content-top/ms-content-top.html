@@ -12,6 +12,11 @@
 <dom-module id="ms-content-top">
   <template>
     <style>
+      a {
+        color: #333;
+        text-decoration: none;
+      }
+
       #wrap {
         width: 960px;
         margin: 0 auto;
@@ -111,9 +116,6 @@
         color: #b50b0b;
       }
 
-
-
-
     </style>
     <div id="wrap">
       <paper-toolbar>
@@ -126,7 +128,7 @@
           <paper-tab>民谣</paper-tab>
           <paper-tab class="last">电子</paper-tab>
         </paper-tabs>
-        <span id="more">更多<iron-icon icon="arrow-forward"></iron-icon></span>
+        <span id="more"><a href="/playlist">更多</a><iron-icon icon="arrow-forward"></iron-icon></span>
       </paper-toolbar>
 
       <div id="img">

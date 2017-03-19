@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
@@ -119,9 +120,9 @@
 
           <paper-button raised on-tap="login">登录</paper-button>
         </form>
+        <paper-toast id="toast" vertical-align="top"></paper-toast>
       </div>
     </paper-dialog>
-
     <ms-register-dialog id="registerDialog"></ms-register-dialog>
   </template>
   <script>
@@ -156,6 +157,12 @@
         this.opened = false;
       },
 
+      _toast(msg) {
+        let toast = this.$.toast;
+        toast.text = msg;
+        toast.open();
+      },
+
       _openRegister() {
         this.close();
         this.$.registerDialog.open();
@@ -173,16 +180,18 @@
       },
 
       _handleResponse(e) {
-        console.log('登录成功');
+        this._toast('登录成功');
         this.fire('ms-login-success', e.detail.response, {bubble: false});
-        this.close();
+        setTimeOut( () => {
+          this.close();
+        }, 4000);
       },
 
       _handleError(e) {
         if(e.detail.request.status === 404) {
-          console.log('用户名不存在');
+          this._toast('用户名不存在');
         } else if (e.detail.request.status === 400) {
-          console.log('密码错误');
+          this._toast('密码错误');
         }
       },
 
