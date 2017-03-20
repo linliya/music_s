@@ -7,7 +7,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-
+<link rel="import" href="../../bower_components/tk-app-local-user/tk-app-local-user.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="./ms-register-dialog.html">
@@ -124,6 +124,8 @@
       </div>
     </paper-dialog>
     <ms-register-dialog id="registerDialog"></ms-register-dialog>
+    <tk-app-local-user id="localUser"></tk-app-local-user>
+
   </template>
   <script>
     Polymer({
@@ -182,9 +184,9 @@
       _handleResponse(e) {
         this._toast('登录成功');
         this.fire('ms-login-success', e.detail.response, {bubble: false});
-        setTimeOut( () => {
+        setTimeout(() => {
           this.close();
-        }, 4000);
+        }, 3000);
       },
 
       _handleError(e) {

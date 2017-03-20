@@ -190,10 +190,9 @@
       _handleResponse(e) {
         this.fire('ms-register-success', e.detail.response, null);
         this._toast('注册成功!');
-        let that = this;
-        setTimeOut(() => {
-          that.close();
-        }, 4000);
+        setTimeout(() => {
+          this.close();
+        }, 3000);
         this.$.ironForm.reset();
       },
 
