@@ -91,15 +91,15 @@
         <img src="[[src]]" width="920px" height="336px">
         <span id="pre" on-tap="prev"></span>
         <span id="next"on-tap="next"></span>
-        <div id="dot">
+        <!-- <div id="dot">
           <ul>
-            <li class$="[[class]]" on-tap="_dotTap"></li>
-            <li class$="[[class]]" on-tap="_dotTap"></li>
-            <li class$="[[class]]" on-tap="_dotTap"></li>
-            <li class$="[[class]]" on-tap="_dotTap"></li>
-            <li class$="[[class]]" on-tap="_dotTap"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </template>
@@ -135,8 +135,8 @@
           type: Object
         },
 
-        class: {
-          type: String
+        totalNum: {
+          type: Number
         }
       },
 
@@ -155,7 +155,19 @@
         this.$.wrap.style.backgroundImage = 'url('+this.srcBg[this.num]+')';
 
         this._play();
+
+
       },
+
+      // _dotActive() {
+      //   let dotArr = this.$.dot.querySelectorAll('ul li');
+      //
+      //   for (var i = 0; i < dotArr.length; i++) {
+      //     dotArr[i].index = i;
+      //     dotArr[i].setAttribute('class', 'style-scope ms-nav');
+      //     dotArr[i]
+      //   }
+      // },
 
       _play() {
         this.timer = setInterval(() => {
@@ -165,19 +177,6 @@
 
       _stop() {
         clearInterval(this.timer);
-      },
-
-      _dotTap() {
-        let dotArr = this.$.dot.querySelector('ul li');
-        // for(var i = 0; i < dotArr.length; i++) {
-        //   // if(dotArr[i].getAttribute) {
-        //     dotArr[i].class $= '';
-        //   // }
-        // }
-        // console.log(dotArr);
-        // dotArr[this.num] $= 'active';
-        // this.src = this.srcArr[this.num];
-        this.class = 'active';
       },
 
       prev() {
