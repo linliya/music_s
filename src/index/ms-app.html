@@ -32,12 +32,12 @@
     <tk-app-local-user id="localUser"></tk-app-local-user>
 
     <iron-pages attr-for-selected="id" selected="[[routeData.page]]" id="selector">
-      <ms-main route="{{tail}}" id="main" user="[[user]]"></ms-main>
-      <ms-me route="{{tail}}" id="me" user="[[user]]"></ms-me>
-      <ms-music-detail id="musicDetail" user="[[user]]"></ms-music-detail>
-      <ms-disk-detail id="diskDetail" user="[[user]]"></ms-disk-detail>
-      <ms-toplist id="toplist" user="[[user]]"></ms-toplist>
-      <ms-playlist id="playlist" user="[[user]]"></ms-playlist>
+      <ms-main route="{{tail}}" id="main" login-user="[[user]]"></ms-main>
+      <ms-me route="{{tail}}" id="me" login-user="[[user]]"></ms-me>
+      <ms-music-detail id="musicDetail" login-user="[[user]]"></ms-music-detail>
+      <ms-disk-detail id="diskDetail" login-user="[[user]]"></ms-disk-detail>
+      <ms-toplist id="toplist" login-user="[[user]]"></ms-toplist>
+      <ms-playlist id="playlist" login-user="[[user]]"></ms-playlist>
     </iron-pages>
 
   </template>

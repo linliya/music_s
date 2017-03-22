@@ -107,6 +107,12 @@
 
 
     </style>
+    <iron-ajax id="ajax"
+               method="POST"
+               url="[[serverUrl]]/user/update/id=[[user.id]]"
+               handle-as="json"
+               on-response="handleResponse"></iron-ajax>
+
     <ms-topbar user="[[user]]"></ms-topbar>
 
     <div id="wrap">

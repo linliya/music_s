@@ -180,7 +180,6 @@
       <ms-login-dialog id="loginDialog" on-ms-login-success="_handleUserLogin"></ms-login-dialog>
       <ms-register-dialog id="registerDialog" on-ms-register-success="_handleUserRegister"></ms-login-dialog>
       <tk-app-local-user id="localUser"></tk-app-local-user>
-
     </div>
 
     <tk-confirm-dialog id="dialog"
@@ -223,13 +222,11 @@
       _handleUserLogin(e) {
         this.user = e.detail;
         this.$.localUser.saveUser(this.user);
-        // parent.location.reload();
+        parent.location.reload();
       },
 
       _handleUserRegister(e) {
-        this.user = e.detail;
-        this.$.localUser.saveUser(this.user);
-        // parent.location.reload();
+        this.$.loginDialog.open();
       },
 
       _initLogoutListen() {

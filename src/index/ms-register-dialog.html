@@ -83,7 +83,8 @@
       url="[[serverUrl]]/user/register"
       handle-as="json"
       content-type="application/json"
-      on-response="_handleResponse"></iron-ajax>
+      on-response="_handleResponse"
+      on-error="_handleError"></iron-ajax>
 
     <paper-dialog id="loginDialog" opened="{{opened}}" with-backdrop no-cancel-on-outside-click>
       <header>
@@ -123,7 +124,6 @@
 
       </div>
     </paper-dialog>
-
   </template>
   <script>
     Polymer({
@@ -188,17 +188,18 @@
 
       // 提交数据成功时服务器的反馈
       _handleResponse(e) {
-        this.fire('ms-register-success', e.detail.response, null);
-        this._toast('注册成功!');
+        this.fire('ms-register-success', null, null);
+        this._toast('注册成功.请登录!');
+
         setTimeout(() => {
           this.close();
-        }, 3000);
+        }, 1000);
         this.$.ironForm.reset();
       },
 
       _handleError(e) {
         if(e.detail.request.status === 403) {
-          this._toast('用户名已存在，请直接登录');
+          this._toast('用户名已被占用!');
         }
       },
 
