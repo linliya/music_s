@@ -1,4 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-footer.html">
@@ -11,6 +15,11 @@
         resize: none;
       }
 
+      h3, h4, section, header, div, form, paper-input {
+        margin: 0;
+        padding: 0;
+      }
+
       ms-topbar:after {
         content: '';
         display: block;
@@ -20,6 +29,7 @@
       #wrap {
         width: 960px;
         margin: 0px auto;
+        padding-bottom: 100px;
         border: 1px solid #ccc;
         background: #fff;
         display: flex;
@@ -36,12 +46,34 @@
       }
 
       h3 {
+        margin-top: 50px;
         border-bottom: 1px solid #ddd;
         padding: 8px 0;
         font-size: 24px;
         color: #333;
         font-weight: normal;
         font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #37a0ce;
+        width: 300px;
+        margin-bottom: 40px;
+      }
+
+      #updatePassword {
+        width: 220px;
+        margin: -30px 0 0 77px;
+      }
+
+      #updatePassword paper-input {
+        height: 70px;
+      }
+
+      #updatePassword paper-button {
+        background: #3677d8;
+        color: #fff;
+        margin-top: 20px;
       }
 
       #msg {
@@ -62,7 +94,7 @@
         margin: 0 10px 0 30px;
       }
 
-      #text input[type='date'] {
+      #text input[type='date']{
         width: 169px;
       }
 
@@ -105,11 +137,15 @@
         text-decoration: underline;
       }
 
+      #photo input {
+        display: none;
+      }
+
 
     </style>
     <iron-ajax id="ajax"
                method="POST"
-               url="[[serverUrl]]/user/update/id=[[user.id]]"
+               url="[[serverUrl]]/user/update/[[user.id]]"
                handle-as="json"
                on-response="handleResponse"></iron-ajax>
 
@@ -117,14 +153,54 @@
 
     <div id="wrap">
       <header>
-        <h3>个人设置</h3>
-      </header>
+        <h3>
+          个人设置
+        </h3>
+        <paper-tabs selected="[[selectedTab]]" align-bottom id="tabs">
+          <paper-tab on-tap="updateMsg">基本资料</paper-tab>
+          <paper-tab on-tap="updatePassword">修改密码</paper-tab>
+        </paper-tabs>
 
-      <section id="msg">
+      </header>
+      <form is="iron-form" id="updatePassword" hidden$="[[!isUpdatePassword]]">
+        <paper-input id="oldPassword"
+                     focused
+                     name="old_password"
+                     label="请输入旧密码"
+                     type="password"
+                     required
+                     auto-validate
+                     error-message="请输入旧密码">
+        </paper-input>
+
+        <paper-input id="newPassword"
+                     nmae="new_password"
+                     label="请输入新密码"
+                     type="password"
+                     auto-validate
+                     pattern="[a-zA-Z0-9_]{6,16}"
+                     on-value-changed="_validatePwd"
+                     error-message="密码由6-16位数字和字母组成">
+        </paper-input>
+
+        <paper-input id="repeatPassword"
+                     name="repeat_password"
+                     label="请确认新密码"
+                     type="password"
+                     on-value-changed="_validatePwd"
+                     error-message="两次输入密码不一致">
+        </paper-input>
+
+        <paper-button raised>保存</paper-button>
+
+
+      </form>
+
+      <form is="iron-form" id="msg" hidden$="[[isUpdatePassword]]">
         <section id="text">
           <section>
             <span>昵称:</span>
-            <input type="text">
+            <input type="text" name="name">
           </section>
 
           <section>
@@ -152,15 +228,55 @@
         </section>
 
         <section id="photo">
-          <img src="../../images/me_photo.jpg" width="140px" height="140px">
-          <span id="changePhoto">更换头像</span>
+          <img src="../../images/me_photo.jpg" width="140px" height="140px" id="image">
+          <span id="changePhoto" on-tap="_changePhoto">更换头像</span>
+          <input type="file" id="file" accept="image/png,image/gif,image/jpg" on-change="_handleChangePhoto">
         </section>
-      </section>
+      </form>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'ms-me-edit'
+      is: 'ms-me-edit',
+      properties: {
+        isUpdatePassword: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        selectedTab: {
+          type: Number,
+          notify: true,
+          value: 0,
+          computed: '_computedSelectedTab(isUpdatePassword)'
+        }
+      },
+
+      _computedSelectedTab(isUpdatePassword) {
+        if(isUpdatePassword) {
+          return 1;
+        }
+        return 0;
+      },
+
+      updatePassword() {
+        this.isUpdatePassword = true;
+      },
+
+      updateMsg() {
+        this.isUpdatePassword = false;
+      },
+
+      _changePhoto() {
+        this.$.file.click();
+      },
+
+      _handleChangePhoto() {
+        let file = this.$.file;
+        this.$.changePhoto.innerHTML = file.files[0].name;
+      }
     });
   </script>
 </dom-module>
