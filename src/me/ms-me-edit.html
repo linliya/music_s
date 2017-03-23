@@ -143,9 +143,14 @@
 
 
     </style>
-    <iron-ajax id="ajax"
+    <iron-ajax id="msgAjax"
                method="POST"
-               url="[[serverUrl]]/user/update/[[user.id]]"
+               url="[[serverUrl]]/user/update_msg/[[user.id]]"
+               handle-as="json"
+               on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="passwordAjax"
+               method="POST"
+               url="[[serverUrl]]/user/update_psw/[[user.id]]"
                handle-as="json"
                on-response="handleResponse"></iron-ajax>
 
@@ -157,8 +162,8 @@
           个人设置
         </h3>
         <paper-tabs selected="[[selectedTab]]" align-bottom id="tabs">
-          <paper-tab on-tap="updateMsg">基本资料</paper-tab>
-          <paper-tab on-tap="updatePassword">修改密码</paper-tab>
+          <paper-tab on-tap="_updateMsg">基本资料</paper-tab>
+          <paper-tab on-tap="_updatePassword">修改密码</paper-tab>
         </paper-tabs>
 
       </header>
@@ -192,8 +197,6 @@
         </paper-input>
 
         <paper-button raised>保存</paper-button>
-
-
       </form>
 
       <form is="iron-form" id="msg" hidden$="[[isUpdatePassword]]">
@@ -250,22 +253,41 @@
           type: Number,
           notify: true,
           value: 0,
-          computed: '_computedSelectedTab(isUpdatePassword)'
-        }
+        },
+
+        _isSamePwd: {
+          type: Boolean,
+          notify: true,
+          observer: '_observeIsSamePwd'
+        },
+
       },
 
-      _computedSelectedTab(isUpdatePassword) {
-        if(isUpdatePassword) {
-          return 1;
+      // 验证密码是否一致
+      _validatePwd() {
+        if (this.$.newPassword.value !== this.$.repeatPassword.value) {
+          this._isSamePwd = false;
+          return;
         }
-        return 0;
+
+        this._isSamePwd = true;
       },
 
-      updatePassword() {
+      // 如果密码不一致要采取的操作
+      _observeIsSamePwd() {
+        if (this._isSamePwd) {
+          this.$.repeatPassword.invalid = false;
+          return;
+        }
+
+        this.$.repeatPassword.invalid = true;
+      },
+
+      _updatePassword() {
         this.isUpdatePassword = true;
       },
 
-      updateMsg() {
+      _updateMsg() {
         this.isUpdatePassword = false;
       },
 
