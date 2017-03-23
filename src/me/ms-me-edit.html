@@ -7,6 +7,7 @@
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-footer.html">
 
+<link rel="import" href="../behavior/ms-connect-behavior.html">
 
 <dom-module id="ms-me-edit">
   <template>
@@ -144,15 +145,18 @@
 
     </style>
     <iron-ajax id="msgAjax"
-               method="POST"
-               url="[[serverUrl]]/user/update_msg/[[user.id]]"
+               method="PUT"
+               url="[[serverUrl]]/user/update_msg/[[loginUser.id]]"
                handle-as="json"
-               on-response="handleResponse"></iron-ajax>
-    <iron-ajax id="passwordAjax"
-               method="POST"
-               url="[[serverUrl]]/user/update_psw/[[user.id]]"
+               on-error="_handleError"></iron-ajax>
+    <iron-ajax id="pswAjax"
+               method="PUT"
+               url="[[serverUrl]]/user/update_psw/[[loginUser.id]]"
                handle-as="json"
-               on-response="handleResponse"></iron-ajax>
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               on-response="_handlePswResponse"
+               on-error="_handlePswError"></iron-ajax>
 
     <ms-topbar user="[[user]]"></ms-topbar>
 
@@ -161,7 +165,7 @@
         <h3>
           个人设置
         </h3>
-        <paper-tabs selected="[[selectedTab]]" align-bottom id="tabs">
+        <paper-tabs selected="[[selectedTab]]" align-bottom id="tabs" noink>
           <paper-tab on-tap="_updateMsg">基本资料</paper-tab>
           <paper-tab on-tap="_updatePassword">修改密码</paper-tab>
         </paper-tabs>
@@ -196,7 +200,7 @@
                      error-message="两次输入密码不一致">
         </paper-input>
 
-        <paper-button raised>保存</paper-button>
+        <paper-button raised on-tap="save">保存</paper-button>
       </form>
 
       <form is="iron-form" id="msg" hidden$="[[isUpdatePassword]]">
@@ -236,11 +240,15 @@
           <input type="file" id="file" accept="image/png,image/gif,image/jpg" on-change="_handleChangePhoto">
         </section>
       </form>
+      <paper-toast id="toast"></paper-toast>
+
     </div>
   </template>
   <script>
     Polymer({
       is: 'ms-me-edit',
+      behaviors: [Polymer.msConnectBehavior],
+
       properties: {
         isUpdatePassword: {
           type: Boolean,
@@ -259,8 +267,18 @@
           type: Boolean,
           notify: true,
           observer: '_observeIsSamePwd'
-        },
+        }
 
+      },
+
+      save() {
+        this.$.pswAjax.generateRequest();
+      },
+
+      _toast(msg) {
+        let toast = this.$.toast;
+        toast.text = msg;
+        toast.open();
       },
 
       // 验证密码是否一致
@@ -298,6 +316,19 @@
       _handleChangePhoto() {
         let file = this.$.file;
         this.$.changePhoto.innerHTML = file.files[0].name;
+      },
+
+      _handlePswResponse() {
+        this._toast('密码修改成功！')
+        location.href = '/me';
+      },
+
+      _handlePswError(e) {
+        if(e.detail.request.status === 400) {
+          this._toast('旧密码错误');
+        } else {
+          this._toast('用户不存在');
+        }
       }
     });
   </script>
