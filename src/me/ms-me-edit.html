@@ -3,20 +3,22 @@
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+
+<link rel="import" href="../../bower_components/">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-footer.html">
+<link rel="import" href="./ms-upload-dialog.html">
 
 <link rel="import" href="../behavior/ms-connect-behavior.html">
 
 <dom-module id="ms-me-edit">
   <template>
     <style>
-      textarea {
-        resize: none;
-      }
-
-      h3, h4, section, header, div, form, paper-input {
+      h3, h4, section, header, div, form, paper-input, paper-textarea,label {
         margin: 0;
         padding: 0;
       }
@@ -59,7 +61,7 @@
       paper-tabs {
         --paper-tabs-selection-bar-color: #37a0ce;
         width: 300px;
-        margin-bottom: 40px;
+        margin-bottom: 10px;
       }
 
       #updatePassword {
@@ -80,34 +82,22 @@
       #msg {
         display: flex;
         justify-content: space-around;
-        width: 480px;
+        width: 600px;
       }
 
-      #text section{
-        display: flex;
-        justify-content: flex-start;
-        line-height: 28px;
-        margin-bottom: 10px;
-      }
-
-      #text section span {
-        width: 50px;
-        margin: 0 10px 0 30px;
-      }
-
-      #text input[type='date']{
-        width: 169px;
+      #msg paper-input, paper-textarea {
+        width: 300px;
       }
 
       #save {
-        width: 60px;;
-        height:28px;
+        width: 70px;;
+        height: 48px;
         border: none;
         outline: none;
         color: #fff;
         border-radius: 4px;
         background: #3677d8;
-        margin: 10px 0 30px 30px;
+        margin-top: 30px;
         cursor: pointer;
       }
 
@@ -137,11 +127,6 @@
       #changePhoto:hover {
         text-decoration: underline;
       }
-
-      #photo input {
-        display: none;
-      }
-
 
     </style>
     <iron-ajax id="msgAjax"
@@ -207,43 +192,33 @@
 
       <form is="iron-form" id="msg" hidden$="[[isUpdatePassword]]">
         <section id="text">
-          <section>
-            <span>昵称:</span>
-            <input type="text" name="name">
-          </section>
+          <paper-input label="昵称:"></paper-input>
 
-          <section>
-            <span>爱好:</span>
-            <textarea name="name" rows="6" cols="19"></textarea>
-          </section>
+          <paper-textarea maxlength="100" label="爱好:"></paper-textarea>
 
-          <section>
-            <span>性别:</span>
-            <input type="radio" name="sex" checked="">男
-            <input type="radio" name="sex">女
-            <input type="radio" name="sex">保密
-          </section>
+          <label>性别:</label>
+          <paper-radio-group selected="man">
+            <paper-radio-button name="man">男</paper-radio-button>
+            <paper-radio-button name="women">女</paper-radio-button>
+            <paper-radio-button name="secret">保密</paper-radio-button>
+          </paper-radio-group>
 
-          <section>
+          <div>
             <span>生日:</span>
-            <input type="date" id="date">
-          </section>
+            <paper-input type="date" id="date"></paper-input>
+          </div>
 
-          <section>
-            <span>地区:</span>
-            <input type="text">
-          </section>
+          <paper-input type="text" label="地区:"></paper-input>
           <button type="button" name="button" id="save">保存</button>
         </section>
 
         <section id="photo">
           <img src="../../images/me_photo.jpg" width="140px" height="140px" id="image">
-          <span id="changePhoto" on-tap="_changePhoto">更换头像</span>
-          <input type="file" id="file" accept="image/png,image/gif,image/jpg" on-change="_handleChangePhoto">
+          <label id="changePhoto" on-tap="_changePhoto">更换头像</label>
         </section>
       </form>
       <paper-toast id="toast"></paper-toast>
-
+      <ms-upload-dialog login-user="[[loginUser]]" id="changePhotoDialog"></ms-upload-dialog>
     </div>
   </template>
   <script>
@@ -319,12 +294,7 @@
       },
 
       _changePhoto() {
-        this.$.file.click();
-      },
-
-      _handleChangePhoto() {
-        let file = this.$.file;
-        this.$.changePhoto.innerHTML = file.files[0].name;
+        this.$.changePhotoDialog.open();
       },
 
       _handlePswResponse() {
