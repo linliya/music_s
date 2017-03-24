@@ -35,7 +35,6 @@
       #wrap {
         height: 60px;
         background: url('../../images/topbar.png') repeat-x 0px -90px;
-        position: relative;
       }
 
       #logo {
@@ -51,6 +50,7 @@
         align-items: center;
         text-align: center;
         --paper-toolbar-background: transparent;
+        position: relative;
       }
 
       #tabs {
@@ -125,7 +125,7 @@
         position: absolute;
         font-size: 13px;
         width: 160px;
-        right: 20px;
+        right: -400px;
         color: #fff;
         display: flex;
         align-items: center;
@@ -149,7 +149,7 @@
         <span id="logo">logo</span>
         <div id="tabs">
           <a href="/main" id="activeTab" class="tab" active>发现音乐<i></i></a>
-          <a href="/me/music" class="tab">我的音乐</a>
+          <a href="[[href]]" class="tab">我的音乐</a>
         </div>
 
         <div id="searchBox">
@@ -203,6 +203,13 @@
           notify: true,
           value: false,
           computed: '_computeIsLogin(user)'
+        },
+
+        href: {
+          type: String,
+          notify: true,
+          value: 'me/noLogin',
+          computed: '_computeIsLoginaa(isLogin)'
         }
       },
 
@@ -243,6 +250,13 @@
         }
 
         return false;
+      },
+
+      _computeIsLoginaa(isLogin) {
+        if(isLogin) {
+          return '/me/music';
+        }
+        return '/me/noLogin';
       },
 
       _openDialog() {

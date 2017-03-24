@@ -1,7 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/tk-app-local-user/tk-app-local-user.html">
 
-<link rel="import" href=".././index/ms-topbar.html">
-<link rel="import" href=".././index/ms-login-dialog.html">
+<link rel="import" href="../index/ms-topbar.html">
+<link rel="import" href="../index/ms-login-dialog.html">
 <dom-module id="ms-no-login">
   <template>
     <style>
@@ -60,8 +61,8 @@
 
 
     </style>
-    <ms-topbar></ms-topbar>
-    <ms-login-dialog id="login"></ms-login-dialog>
+    <ms-topbar login-user="[[loginUser]]"></ms-topbar>
+    <ms-login-dialog id="login" on-ms-login-success="_handleUserLogin"></ms-login-dialog>
     <div id="wrap">
       <div id="pic">
       </div>
@@ -73,6 +74,7 @@
         <button type="button" name="button" on-tap="_login">立即登录</button>
       </div>
     </div>
+    <tk-app-local-user id="localUser"></tk-app-local-user>
   </template>
   <script>
     Polymer({
@@ -80,6 +82,14 @@
 
       _login() {
         this.$.login.open();
+      },
+
+      _handleUserLogin(e) {
+        let origin = location.origin;
+        
+        this.loginUser = e.detail;
+        this.$.localUser.saveUser(this.loginUser);
+        window.location.href = origin+'/main';
       }
     });
   </script>

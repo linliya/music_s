@@ -146,13 +146,15 @@
     </style>
     <iron-ajax id="msgAjax"
                method="PUT"
-               url="[[serverUrl]]/user/update_msg/[[loginUser.id]]"
                handle-as="json"
+               content-type="application/json"
+               url="[[serverUrl]]/user/update_msg/[[loginUser.id]]"
                on-error="_handleError"></iron-ajax>
     <iron-ajax id="pswAjax"
                method="PUT"
-               url="[[serverUrl]]/user/update_psw/[[loginUser.id]]"
                handle-as="json"
+               content-type="application/json"
+               url="[[serverUrl]]/user/update_psw/[[loginUser.id]]"
                headers="[[authHeader]]"
                login-user="[[loginUser]]"
                on-response="_handlePswResponse"
@@ -183,7 +185,7 @@
         </paper-input>
 
         <paper-input id="newPassword"
-                     nmae="new_password"
+                     name="new_password"
                      label="请输入新密码"
                      type="password"
                      auto-validate
@@ -327,7 +329,9 @@
 
       _handlePswResponse() {
         this._toast('密码修改成功！')
-        location.href = '/me';
+        setTimeout(()=> {
+          location.href = '/me';
+        }, 1000);
       },
 
       _handlePswError(e) {

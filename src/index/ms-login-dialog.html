@@ -120,7 +120,7 @@
 
           <paper-button raised on-tap="login">登录</paper-button>
         </form>
-        <paper-toast id="toast" vertical-align="top"></paper-toast>
+        <paper-toast id="toast"></paper-toast>
       </div>
     </paper-dialog>
     <ms-register-dialog id="registerDialog"></ms-register-dialog>
@@ -186,7 +186,7 @@
         this.fire('ms-login-success', e.detail.response, {bubble: false});
         setTimeout(() => {
           this.close();
-        }, 1000);
+        }, 2000);
       },
 
       _handleError(e) {
