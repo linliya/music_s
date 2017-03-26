@@ -72,7 +72,7 @@
       </div>
 
       <input type="file" id="file" accept="image/png,image/gif,image/jpg" on-change="_handleChangePhoto">
-      <paper-button raised>上传</paper-button>
+      <paper-button raised id="upload" on-tap="upload">上传</paper-button>
 
     </paper-dialog>
 
@@ -83,7 +83,10 @@
       behaviors: [[Polymer.msConnectBehavior]],
 
       properties: {
-
+        file: {
+          type: Object,
+          notify: true
+        }
       },
 
       open() {
@@ -94,15 +97,33 @@
         this.$.dialog.opened = false;
       },
 
+      upload() {
+        let formData = new FormData();
+        let url = this.serverUrl + '/user/upload/' + this.loginUser.id;
+        formData.append('file', this.file);
+
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener("readystatechange", function (){
+          if (this.readyState === 4) {
+            that.fire('ms-upload-photo-success', {path: this.responseText}, null);
+            that.close();
+          }
+        });
+
+        xhr.open("POST", url);
+
+        xhr.setRequestHeader("Authorization", 'Token ' + this.loginUser.token);
+        xhr.send(formData);
+      },
+
       _handleLookup() {
         this.$.file.click();
       },
 
       _handleChangePhoto() {
-        let file = this.$.file;
-        this.$.fileName.value = file.files[0].name;
-
-
+        this.file = this.$.file.files[0];
+        this.$.fileName.value = this.file.name;
       }
     });
   </script>

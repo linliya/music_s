@@ -1,11 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <link rel="import" href="../../bower_components/">
 
@@ -66,7 +70,7 @@
 
       #updatePassword {
         width: 220px;
-        margin: -30px 0 0 77px;
+        margin: 0px 0 0 77px;
       }
 
       #updatePassword paper-input {
@@ -79,17 +83,17 @@
         margin-top: 20px;
       }
 
-      #msg {
+      #updateMsg {
         display: flex;
         justify-content: space-around;
         width: 600px;
       }
 
-      #msg paper-input, paper-textarea {
+      #updateMsg paper-input, paper-textarea, paper-dropdown-menu {
         width: 300px;
       }
 
-      #save {
+      #saveMsg {
         width: 70px;;
         height: 48px;
         border: none;
@@ -101,7 +105,7 @@
         cursor: pointer;
       }
 
-      #save:hover {
+      #saveMsg:hover {
         background: #1e63c1;
       }
 
@@ -134,7 +138,8 @@
                handle-as="json"
                content-type="application/json"
                url="[[serverUrl]]/user/update_msg/[[loginUser.id]]"
-               on-error="_handleError"></iron-ajax>
+               on-response="_handleMsgResponse"
+               on-error="_handleMsgError"></iron-ajax>
     <iron-ajax id="pswAjax"
                method="PUT"
                handle-as="json"
@@ -144,7 +149,6 @@
                login-user="[[loginUser]]"
                on-response="_handlePswResponse"
                on-error="_handlePswError"></iron-ajax>
-
     <ms-topbar user="[[user]]"></ms-topbar>
 
     <div id="wrap">
@@ -173,6 +177,7 @@
                      name="new_password"
                      label="请输入新密码"
                      type="password"
+                     required
                      auto-validate
                      pattern="[a-zA-Z0-9_]{6,16}"
                      on-value-changed="_validatePwd"
@@ -182,43 +187,53 @@
         <paper-input id="repeatPassword"
                      label="请确认新密码"
                      type="password"
+                     required
                      on-keydown="_checkPress"
                      on-value-changed="_validatePwd"
                      error-message="两次输入密码不一致">
         </paper-input>
 
-        <paper-button raised on-tap="save">保存</paper-button>
+        <paper-button raised on-tap="savePsw">保存</paper-button>
       </form>
 
-      <form is="iron-form" id="msg" hidden$="[[isUpdatePassword]]">
+      <form is="iron-form" id="updateMsg" hidden$="[[isUpdatePassword]]">
         <section id="text">
-          <paper-input label="昵称:"></paper-input>
+          <paper-input label="昵称:" value="[[loginUser.username]]" name="username"></paper-input>
 
-          <paper-textarea maxlength="100" label="爱好:"></paper-textarea>
+          <paper-textarea maxlength="100" label="爱好:" name="hobby"></paper-textarea>
 
           <label>性别:</label>
-          <paper-radio-group selected="man">
+          <paper-radio-group selected="man" id="sex">
             <paper-radio-button name="man">男</paper-radio-button>
             <paper-radio-button name="women">女</paper-radio-button>
             <paper-radio-button name="secret">保密</paper-radio-button>
           </paper-radio-group>
 
-          <div>
+          <div >
             <span>生日:</span>
-            <paper-input type="date" id="date"></paper-input>
+            <paper-input type="date" id="date" name="birthday"></paper-input>
           </div>
 
-          <paper-input type="text" label="地区:"></paper-input>
-          <button type="button" name="button" id="save">保存</button>
+          <!-- <paper-input type="text" label="地区:(省/市)"></paper-input> -->
+          <paper-dropdown-menu label="地区:" name="area">
+            <paper-listbox class="dropdown-content" selected="0">
+              <paper-item>广东省-广州市</paper-item>
+              <paper-item>广东省-深圳市</paper-item>
+              <paper-item>广东省-汕头市</paper-item>
+              <paper-item>广东省-中山市</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <br/>
+          <paper-button raise id="saveMsg" on-tap="saveMsg">保存</paper-button>
         </section>
 
         <section id="photo">
-          <img src="../../images/me_photo.jpg" width="140px" height="140px" id="image">
+          <img src="[[src]]" width="140px" height="140px" id="image">
           <label id="changePhoto" on-tap="_changePhoto">更换头像</label>
         </section>
       </form>
       <paper-toast id="toast"></paper-toast>
-      <ms-upload-dialog login-user="[[loginUser]]" id="changePhotoDialog"></ms-upload-dialog>
+      <ms-upload-dialog login-user="[[loginUser]]" id="changePhotoDialog" on-ms-upload-photo-success="uploadSuccess"></ms-upload-dialog>
     </div>
   </template>
   <script>
@@ -227,6 +242,12 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
+        src: {
+          type: String,
+          value: '../../images/me_photo.jpg',
+          notify: true
+        },
+
         isUpdatePassword: {
           type: Boolean,
           notify: true,
@@ -248,7 +269,7 @@
 
       },
 
-      save() {
+      savePsw() {
         if (this.$.updatePassword.validate() === false) {
           return;
         }
@@ -257,6 +278,19 @@
         this.$.pswAjax.body = data;
 
         this.$.pswAjax.generateRequest();
+      },
+
+      saveMsg() {
+        let data = this.$.updateMsg.serialize();
+        this.$.msgAjax.body = data;
+        data.image = this.$.image.src;
+        console.log(data);
+
+        this.$.msgAjax.generateRequest();
+      },
+
+      uploadSuccess(e) {
+        this.src =  this.serverUrl + e.detail.path;
       },
 
       _toast(msg) {
