@@ -1,4 +1,5 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+c<link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
@@ -133,9 +134,19 @@
       }
 
     </style>
+    <iron-ajax
+        id="ajax"
+        auto
+        url="[[serverUrl]]/user/[[loginUser.id]]"
+        headers="[[authHeader]]"
+        last-response="{{user}}">
+    </iron-ajax>
+
     <iron-ajax id="msgAjax"
                method="PUT"
                handle-as="json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
                content-type="application/json"
                url="[[serverUrl]]/user/update_msg/[[loginUser.id]]"
                on-response="_handleMsgResponse"
@@ -198,24 +209,23 @@
 
       <form is="iron-form" id="updateMsg" hidden$="[[isUpdatePassword]]">
         <section id="text">
-          <paper-input label="昵称:" value="[[loginUser.username]]" name="username"></paper-input>
+          <paper-input label="昵称:" value="[[user.username]]" name="username"></paper-input>
 
-          <paper-textarea maxlength="100" label="爱好:" name="hobby"></paper-textarea>
+          <paper-textarea maxlength="100" label="个人介绍" name="intro" value="[[user.intro]]"></paper-textarea>
 
           <label>性别:</label>
           <paper-radio-group selected="man" id="sex">
             <paper-radio-button name="man">男</paper-radio-button>
-            <paper-radio-button name="women">女</paper-radio-button>
+            <paper-radio-button name="woman">女</paper-radio-button>
             <paper-radio-button name="secret">保密</paper-radio-button>
           </paper-radio-group>
 
           <div >
             <span>生日:</span>
-            <paper-input type="date" id="date" name="birthday"></paper-input>
+            <paper-input type="date" id="date" name="birthday" value="[[user.birthday]]"></paper-input>
           </div>
 
-          <!-- <paper-input type="text" label="地区:(省/市)"></paper-input> -->
-          <paper-dropdown-menu label="地区:" name="area">
+          <paper-dropdown-menu label="地区:" name="area" value="[[user.area]]">
             <paper-listbox class="dropdown-content" selected="0">
               <paper-item>广东省-广州市</paper-item>
               <paper-item>广东省-深圳市</paper-item>
@@ -228,7 +238,7 @@
         </section>
 
         <section id="photo">
-          <img src="[[src]]" width="140px" height="140px" id="image">
+          <img src="../../public/uploads/[[loginUser.id]].png" width="140px" height="140px" id="image">
           <label id="changePhoto" on-tap="_changePhoto">更换头像</label>
         </section>
       </form>
@@ -242,9 +252,8 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
-        src: {
-          type: String,
-          value: '../../images/me_photo.jpg',
+        user: {
+          type: Object,
           notify: true
         },
 
@@ -266,7 +275,10 @@
           notify: true,
           observer: '_observeIsSamePwd'
         }
+      },
 
+      refresh() {
+        this.$.ajax.generateRequest();
       },
 
       savePsw() {
@@ -283,14 +295,32 @@
       saveMsg() {
         let data = this.$.updateMsg.serialize();
         this.$.msgAjax.body = data;
-        data.image = this.$.image.src;
-        console.log(data);
+        data.photo = this.$.image.src;
+        if(data.man) {
+          data.sex = '男';
+          delete(data.man);
+        }
+
+        if(data.woman) {
+          data.sex = '女';
+          delete(data.woman);
+        }
+
+        if(data.secret) {
+          data.sex = '保密';
+          delete(data.secret);
+        }
 
         this.$.msgAjax.generateRequest();
       },
 
-      uploadSuccess(e) {
-        this.src =  this.serverUrl + e.detail.path;
+      uploadSuccess() {
+        this.refresh();
+      },
+
+      _handleMsgResponse(e) {
+        this._toast('修改成功');
+        location.href = '/me';
       },
 
       _toast(msg) {
@@ -319,10 +349,12 @@
         this.$.repeatPassword.invalid = true;
       },
 
+      // 显示修改密码页
       _updatePassword() {
         this.isUpdatePassword = true;
       },
 
+      // 显示修改个人信息页
       _updateMsg() {
         this.isUpdatePassword = false;
       },

@@ -20,7 +20,7 @@
     </app-route>
 
     <iron-pages attr-for-selected="id" selected="{{_routeData.page}}" id="selector">
-      <ms-me-detail id="detail" is-login="{{isLogin}}" route="{{tail}}"></ms-me-detail>
+      <ms-me-detail id="detail" is-login="{{isLogin}}" route="{{tail}}" login-user="[[loginUser]]"></ms-me-detail>
       <ms-me-edit id="edit" route="{{tail}}" login-user="[[loginUser]]"></ms-me-edit>
       <ms-me-music id="music" route="{{tail}}"></ms-me-music>
       <ms-no-login id="noLogin" route="{{tail}}"></ms-no-login>
