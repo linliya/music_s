@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
+
+<dom-module id="ms-search">
+  <template>
+    <style>
+
+    </style>
+    <iron-ajax  id="ajax"
+                method="POST"
+                url="[[serverUrl]]/search"
+                handle-as="json"
+                content-type="application/json"
+                headers="[[authHeader]]"
+                login-user="[[loginUser]]"
+                on-response="handleResponse">
+    </iron-ajax>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-search',
+      behaviors: [Polymer.msConnectBehavior],
+
+      search(s, offset, limit, type) {
+        let data = {
+          "s": s,
+          "offset": offset,
+          "limit": limit,
+          "type": type
+        };
+        this.$.ajax.body = data;
+        this.$.ajax.generateRequest();
+      },
+
+      handleResponse(e) {
+        console.log(e.detail.response);
+      }
+    });
+  </script>
+</dom-module>
