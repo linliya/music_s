@@ -42,7 +42,6 @@
       <ms-playlist id="playlist" login-user="[[user]]"></ms-playlist>
       <ms-search id="search" login-user="[[user]]"></ms-search>
     </iron-pages>
-
   </template>
 
   <script>
@@ -95,9 +94,14 @@
         },
 
         attached() {
-          if(this.$.selector.selected === '') {
-            this.$.selector.select('main');
+          if(this.$.selector.selected === '' || this.path === '/') {
+            this.path = '/main';
           }
+
+          this.addEventListener('ms-search', (e) => {
+            this.path = '/search';
+            this.$.search.search(e.detail.s, "0", "20", "1");
+          });
 
           this._initLogoutListen();
           let user = this.$.localUser.getUser();

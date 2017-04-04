@@ -83,7 +83,6 @@
 
     <iron-ajax
         id="ajax"
-        auto
         url="[[serverUrl]]/user/[[loginUser.id]]"
         headers="[[authHeader]]"
         last-response="{{user}}">
@@ -137,9 +136,9 @@
       is: 'ms-me-detail',
       behaviors: [[Polymer.msConnectBehavior]],
 
-      // attached() {
-      //   this.$.ajax.generateRequest();
-      // }
+      attached() {
+        this.$.ajax.generateRequest();
+      }
     });
     </script>
 </dom-module>

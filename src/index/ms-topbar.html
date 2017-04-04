@@ -142,6 +142,10 @@
         text-decoration: underline;
       }
 
+      #searchAjax {
+        display: none;
+      }
+
     </style>
 
     <div id="wrap">
@@ -189,9 +193,6 @@
                        title="是否退出登陆？"
                        on-tk-confirm-dialog-confirm="_dealConfirm">
     </tk-confirm-dialog>
-
-    <ms-search id="searchAjax" login-user="[[loginUser]]"></ms-search>
-
   </template>
   <script>
     Polymer({
@@ -212,7 +213,7 @@
           type: String,
           notify: true,
           value: 'me/noLogin',
-          computed: '_computeIsLoginaa(isLogin)'
+          computed: '_computeIsLoginPage(isLogin)'
         }
       },
 
@@ -255,7 +256,7 @@
         return false;
       },
 
-      _computeIsLoginaa(isLogin) {
+      _computeIsLoginPage(isLogin) {
         if(isLogin) {
           return '/me/music';
         }
@@ -273,8 +274,9 @@
 
       _checkPress(e) {
         if (e.keyCode === 13) {
-          this.$.searchAjax.search("aaa", "0", "10", "1");
-          location.href = "/search";
+          let s = e.target.value;
+          let s_encode = encodeURI(s);
+          this.fire('ms-search', {s: s_encode}, null);
         }
       }
     });

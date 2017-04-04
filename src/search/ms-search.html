@@ -1,11 +1,128 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
+<link rel="import" href="./ms-time-translator.html">
 
 <dom-module id="ms-search">
   <template>
     <style>
+
+    :host {
+      font-size: 12px;
+    }
+
+    p, div {
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    ms-topbar:after {
+      content: '';
+      display: block;
+      border-bottom: 4px solid #11aaff;
+    }
+
+    #wrap {
+      width: 960px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 20px;
+    }
+
+    #searchBox {
+      width: 420px;
+      height: 40px;
+      margin: 0 auto;
+      position: relative;
+      background: url('../../images/sprite.png') 0 0 no-repeat;
+    }
+
+    #searchBox input {
+      width: 320px;
+      height: 40px;
+      padding-left: 20px;
+      border: none;
+      background: none;
+      outline: none;
+    }
+
+    #searchBox a {
+      float: right;
+      width: 50px;
+      height: 40px;
+    }
+
+    #searchBox a:hover {
+      background: url('../../images/sprite.png') -430px 0 no-repeat;
+      text-decoration: none;
+    }
+
+    #searchResult {
+      margin: 28px 0 17px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    #searchResult #title span {
+      color: #f00;
+    }
+
+    paper-tabs {
+      margin: 20px 0;
+      height: 40px;
+      font-size: 14px;
+      color: #333;
+      background: url('../../images/tab.png') 0 0 repeat-x;
+      --paper-tabs-selection-bar-color: #37a0ce;
+    }
+
+    #result p {
+      padding-left: 30px;
+      height: 44px;
+      line-height: 44px;
+      display: flex;
+    }
+
+    #result p a span {
+      display: inline-block;
+      width: 380px;
+    }
+
+    #result p .album {
+      display: inline-block;
+      width: 240px;
+      color: #666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #result p .singer {
+      display: inline-block;
+      width: 200px;
+      color: #333;
+    }
+
+    #result p a span:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    ms-time-translator {
+      color: #333;
+    }
 
     </style>
     <iron-ajax  id="ajax"
@@ -15,14 +132,66 @@
                 content-type="application/json"
                 headers="[[authHeader]]"
                 login-user="[[loginUser]]"
+                last-response="{{data}}"
                 on-response="handleResponse">
     </iron-ajax>
+
+    <ms-topbar login-user="[[loginUser]]"></ms-topbar>
+
+    <div id="wrap">
+      <div id="searchBox">
+        <input type="text" placeholder="search" id="search">
+        <a href="javascript:void(0)" title="搜索"></a>
+      </div>
+
+      <div id="searchResult">
+        <p id="title">搜索"[[value]]",找到<span>[[data.result.songCount]]</span>首[[typeString]]</p>
+
+        <paper-tabs selected="0" align-bottom id="tabs" noink>
+          <paper-tab>单曲</paper-tab>
+          <paper-tab on-tap="_searchAlbums">专辑</paper-tab>
+          <paper-tab on-tap="_searchSinger">歌手</paper-tab>
+        </paper-tabs>
+
+        <div id="result">
+          <template is="dom-repeat" items="[[data.result.songs]]">
+            <p>
+              <a href="/musicDetail?id=[[item.id]]"><span>[[item.name]]</span></a>
+              <span class="singer">
+                <template is="dom-repeat" items="[[item.artists]]">
+                  <span>[[item.name]]</span>
+                </template>
+              </span>
+              <span class="album">[[item.album.name]]</span>
+              <ms-time-translator input="[[item.hMusic.playTime]]"></ms-time-translator>
+            </p>
+          </template>
+        </div>
+      </div>
+    </div>
 
   </template>
   <script>
     Polymer({
       is: 'ms-search',
       behaviors: [Polymer.msConnectBehavior],
+      properties: {
+        value: {
+          type: String,
+          notify: true
+        },
+
+        typeNum: {
+          type: String,
+          notify: true
+        },
+
+        typeString: {
+          type: String,
+          notify: true,
+          computed: '_computeType(typeNum)'
+        }
+      },
 
       search(s, offset, limit, type) {
         let data = {
@@ -31,12 +200,29 @@
           "limit": limit,
           "type": type
         };
+        this.$.search.value = decodeURI(data.s);
+        this.value = decodeURI(data.s);
+        this.typeNum = data.type;
+
         this.$.ajax.body = data;
         this.$.ajax.generateRequest();
       },
 
-      handleResponse(e) {
-        console.log(e.detail.response);
+      _computeType(typeNum) {
+        if(typeNum === '1') {
+          return '单曲';
+        }
+
+        if(typeNum === '10') {
+          return '专辑';
+        }
+        if(typeNum === '100') {
+          return '歌手';
+        }
+      },
+
+      _searchAlbums() {
+        this.search(this.value, "0", "20", "10");
       }
     });
   </script>

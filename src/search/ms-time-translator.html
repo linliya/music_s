@@ -1,0 +1,28 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="ms-time-translator">
+  <template>
+    <style></style>
+    [[output]]
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-time-translator',
+
+      properties: {
+        output: {
+          type: String
+        }
+      },
+
+      attached() {
+        let min = Math.floor((this.input/1000)/60);
+        let second = ((this.input - min*60*1000)/1000).toFixed(0);
+        if(second.toString().length < 2) {
+          second = second + '0';
+        }
+        this.output = min + ':' + second;
+      }
+    });
+  </script>
+</dom-module>

@@ -5,7 +5,6 @@
 <link rel="import" href="./ms-nav.html">
 <link rel="import" href="./ms-content-top/ms-content-top.html">
 <link rel="import" href="./ms-content-bottom.html">
-<!-- <link rel="import" href="./ms-footer.html"> -->
 <link rel="import" href="./ms-player.html">
 
 <dom-module id="ms-main">
@@ -16,6 +15,10 @@
         font-family: '微软雅黑';
         position: relative;
       }
+
+      #searchAjax {
+        display: none;
+      }
     </style>
 
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
@@ -23,7 +26,6 @@
     <ms-nav totalNum="5"></ms-nav>
     <ms-content-top></ms-content-top>
     <ms-content-bottom></ms-content-bottom>
-    <!-- <ms-footer></ms-footer> -->
     <ms-player></ms-player>
   </template>
 
