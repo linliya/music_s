@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
+
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href="./ms-time-translator.html">
@@ -17,9 +19,13 @@
       font-size: 12px;
     }
 
-    p, div {
+    p, div, ul, li {
       margin: 0;
       padding: 0;
+    }
+
+    li {
+      list-style: none;
     }
 
     a {
@@ -39,6 +45,7 @@
       border: 1px solid #ccc;
       background: #fff;
       padding: 20px;
+      position: relative;
     }
 
     #searchBox {
@@ -75,32 +82,57 @@
       font-size: 12px;
     }
 
-    #searchResult #title span {
+    #searchResult .title {
+      margin-left: 20px;
+    }
+
+    #searchResult .title span {
       color: #f00;
     }
 
-    paper-tabs {
-      margin: 20px 0;
-      height: 40px;
-      font-size: 14px;
-      color: #333;
-      background: url('../../images/tab.png') 0 0 repeat-x;
-      --paper-tabs-selection-bar-color: #37a0ce;
+    header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
 
-    #result p {
-      padding-left: 30px;
+    #tabs {
+      width: 93px;
+      height: 29px;
+      background: url('../../images/button.png') 0 0px;
+    }
+
+    #tabs a {
+     font-weight: normal;
+     float: left;
+     width: 46px;
+     height: 29px;
+     line-height: 29px;
+     text-align: center;
+     font-size: 12px;
+   }
+
+    #tabs a:hover {
+     text-decoration: underline;
+    }
+
+    #tabs a.active {
+     color: #fff;
+    }
+
+    #music p {
+      padding-left: 40px;
       height: 44px;
       line-height: 44px;
       display: flex;
     }
 
-    #result p a span {
+    #music p a {
       display: inline-block;
       width: 380px;
     }
 
-    #result p .album {
+    #music p .album {
       display: inline-block;
       width: 240px;
       color: #666;
@@ -109,13 +141,16 @@
       white-space: nowrap;
     }
 
-    #result p .singer {
+    #music p .singer {
       display: inline-block;
       width: 200px;
       color: #333;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    #result p a span:hover {
+    #music p a span:hover {
       text-decoration: underline;
       cursor: pointer;
     }
@@ -124,9 +159,42 @@
       color: #333;
     }
 
+    #albums {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #albumsResult {
+      width: 170px;
+      height: 200px;
+      position: relative;
+      margin-left: 20px;
+    }
+
+    #albumsResult .albumsName {
+      display: inline-block;
+      width: 130px;
+      color: #333;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #albumsResult .imgBg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: inline-block;
+      width: 153px;
+      height: 130px;
+      background: url('../../images/coverall.png') 0 -845px no-repeat;
+    }
+
+
     </style>
     <iron-ajax  id="ajax"
                 method="POST"
+                loading="{{loading}}"
                 url="[[serverUrl]]/search"
                 handle-as="json"
                 content-type="application/json"
@@ -139,22 +207,27 @@
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
 
     <div id="wrap">
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+      
       <div id="searchBox">
-        <input type="text" placeholder="search" id="search">
-        <a href="javascript:void(0)" title="搜索"></a>
+        <input type="text" placeholder="search" id="search" value="[[localValue]]" on-keydown="_checkPress">
+        <a href="javascript:void(0)" title="搜索" on-tap="_clickSearch"></a>
       </div>
 
       <div id="searchResult">
-        <p id="title">搜索"[[value]]",找到<span>[[data.result.songCount]]</span>首[[typeString]]</p>
+        <header>
+          <p class="title" hidden$="[[isAlbum]]">搜索"[[localValue]]",找到<span> [[localData.result.songCount]] </span>首[[typeString]]</p>
+          <p class="title" hidden$="[[!isAlbum]]">搜索"[[localValue]]",找到<span> [[localData.result.albumCount]] </span>张[[typeString]]</p>
 
-        <paper-tabs selected="0" align-bottom id="tabs" noink>
-          <paper-tab>单曲</paper-tab>
-          <paper-tab on-tap="_searchAlbums">专辑</paper-tab>
-          <paper-tab on-tap="_searchSinger">歌手</paper-tab>
-        </paper-tabs>
+          <div id="tabs">
+            <a href="#" on-tap="_searchMusic" class="active">单曲</a>
+            <a href="#" on-tap="_searchAlbums">专辑</a>
+          </div>
+        </header>
 
-        <div id="result">
-          <template is="dom-repeat" items="[[data.result.songs]]">
+
+        <div id="music">
+          <template is="dom-repeat" items="[[localData.result.songs]]">
             <p>
               <a href="/musicDetail?id=[[item.id]]"><span>[[item.name]]</span></a>
               <span class="singer">
@@ -167,9 +240,28 @@
             </p>
           </template>
         </div>
+
+
+        <div id="albums">
+          <template is="dom-repeat" items="[[localData.result.albums]]">
+            <div id="albumsResult">
+              <a href="/diskDetail?id=[[item.id]]">
+                <img class="albumImg" src="[[item.picUrl]]" title="[[item.name]]" width="130px" height="130px">
+                <span class="imgBg"></span>
+              </a>
+              <p><a href="#" class="albumsName">[[item.name]]</a></p>
+              <p>
+                <span>
+                  <template is="dom-repeat" items="[[item.artists]]">
+                    <span>[[item.name]]</span>
+                  </template>
+                </span>
+              </p>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
-
   </template>
   <script>
     Polymer({
@@ -189,18 +281,49 @@
         typeString: {
           type: String,
           notify: true,
-          computed: '_computeType(typeNum)'
+          computed: '_computeType(localType)'
+        },
+
+        localData: {
+          type: Object
+        },
+
+        localValue: {
+          type: String
+        },
+
+        localType: {
+          type: String
+        },
+
+        isAlbum: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          observer: '_observeIsAlbum'
         }
       },
 
+      attached() {
+        let localData = JSON.parse(window.localStorage.getItem('searchData'));
+        let localValue = window.localStorage.getItem('searchKey');
+        let localType = window.localStorage.getItem('searchType');
+
+        this.localData = localData;
+        this.localValue = localValue;
+        this.localType = localType;
+
+        this.isAlbum = false;
+      },
+
       search(s, offset, limit, type) {
+        this.isAlbum = false;
         let data = {
           "s": s,
           "offset": offset,
           "limit": limit,
           "type": type
         };
-        this.$.search.value = decodeURI(data.s);
         this.value = decodeURI(data.s);
         this.typeNum = data.type;
 
@@ -208,21 +331,75 @@
         this.$.ajax.generateRequest();
       },
 
-      _computeType(typeNum) {
-        if(typeNum === '1') {
+      _computeType(type) {
+        if(type === '1') {
           return '单曲';
         }
 
-        if(typeNum === '10') {
+        if(type === '10') {
           return '专辑';
         }
-        if(typeNum === '100') {
+        if(type === '100') {
           return '歌手';
         }
       },
 
+      _observeIsAlbum() {
+        let a = this.$.tabs.querySelectorAll('a');
+
+        if(this.isAlbum) {
+          this.$.tabs.style.background = 'url(../../images/button.png) 0 -32px';
+          a[0].style.color = '#000';
+          a[1].style.color = '#fff';
+        }
+        else {
+          this.$.tabs.style.background = 'url(../../images/button.png) 0 0px';
+          a[0].style.color = '#fff';
+          a[1].style.color = '#000';
+        }
+      },
+
+      _searchMusic() {
+        let s = this.localValue;
+        let s_encode = encodeURI(s);
+        this.fire('ms-search', {s: s_encode}, null);
+        this.isAlbum = false;
+      },
+
       _searchAlbums() {
-        this.search(this.value, "0", "20", "10");
+        let a = this.$.tabs.querySelectorAll('a');
+        let s = this.localValue;
+        let s_encode = encodeURI(s);
+        this.fire('ms-search-albums', {s: s_encode}, null);
+        this.isAlbum = true;
+        console.log(this.data);
+      },
+
+      handleResponse() {
+        window.localStorage.setItem('searchData', JSON.stringify(this.data));
+        window.localStorage.setItem('searchKey', this.value);
+        window.localStorage.setItem('searchType', this.typeNum);
+
+        this.localData = JSON.parse(window.localStorage.getItem('searchData'));
+        this.localValue = window.localStorage.getItem('searchKey');
+        this.localType = window.localStorage.getItem('searchType');
+
+      },
+
+      _checkPress(e) {
+        if (e.keyCode === 13) {
+          let s = e.target.value;
+          let s_encode = encodeURI(s);
+          this.fire('ms-search', {s: s_encode}, null);
+          this.isAlbum = false;
+        }
+      },
+
+      _clickSearch() {
+        let s = this.$.search.value;
+        let s_encode = encodeURI(s);
+        this.fire('ms-search', {s: s_encode}, null);
+        this.isAlbum = false;
       }
     });
   </script>

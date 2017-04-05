@@ -276,7 +276,8 @@
         if (e.keyCode === 13) {
           let s = e.target.value;
           let s_encode = encodeURI(s);
-          this.fire('ms-search', {s: s_encode}, null);
+          this.fire('ms-search', {s: s_encode, isAlbum: false}, null);
+          e.target.value = '';
         }
       }
     });

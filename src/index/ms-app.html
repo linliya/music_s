@@ -103,6 +103,10 @@
             this.$.search.search(e.detail.s, "0", "20", "1");
           });
 
+          this.addEventListener('ms-search-albums', (e) => {
+            this.$.search.search(e.detail.s, "0", "20", "10");
+          });
+
           this._initLogoutListen();
           let user = this.$.localUser.getUser();
           this.user = user;

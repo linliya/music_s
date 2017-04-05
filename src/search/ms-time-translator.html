@@ -16,11 +16,17 @@
       },
 
       attached() {
+        if(!this.input) {
+          this.output = '0:00';
+          return;
+        }
+
         let min = Math.floor((this.input/1000)/60);
         let second = ((this.input - min*60*1000)/1000).toFixed(0);
         if(second.toString().length < 2) {
           second = second + '0';
         }
+
         this.output = min + ':' + second;
       }
     });
