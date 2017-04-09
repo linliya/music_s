@@ -83,6 +83,7 @@
 
     <iron-ajax
         id="ajax"
+        auto
         url="[[serverUrl]]/user/[[loginUser.id]]"
         headers="[[authHeader]]"
         last-response="{{user}}">

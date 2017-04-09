@@ -1,9 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-secondbar.html">
 <link rel="import" href=".././music_detail/ms-music-comment.html">
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
 
 <dom-module id="ms-music-detail">
   <template>
@@ -27,6 +33,7 @@
         border: 1px solid #ccc;
         background: #fff;
         font-size: 14px;
+        position: relative;
       }
 
       #detail #photo img {
@@ -68,7 +75,7 @@
         padding-right: 8px;
       }
 
-      #text button {
+      #text paper-button {
         width: 66px;
         height: 32px;
         background: #fff;
@@ -85,7 +92,7 @@
         box-shadow: 0px 1px 0px #ddd;
       }
 
-      #text button i {
+      #text paper-button i {
         display: inline-block;
         width: 18px;
         height: 18px;
@@ -127,7 +134,22 @@
 
     <ms-topbar></ms-topbar>
     <ms-secondbar></ms-secondbar>
+   <iron-ajax id="ajaxGet"
+              method="GET"
+              loading="{{loading}}"
+              url="[[serverUrl]]/music/[[songId]]"
+              handle-as="json"
+              content-type="application/json"
+              headers="[[authHeader]]"
+              login-user="[[loginUser]]"
+              last-response="{{data}}"
+              on-response="handleResponse">
+   </iron-ajax>
+
+
     <div id="wrap">
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+
       <section id="detail">
         <div id="photo">
           <img src="../../images/my_disk.jpg" alt="" width="188px" height="188px">
@@ -135,32 +157,58 @@
 
         <div id="text">
           <h3 id="name">
-            <i></i>我喜欢的音乐
+            <i></i>
+            <template is="dom-if" if="[[data.songs]]">
+              <template is="dom-repeat" items="[[data.songs]]">
+                [[item.name]]
+              </template>
+            </template>
+            [[data.name]]
           </h3>
 
           <div class="clear">
             <p id="singer">
-              <span>歌手:<span class="singer_name"> 周杰伦</span></span>
+              <span>歌手:
+                <span class="singer_name">
+                  <template is="dom-if" if="[[data.songs]]">
+                    <template is="dom-repeat" items="[[data.songs]]">
+                      <template is="dom-repeat" items="[[item.artists]]">
+                        <span>[[item.name]]</span>
+                      </template>
+                    </template>
+                  </template>
+                  [[data.singer]]
+                </span>
+              </span>
             </p>
             <p id="disk">
-              <span>所属专辑:<span class="disk_name"> 跨时代</span></span>
+              <span>所属专辑:
+                <span class="disk_name">
+                  <template is="dom-if" if="[[data.songs]]">
+                    <template is="dom-repeat" items="[[data.songs]]">
+                      [[item.album.name]]
+                    </template>
+                  </template>
+                  [[data.album]]
+                </span>
+              </span>
             </p>
-            <button type="button" name="button" id="play">
+            <paper-button id="play" on-tap="_play">
               <i></i>
               播放
-            </button>
-            <button type="button" name="button" id="store">
+            </paper-button>
+            <paper-button id="store">
               <i></i>
               收藏
-            </button>
-            <button type="button" name="button" id="download">
+            </paper-button>
+            <paper-button id="download">
               <iron-icon icon="file-download"></iron-icon>
               下载
-            </button>
-            <button type="button" name="button" id="comment">
+            </paper-button>
+            <paper-button id="comment">
               <i></i>
               (100)
-            </button>
+            </paper-button>
           </div>
 
           <section id="lyric">
@@ -181,7 +229,33 @@
   </template>
   <script>
     Polymer({
-      is: 'ms-music-detail'
+      is: 'ms-music-detail',
+      behaviors: [Polymer.msConnectBehavior],
+
+      properties: {
+        songId: {
+          type: String,
+          notify: true
+        }
+      },
+
+      refresh() {
+        let id = window.location.search;
+        let split = id.split('=');
+        this.songId = split[1];
+        this.$.ajaxGet.generateRequest();
+      },
+
+      _play() {
+        let mp3Url = this.data.playUrl || this.data.songs[0].mp3Url;
+        let name = this.data.name || this.data.songs[0].name;
+        let singer = this.data.singer || this.data.songs[0].artists[0].name;
+        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+      },
+
+      handleResponse(e) {
+        console.log(e.detail.response);
+      }
     });
   </script>
 </dom-module>

@@ -11,22 +11,31 @@
         left: 0;
         bottom: 20px;
         --paper-audio-player-color: #2783ca;
-        /*z-index: 10;*/
       }
     </style>
     <div>
-      <paper-audio-player src="../../mp3/test.mp3" title="[[musicName]]"></paper-audio-player>
+      <paper-audio-player src="[[src]]" title="[[musicName]]" id="player"></paper-audio-player>
     </div>
   </template>
   <script>
     Polymer({
       is: 'ms-player',
       properties: {
+        src: {
+          type: String,
+          notify: true,
+          value: '../../mp3/test.mp3'
+        },
+
         musicName: {
           type: String,
           notify: true,
           value: 'music'
         }
+      },
+
+      play() {
+        this.$.player.playPause();
       }
 
     });

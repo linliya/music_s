@@ -11,9 +11,7 @@
 <link rel="import" href=".././toplist/ms-toplist.html">
 <link rel="import" href=".././playlist/ms-playlist.html">
 <link rel="import" href=".././search/ms-search.html">
-
-
-
+<link rel="import" href=".././index/ms-player.html">
 
 <dom-module id="ms-app">
   <template>
@@ -21,6 +19,9 @@
       :host {
         display: block;
         font-family: "Microsoft Yahei";
+      }
+      #player {
+        display: none;
       }
     </style>
     <app-location id="location" path="{{path}}" route="{{route}}"></app-location>
@@ -42,6 +43,8 @@
       <ms-playlist id="playlist" login-user="[[user]]"></ms-playlist>
       <ms-search id="search" login-user="[[user]]"></ms-search>
     </iron-pages>
+
+    <ms-player id="player"></ms-player>
   </template>
 
   <script>
@@ -89,7 +92,8 @@
            */
           path: {
             type: String,
-            notify: true
+            notify: true,
+            observer: '_observePath'
           }
         },
 
@@ -97,6 +101,14 @@
           if(this.$.selector.selected === '' || this.path === '/') {
             this.path = '/main';
           }
+
+          this.addEventListener('ms-music-play', (e) => {
+            this.$.player.style.display = 'block';
+
+            this.$.player.src = e.detail.mp3Url;
+            this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
+            this.$.player.play();
+          })
 
           this.addEventListener('ms-search', (e) => {
             this.path = '/search';
@@ -110,6 +122,12 @@
           this._initLogoutListen();
           let user = this.$.localUser.getUser();
           this.user = user;
+        },
+
+        _observePath(path) {
+          if(path === '/musicDetail') {
+            this.$.musicDetail.refresh();
+          }
         },
 
         _initLogoutListen() {
