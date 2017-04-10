@@ -1,5 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href=".././search/ms-time-translator.html">
+
+
 <dom-module id="ms-disk-detail-list">
   <template>
     <style>
@@ -7,6 +10,11 @@
         margin: 0;
         padding: 0;
         font-size: 12px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #000;
       }
 
       li {
@@ -92,6 +100,14 @@
 
       h4 .title, ul li .title {
         width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+      }
+
+      ul li .title a:hover{
+        text-decoration: underline;
       }
 
       h4 .time, ul li .time {
@@ -100,10 +116,18 @@
 
       h4 .singer, ul li .singer {
         width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
       }
 
       h4 .disk, ul li .disk {
         width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
       }
 
       ul li:nth-child(2n+1) {
@@ -113,8 +137,8 @@
     <div id="wrap">
       <h3>
         歌曲列表
-        <span>100首歌</span>
-        <span id="playTime">播放：<span>23928538</span>次</span>
+        <span>[[list.length]]首歌</span>
+        <span id="playTime">播放：<span>[[playCount]]</span>次</span>
       </h3>
 
       <div id="list">
@@ -127,55 +151,22 @@
         </h4>
 
         <ul>
-          <li>
-            <span class="num">1<i></i></span>
-            <span class="title">晴天</span>
-            <span class="time">04:11</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">依然范特西</span>
-          </li>
-          <li>
-            <span class="num">2<i></i></span>
-            <span class="title">熟悉的陌生人</span>
-            <span class="time">03:12</span>
-            <span class="singer">洪卓立</span>
-            <span class="disk">Timing</span>
-          </li>
-          <li>
-            <span class="num">3<i></i></span>
-            <span class="title">说不出的秘密</span>
-            <span class="time">03:20</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">依然范特西</span>
-          </li>
-          <li>
-            <span class="num">4<i></i></span>
-            <span class="title">红尘客栈</span>
-            <span class="time">04:20</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">跨时代</span>
-          </li>
-          <li>
-            <span class="num">5<i></i></span>
-            <span class="title">红尘客栈</span>
-            <span class="time">04:20</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">跨时代</span>
-          </li>
-          <li>
-            <span class="num">6<i></i></span>
-            <span class="title">红尘客栈</span>
-            <span class="time">04:20</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">跨时代</span>
-          </li>
-          <li>
-            <span class="num">7<i></i></span>
-            <span class="title">红尘客栈</span>
-            <span class="time">04:20</span>
-            <span class="singer">周杰伦</span>
-            <span class="disk">跨时代</span>
-          </li>
+          <template is="dom-repeat" items="[[list]]">
+            <li>
+              <span class="num"><i></i></span>
+              <span class="title"><a href="/musicDetail?id=[[item.id]]">[[item.name]]</a></span>
+              <span class="time">
+                <ms-time-translator input="[[item.duration]]"></ms-time-translator>
+              </span>
+
+              <span class="singer">
+                <template is="dom-repeat" items="[[item.artists]]">
+                  [[item.name]]
+                </template>
+              </span>
+              <span class="disk">[[item.album.name]]</span>
+            </li>
+          </template>
         </ul>
       </div>
     </div>

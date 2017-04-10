@@ -29,7 +29,8 @@
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
     "bwt-uploader": "bluewatertracks/bwt-uploader#^0.9.9",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
-    "tk-loading-backdrop": "butterandfly/tk-loading-backdrop#^0.1.2"
+    "tk-loading-backdrop": "butterandfly/tk-loading-backdrop#^0.1.2",
+    "moment": "^2.18.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

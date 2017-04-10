@@ -114,7 +114,7 @@
       }
 
       #text #comment i {
-        background: url('../../images/icons.png') no-repeat -44px -107px;
+        background: url('../../images/button2.png') no-repeat -10px -1469px;
       }
 
       #text #download iron-icon {
@@ -146,13 +146,31 @@
               on-response="handleResponse">
    </iron-ajax>
 
+   <iron-ajax id="ajaxGetLyric"
+              method="GET"
+              url="[[serverUrl]]/music/lyric/[[songId]]"
+              handle-as="json"
+              content-type="application/json"
+              headers="[[authHeader]]"
+              login-user="[[loginUser]]"
+              last-response="{{lyric}}"
+              on-response="handleGetLyricResponse">
+   </iron-ajax>
+
 
     <div id="wrap">
       <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
 
       <section id="detail">
         <div id="photo">
-          <img src="../../images/my_disk.jpg" alt="" width="188px" height="188px">
+          <template is="dom-if" if="[[data.songs]]">
+            <template is="dom-repeat" items="[[data.songs]]">
+              <img src="[[item.album.blurPicUrl]]" alt="" width="188px" height="188px">
+            </template>
+          </template>
+          <template is="dom-if" if="[[data.pic]]">
+            <img src="[[data.pic]]" alt="" width="188px" height="188px">
+          </template>
         </div>
 
         <div id="text">
@@ -212,12 +230,9 @@
           </div>
 
           <section id="lyric">
-            <p>歌词歌词</p>
-            <p>歌词歌词</p>
-            <p>歌词歌词</p>
-            <p>歌词歌词</p>
-            <p>歌词歌词</p>
-            <p>歌词歌词</p>
+            <template is="dom-repeat" items="[[lyricData]]">
+              <p>[[item]]</p>
+            </template>
           </section>
         </div>
       </section>
@@ -236,6 +251,11 @@
         songId: {
           type: String,
           notify: true
+        },
+
+        lyricData: {
+          type: Array,
+          notify: true
         }
       },
 
@@ -244,6 +264,7 @@
         let split = id.split('=');
         this.songId = split[1];
         this.$.ajaxGet.generateRequest();
+        this.$.ajaxGetLyric.generateRequest();
       },
 
       _play() {
@@ -255,6 +276,28 @@
 
       handleResponse(e) {
         console.log(e.detail.response);
+      },
+
+      handleGetLyricResponse(e) {
+        let lyric = e.detail.response;
+        if(lyric.uncollected === true) {
+          this.lyricData = '暂无歌词';
+          return;
+        }
+
+        // 过滤歌词
+        var str= lyric.lrc.lyric;
+        str = str.replace(/\]\[/g,'] ['); //"]["没有空格会影响匹配结果
+        var arr = str.match(/(\[\d{2}:\d{2}\.\d{2,3}\])(.[^\[\]]*)?/g);
+        var time = [], txt = [];
+
+        for(var i = 0;i < arr.length; i++) {
+          /^(\[\d{2}:\d{2}\.\d{2,3}\])(.[^\[\]]*)?$/.exec(arr[i]);
+          time.push(RegExp.$1);
+          txt.push(RegExp.$2);
+        }
+
+        this.lyricData = txt;
       }
     });
   </script>

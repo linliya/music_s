@@ -1,11 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-secondbar.html">
 <link rel="import" href=".././music_detail/ms-music-comment.html">
 <link rel="import" href=".././music_disk/ms-disk-detail-list.html">
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
 
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
+
+<script src="../../bower_components/moment/moment.js"></script>
 
 <dom-module id="ms-disk-detail">
   <template>
@@ -29,6 +34,7 @@
         border: 1px solid #dedede;
         background: #fff;
         font-size: 14px;
+        position: relative;
       }
 
       #detail #photo img {
@@ -113,7 +119,7 @@
       }
 
       #msg #comment i {
-        background: url('../../images/icons.png') no-repeat -44px -107px;
+        background: url('../../images/button2.png') no-repeat -10px -1469px;
       }
 
       #msg #download iron-icon {
@@ -149,23 +155,35 @@
 
     <ms-topbar></ms-topbar>
     <ms-secondbar></ms-secondbar>
+    <iron-ajax id="ajax"
+               loading="{{loading}}"
+               url="[[serverUrl]]/playlist/[[songId]]"
+               handle-as="json"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               last-response="{{data}}"
+               on-response="handleResponse">
+    </iron-ajax>
     <div id="wrap">
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+
       <section id="detail">
         <div id="photo">
-          <img src="../../images/mylove_disk.jpg" alt="" width="188px" height="188px">
+          <img src="[[data.result.coverImgUrl]]" alt="" width="188px" height="188px">
         </div>
 
         <div id="text">
           <h3 id="name">
-            <i></i>我喜欢的歌单
+            <i></i>[[data.result.name]]
           </h3>
 
           <div class="clear" id="msg">
             <p id="author">
-              <span><img src="../../images/my_disk.jpg" width="30px" height="30px"></span>
-              <span class="author_name"> 云树人</span>
+              <span><img src="[[data.result.creator.backgroundUrl]]" width="30px" height="30px"></span>
+              <span class="author_name"> [[data.result.creator.nickname]]</span>
               <i></i>
-              <span id="createTime"><span>2016-10-11创建</span>
+              <span id="createTime"><span>[[createTime]]创建</span>
             </p>
 
             <button type="button" name="button" id="play">
@@ -182,27 +200,29 @@
             </button>
             <button type="button" name="button" id="comment">
               <i></i>
-              (100)
+              ([[data.result.commentCount]])
             </button>
           </div>
 
           <div id="tag">
             标签:
-            <button>华语</button>
-            <button>流行</button>
+            <template is="dom-repeat" items="[[data.result.tags]]">
+              <button>[[item]]</button>
+            </template>
+
           </div>
 
           <section id="intro">
-            <p>介绍介绍</p>
-            <p>介绍介绍</p>
-            <p>介绍介绍</p>
-            <p>介绍介绍</p>
-            <p>介绍介绍</p>
+            <template is="dom-repeat" items="[[description]]">
+              <p>[[item]]</p>
+            </template>
           </section>
         </div>
       </section>
 
-      <ms-disk-detail-list></ms-disk-detail-list>
+      <ms-disk-detail-list list="[[data.result.tracks]]"
+                           play-count="[[data.result.playCount]]">
+      </ms-disk-detail-list>
       <ms-music-comment></ms-music-comment>
 
 
@@ -210,7 +230,52 @@
   </template>
   <script>
     Polymer({
-      is: 'ms-disk-detail'
+      is: 'ms-disk-detail',
+      behaviors: [Polymer.msConnectBehavior],
+      properties: {
+        data: {
+          type: Object,
+          notify: true
+        },
+
+        songId: {
+          type: String,
+          notify: true
+        },
+
+        createTime: {
+          type: String,
+          notify: true,
+          computed: '_computeCreateTime(data)'
+        },
+
+        description: {
+          type: Array
+        }
+      },
+
+      _computeCreateTime(data){
+        if (!data) {
+          return;
+        }
+
+        let ctime = this.data.result.createTime;
+        let formatTime = window.moment(ctime).format('YYYY-MM-DD');
+        return formatTime;
+      },
+
+      refresh() {
+        let id = window.location.search;
+        let split = id.split('=');
+        this.songId = split[1];
+        this.$.ajax.generateRequest();
+      },
+
+      handleResponse(e) {
+        let description = this.data.result.description;
+        let split = description.split('，');
+        this.description = split;
+      }
     });
   </script>
 </dom-module>
