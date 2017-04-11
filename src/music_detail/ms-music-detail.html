@@ -113,7 +113,7 @@
         background: url('../../images/icons.png') no-repeat -44px -107px;
       }
 
-      #text #comment i {
+      #text #commentNum i {
         background: url('../../images/button2.png') no-repeat -10px -1469px;
       }
 
@@ -223,7 +223,7 @@
               <iron-icon icon="file-download"></iron-icon>
               下载
             </paper-button>
-            <paper-button id="comment">
+            <paper-button id="commentNum">
               <i></i>
               (100)
             </paper-button>
@@ -237,7 +237,7 @@
         </div>
       </section>
 
-      <ms-music-comment></ms-music-comment>
+      <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
 
 
     </div>
@@ -265,6 +265,7 @@
         this.songId = split[1];
         this.$.ajaxGet.generateRequest();
         this.$.ajaxGetLyric.generateRequest();
+        this.$.comment.refresh();
       },
 
       _play() {

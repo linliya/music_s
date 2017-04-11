@@ -1,5 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
+
 <dom-module id="ms-music-comment">
   <template>
     <style>
@@ -80,6 +84,7 @@
        }
 
        #latestComment .text{
+         width: 600px;
          color: #333;
          margin: 0 8px;
          position: relative;
@@ -95,65 +100,103 @@
          bottom: 0px;
          color: #999;
        }
-
-
     </style>
+
+    <iron-ajax id="ajaxGet"
+               loading="{{loading}}"
+               url="[[serverUrl]]/comment/[[commentId]]"
+               handle-as="json"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               last-response="{{data}}"
+               on-response="handleResponse">
+    </iron-ajax>
+
+    <iron-ajax id="ajaxAdd"
+               method="POST"
+               loading="{{loading}}"
+               url="[[serverUrl]]/comment/add/[[commentId]]"
+               handle-as="json"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               on-response="handleAddResponse">
+    </iron-ajax>
 
     <div id="wrap">
       <h3>
         评论
-        <span>共100条评论</span>
+        <span>共[[commentLength]]条评论</span>
       </h3>
 
       <section id="comment">
         <section  id="myComment">
-          <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
-          <textarea name="name" rows="4" cols="60" placeholder="评论"></textarea>
+          <img src="../../public/uploads/[[loginUser.id]].png" alt="" width="40px" height="40px">
+          <textarea name="name" rows="4" cols="60" placeholder="评论" id="commentContent"></textarea>
         </section>
-        <button type="button" name="button">评论</button>
+        <button type="button" name="button" on-tap="comment">评论</button>
       </section>
 
       <section id="latestComment">
         <h4>
-          最新评论(100)
+          最新评论([[commentLength]])
         </h4>
 
         <ul>
-          <li>
-            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
-            <div class="text">
-              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
-              <p><span id="time">16:50</span></p>
-            </div>
-          </li>
-          <li>
-            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
-            <div class="text">
-              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
-              <p><span id="time">16:50</span></p>
-            </div>
-          </li>
-          <li>
-            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
-            <div class="text">
-              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
-              <p><span id="time">16:50</span></p>
-            </div>
-          </li>
-          <li>
-            <img src="../../images/me_photo.jpg" alt="" width="40px" height="40px">
-            <div class="text">
-              <p><span id="name">杨洋羊羊羊</span>: 哈哈哈哈哈哈哈哈!好听！！！</p>
-              <p><span id="time">16:50</span></p>
-            </div>
-          </li>
+          <template is="dom-repeat" items="[[data]]">
+            <li>
+              <img src="[[item.commentUserPhoto]]" alt="" width="40px" height="40px">
+              <div class="text">
+                <p><span id="name">[[item.commentUser]]</span>: [[item.comment]]</p>
+                <p><span id="time">[[item.commentTime]]</span></p>
+              </div>
+            </li>
+          </template>
         </ul>
       </section>
     </div>
   </template>
   <script>
     Polymer({
-      is: 'ms-music-comment'
+      is: 'ms-music-comment',
+      behaviors: [Polymer.msConnectBehavior],
+      properties: {
+        commentLength: {
+          type: Number,
+          notify: true
+        }
+      },
+
+      comment() {
+        let date = new Date();
+        let formatTime = window.moment(date).format('YYYY-MM-DD HH:mm:ss');
+        let photo = '../../public/uploads/' + this.loginUser.id + '.png';
+        let commentData = {
+          id: this.commentId,
+          commentUser: this.loginUser.username,
+          commentUserPhoto: photo,
+          comment: this.$.commentContent.value,
+          commentTime: formatTime
+        }
+
+        this.$.ajaxAdd.body = commentData;
+        this.$.ajaxAdd.generateRequest();
+      },
+
+      refresh() {
+        this.$.ajaxGet.generateRequest();
+      },
+
+      handleResponse() {
+        this.commentLength = this.data.length;
+      },
+
+      handleAddResponse() {
+        this.refresh();
+        this.$.commentContent.value = '';
+        console.log('评论成功');
+      }
     });
   </script>
 </dom-module>

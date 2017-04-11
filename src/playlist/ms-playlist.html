@@ -1,10 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-secondbar.html">
 <link rel="import" href="./ms-page.html">
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
 
 
 <dom-module id="ms-playlist">
@@ -106,6 +110,10 @@
         color: #fff;
       }
 
+      #list {
+        position: relative;
+      }
+
       /*歌单列表*/
       #list ul {
         display: flex;
@@ -126,6 +134,8 @@
       }
 
       #list ul li .title {
+        display: inline-block;
+        width: 140px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -166,6 +176,17 @@
     <ms-topbar></ms-topbar>
     <ms-secondbar></ms-secondbar>
 
+    <iron-ajax id="ajax"
+               loading="{{loading}}"
+               url="[[serverUrl]]/playlist/all/[[order]]"
+               handle-as="json"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               last-response="{{data}}"
+               on-response="handleResponse">
+    </iron-ajax>
+
     <div id="wrap">
       <header>
         <h3>
@@ -180,124 +201,40 @@
           </div>
 
           <div id="order">
-            <a href="#" class="active">热门</a>
-            <a href="#">最新</a>
+            <a href="#" class="active" on-tap="_orderHot">热门</a>
+            <a href="#" on-tap="_orderNew">最新</a>
           </div>
         </h3>
       </header>
 
       <section id="list">
+        <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
         <ul>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by<a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <img src="../../images/my_disk.jpg" alt="" width="140px" height="140px">
-              <span class="imgBottom">
-                <iron-icon icon="hardware:headset"></iron-icon>
-                <span>[[listenerNum]]</span>
-              </span>
-              <p><a href="#" class="title"><span>歌单标题</span></a></p>
-              <p>by <a href="#" class="name"><span>姓名</span></a></p>
-            </a>
-          </li>
+          <template is="dom-repeat" items="[[data.playlists]]">
+            <li>
+              <a href="/diskDetail?id=[[item.id]]">
+                <img src="[[item.coverImgUrl]]" title="[[item.name]]" width="140px" height="140px">
+                <span class="imgBottom">
+                  <iron-icon icon="hardware:headset"></iron-icon>
+                  <span>[[item.playCount]]</span>
+                </span>
+                <p>
+                  <a href="/diskDetail?id=[[item.id]]" class="title" title="[[item.name]]">
+                    <span>
+                      [[item.name]]
+                    </span>
+                  </a>
+                </p>
+                <p>by
+                  <a href="javascript:;" class="name">
+                    <span>
+                      [[item.creator.nickname]]
+                    </span>
+                  </a>
+                </p>
+              </a>
+            </li>
+          </template>
         </ul>
       </section>
 
@@ -307,12 +244,60 @@
   <script>
     Polymer({
       is: 'ms-playlist',
+      behaviors: [[Polymer.msConnectBehavior]],
 
       properties: {
-        listenerNum: {
+        isNew: {
+          type: Boolean,
+          notify: true,
+          observer: '_observeIsHot'
+        },
+
+        order: {
           type: String,
-          value: '100万'
+          notify: true,
+          value: 'hot'
         }
+      },
+
+      attached() {
+        // this.refresh();
+        this.isNew = false;
+      },
+
+      refresh() {
+        this.$.ajax.generateRequest();
+      },
+
+      _observeIsHot() {
+        let a = this.$.order.querySelectorAll('a');
+
+        if(this.isNew) {
+          this.$.order.style.background = 'url(../../images/button.png) 0 -32px';
+          a[0].style.color = '#000';
+          a[1].style.color = '#fff';
+        }
+        else {
+          this.$.order.style.background = 'url(../../images/button.png) 0 0px';
+          a[0].style.color = '#fff';
+          a[1].style.color = '#000';
+        }
+      },
+
+      _orderHot() {
+        this.isNew = false;
+        this.order = 'hot';
+        this.refresh();
+      },
+
+      _orderNew() {
+        this.isNew = true;
+        this.order = 'new';
+        this.refresh();
+      },
+
+      handleResponse() {
+        console.log(this.data);
       }
     });
   </script>

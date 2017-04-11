@@ -30,7 +30,7 @@
       #wrap {
         width: 960px;
         margin: 0px auto;
-        padding: 30px 0 0 30px;
+        padding: 30px 0 100px 30px;
         border: 1px solid #dedede;
         background: #fff;
         font-size: 14px;
@@ -118,7 +118,7 @@
         background: url('../../images/icons.png') no-repeat -44px -107px;
       }
 
-      #msg #comment i {
+      #msg #commentNum i {
         background: url('../../images/button2.png') no-repeat -10px -1469px;
       }
 
@@ -198,7 +198,7 @@
               <iron-icon icon="file-download"></iron-icon>
               下载
             </button>
-            <button type="button" name="button" id="comment">
+            <button type="button" name="button" id="commentNum">
               <i></i>
               ([[data.result.commentCount]])
             </button>
@@ -223,8 +223,7 @@
       <ms-disk-detail-list list="[[data.result.tracks]]"
                            play-count="[[data.result.playCount]]">
       </ms-disk-detail-list>
-      <ms-music-comment></ms-music-comment>
-
+      <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
 
     </div>
   </template>
@@ -269,6 +268,7 @@
         let split = id.split('=');
         this.songId = split[1];
         this.$.ajax.generateRequest();
+        this.$.comment.refresh();
       },
 
       handleResponse(e) {
