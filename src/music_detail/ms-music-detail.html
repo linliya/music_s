@@ -142,8 +142,7 @@
               content-type="application/json"
               headers="[[authHeader]]"
               login-user="[[loginUser]]"
-              last-response="{{data}}"
-              on-response="handleResponse">
+              last-response="{{data}}">
    </iron-ajax>
 
    <iron-ajax id="ajaxGetLyric"
@@ -225,7 +224,7 @@
             </paper-button>
             <paper-button id="commentNum">
               <i></i>
-              (100)
+              ([[commentLength]])
             </paper-button>
           </div>
 
@@ -239,7 +238,6 @@
 
       <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
 
-
     </div>
   </template>
   <script>
@@ -248,6 +246,11 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
+        commentLength: {
+          type: Number,
+          notify: true
+        },
+
         songId: {
           type: String,
           notify: true
@@ -259,12 +262,20 @@
         }
       },
 
+      attached() {
+        this.addEventListener('ms-comment-change', (e) => {
+          this.commentLength = e.detail.length;
+        });
+      },
+
       refresh() {
         let id = window.location.search;
         let split = id.split('=');
         this.songId = split[1];
+
         this.$.ajaxGet.generateRequest();
         this.$.ajaxGetLyric.generateRequest();
+
         this.$.comment.refresh();
       },
 
@@ -273,10 +284,6 @@
         let name = this.data.name || this.data.songs[0].name;
         let singer = this.data.singer || this.data.songs[0].artists[0].name;
         this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
-      },
-
-      handleResponse(e) {
-        console.log(e.detail.response);
       },
 
       handleGetLyricResponse(e) {

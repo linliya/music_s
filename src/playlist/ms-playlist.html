@@ -3,18 +3,22 @@
 <link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
 <link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././index/ms-secondbar.html">
-<link rel="import" href="./ms-page.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
+
+<link rel="import" href="./ms-page.html">
+<link rel="import" href="./ms-category.html">
 
 
 <dom-module id="ms-playlist">
   <template>
     <style>
-      div, h3, header, section, ul, p, a {
+      div, h3, header, section, ul, p, a, dl, dt, dd {
         margin: 0;
         padding: 0;
       }
@@ -31,6 +35,7 @@
         color: #333;
         font-size: 12px;
         border: 1px solid #d5d5d5;
+        position: relative;
       }
 
       a {
@@ -57,15 +62,12 @@
         font-weight: normal;
       }
 
-      header h3 #selector a {
-        display: inline-block;
+      header h3 #selector paper-button {
         height: 30px;
         line-height: 30px;
-        vertical-align: top;
-        text-align: center;
-        cursor: pointer;
         font-size: 12px;
         border: 1px solid #d5d5d5;
+        vertical-align: top;
         border-radius: 5px;
         margin: 2px 0 0 12px;
         padding: 0 16px 0 10px;
@@ -171,6 +173,7 @@
       }
 
 
+
     </style>
 
     <ms-topbar></ms-topbar>
@@ -178,13 +181,12 @@
 
     <iron-ajax id="ajax"
                loading="{{loading}}"
-               url="[[serverUrl]]/playlist/all/[[order]]"
+               url="[[serverUrl]]/playlist?order=[[order]]&category=[[category]]"
                handle-as="json"
                content-type="application/json"
                headers="[[authHeader]]"
                login-user="[[loginUser]]"
-               last-response="{{data}}"
-               on-response="handleResponse">
+               last-response="{{data}}">
     </iron-ajax>
 
     <div id="wrap">
@@ -192,12 +194,12 @@
         <h3>
           <div id="selector">
             <span>全部</span>
-            <a href="#">
+            <paper-button on-tap="_showSelector">
               <i>
                 选择分类
                 <em></em>
               </i>
-            </a>
+            </paper-button>
           </div>
 
           <div id="order">
@@ -206,6 +208,8 @@
           </div>
         </h3>
       </header>
+
+      <ms-category id="category"></ms-category>
 
       <section id="list">
         <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
@@ -247,6 +251,12 @@
       behaviors: [[Polymer.msConnectBehavior]],
 
       properties: {
+        category: {
+          type: String,
+          notify: true,
+          value: '全部'
+        },
+
         isNew: {
           type: Boolean,
           notify: true,
@@ -263,6 +273,12 @@
       attached() {
         // this.refresh();
         this.isNew = false;
+
+        this.addEventListener('ms-category', (e) => {
+          this.category = e.detail.category;
+          this.refresh();
+          this.$.category.hide();
+        });
       },
 
       refresh() {
@@ -296,8 +312,8 @@
         this.refresh();
       },
 
-      handleResponse() {
-        console.log(this.data);
+      _showSelector() {
+        this.$.category.show();
       }
     });
   </script>

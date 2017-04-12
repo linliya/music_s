@@ -164,7 +164,8 @@
       properties: {
         commentLength: {
           type: Number,
-          notify: true
+          notify: true,
+          value: 0
         }
       },
 
@@ -195,7 +196,7 @@
       handleAddResponse() {
         this.refresh();
         this.$.commentContent.value = '';
-        console.log('评论成功');
+        this.fire('ms-comment-change', {length: this.commentLength + 1}, null);
       }
     });
   </script>

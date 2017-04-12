@@ -200,7 +200,7 @@
             </button>
             <button type="button" name="button" id="commentNum">
               <i></i>
-              ([[data.result.commentCount]])
+              ([[commentLength]])
             </button>
           </div>
 
@@ -253,6 +253,13 @@
         }
       },
 
+      attached() {
+        this.addEventListener('ms-comment-change', (e) => {
+          this.commentLength = e.detail.length;
+        });
+      },
+
+
       _computeCreateTime(data){
         if (!data) {
           return;
@@ -269,6 +276,7 @@
         this.songId = split[1];
         this.$.ajax.generateRequest();
         this.$.comment.refresh();
+        this.commentLength = this.$.comment.commentLength;
       },
 
       handleResponse(e) {

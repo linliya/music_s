@@ -1,0 +1,281 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="ms-category">
+  <template>
+    <style>
+
+    div, h3, header, section, ul, p, a, dl, dt, dd {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+    #categoryTip {
+      width: 700px;
+      position: relative;
+    }
+
+    #categoryTip i {
+      position: absolute;
+      top: -5px;
+      left: 132px;
+      display: inline-block;
+      width: 24px;
+      height: 11px;
+      background: url('../../images/iconall.png')  -48px 0;
+      vertical-align: middle;
+      z-index: 1000;
+    }
+
+    #category {
+      width: 720px;
+      height: 378px;
+      z-index: 100;
+      border: 1px solid #d5d5d5;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);
+      background: #fff;
+      position: absolute;
+      top: 86px;
+      left: 62px;
+    }
+
+    #category h3 {
+      height: 37px;
+      padding-left: 26px;
+      border-bottom: 1px solid #e6e6e6;
+      font-weight: normal;
+      margin: 14px 0;
+    }
+
+    #category h3 a {
+      display: inline-block;
+      width: 75px;
+      height: 26px;
+      text-align: center;
+      line-height: 26px;
+      border: 1px solid #e6e6e6;
+      border-radius: 4px;
+    }
+
+    #category dl dt {
+      float: left;
+      display: inline;
+      width: 70px;
+      margin: 0 -100px 0 26px;
+      padding-top: 15px;
+      border-right: 1px solid #e6e6e6;
+      font-weight: bold;
+    }
+
+    #category dl dd {
+      display: inline-block;
+      margin-left: 96px;
+      padding: 16px 15px 0 15px;
+      line-height: 24px;
+      border-left: 1px solid #e6e6e6;
+    }
+
+    #category dl dd span {
+      margin: 0 8px 0 10px;
+      color: #d8d8d8;
+    }
+
+    #category dl dd a {
+      cursor: pointer;
+    }
+
+    #category dl dd a:hover, #category h3 a:hover {
+      text-decoration: underline;
+    }
+
+    #category dl dt i {
+      margin-right: 8px;
+      margin-bottom: 4px;
+      width: 23px;
+      height: 23px;
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: middle;
+    }
+
+    #category dl .y {
+      background: url('../../images/icons.png') no-repeat -20px -735px;
+    }
+
+    #category dl .f {
+      background: url('../../images/icons.png') no-repeat 0px -60px;
+    }
+
+    #category dl .c {
+      background: url('../../images/icons.png') no-repeat 0px -90px;
+    }
+
+    #category dl .q {
+      background: url('../../images/icons.png') no-repeat 0px -117px;
+    }
+
+    #category dl .z {
+      background: url('../../images/icons.png') no-repeat 0px -141px;
+    }
+    </style>
+    <div id="categoryBox" hidden$="[[isHide]]">
+      <div id="categoryTip" >
+        <i></i>
+      </div>
+      <div id="category">
+        <h3>
+          <a href="#" on-tap="getCategory">全部</a>
+        </h3>
+
+        <dl>
+          <dt>
+            <i class="y"></i>
+            语种
+          </dt>
+          <dd>
+            <a href="javascript:;" on-tap="getCategory">华语</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">欧美</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">日语</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">韩语</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">粤语</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">小语种</a><span>|</span>
+          </dd>
+        </dl>
+
+        <dl>
+          <dt>
+            <i class="f"></i>
+            风格
+          </dt>
+          <dd>
+            <a href="javascript:;" on-tap="getCategory">流行</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">摇滚</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">民谣</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">电子</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">舞曲</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">说唱</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">轻音乐</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">说唱</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">爵士</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">乡村</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">R&B/Soul</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">民族</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">英伦</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">金属</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">朋克</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">蓝调</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">雷鬼</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">世界音乐</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">另类/独立</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">New Age</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">古风</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">后摇</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">Bossa Nova</a><span>|</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            <i class="c"></i>
+            场景
+          </dt>
+          <dd>
+            <a href="javascript:;" on-tap="getCategory">清晨</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">夜晚</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">学习</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">工作</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">午休</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">下午茶</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">地铁</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">驾车</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">运动</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">旅行</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">散步</a><span>|</span>
+          </dd>
+        </dl>
+
+        <dl>
+          <dt>
+            <i class="q"></i>
+            情感
+          </dt>
+          <dd>
+            <a href="javascript:;" on-tap="getCategory">清新</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">浪漫</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">性感</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">伤感</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">治愈</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">放松</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">孤独</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">感动</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">兴奋</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">快乐</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">安静</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">思念</a><span>|</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt>
+            <i class="z"></i>
+            主题
+          </dt>
+          <dd>
+            <a href="javascript:;" on-tap="getCategory">影视原声</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">ACG</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">校园</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">游戏</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">70后</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">80后</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">90后</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">网络歌曲</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">KTV</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">经典</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">翻唱</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">吉他</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">钢琴</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">器乐</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">儿童</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">榜单</a><span>|</span>
+            <a href="javascript:;" on-tap="getCategory">00后</a><span>|</span>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-category',
+      properties: {
+        isHide: {
+          type: Boolean,
+          notify: true,
+          value: true
+        }
+      },
+
+      show() {
+        if(this.isHide === true) {
+          this.isHide = false;
+        }
+        else {
+          this.isHide = true;
+        }
+      },
+
+      hide() {
+        this.isHide = true;
+      },
+
+      getCategory(e) {
+        this.fire('ms-category', {category: e.target.innerHTML}, null);
+      }
+
+    });
+  </script>
+</dom-module>
