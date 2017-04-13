@@ -1,3 +1,4 @@
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
@@ -134,7 +135,7 @@
       }
 
       #tag button {
-        width: 60px;
+        width: 80px;
         border: none;
         outline: none;
         border: 1px solid #ddd;
@@ -165,6 +166,17 @@
                last-response="{{data}}"
                on-response="handleResponse">
     </iron-ajax>
+
+    <iron-ajax id="ajaxStore"
+               method="POST"
+               url="[[serverUrl]]/store/add"
+               handle-as="json"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               on-response="handleStoreResponse">
+    </iron-ajax>
+
     <div id="wrap">
       <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
 
@@ -190,7 +202,7 @@
               <i></i>
               播放
             </button>
-            <button type="button" name="button" id="store">
+            <button type="button" name="button" id="store" on-tap="store">
               <i></i>
               收藏
             </button>
@@ -279,10 +291,31 @@
         this.commentLength = this.$.comment.commentLength;
       },
 
+      store() {
+        let data = {
+          userId: this.loginUser.id,
+          playlistId: this.songId,
+          playlistName: this.data.result.name,
+          playlistCreator: this.data.result.creator.nickname,
+          playlistPic: this.data.result.coverImgUrl,
+          playlistCreatorBg: this.data.result.creator.backgroundUrl,
+          playlistSongs: this.data.result.tracks,
+          playlistCreateTime: this.createTime,
+          playCount: this.data.result.playCount
+        };
+
+        this.$.ajaxStore.body = data;
+        this.$.ajaxStore.generateRequest();
+      },
+
       handleResponse(e) {
         let description = this.data.result.description;
         let split = description.split('，');
         this.description = split;
+      },
+
+      handleStoreResponse() {
+        console.log("收藏成功");
       }
     });
   </script>

@@ -19,6 +19,7 @@
 
       #wrap {
         width: 600px;
+        margin-bottom: 100px;
       }
 
       h3 {
@@ -116,7 +117,7 @@
     <iron-ajax id="ajaxAdd"
                method="POST"
                loading="{{loading}}"
-               url="[[serverUrl]]/comment/add/[[commentId]]"
+               url="[[serverUrl]]/comment/add"
                handle-as="json"
                content-type="application/json"
                headers="[[authHeader]]"
