@@ -294,14 +294,7 @@
       store() {
         let data = {
           userId: this.loginUser.id,
-          playlistId: this.songId,
-          playlistName: this.data.result.name,
-          playlistCreator: this.data.result.creator.nickname,
-          playlistPic: this.data.result.coverImgUrl,
-          playlistCreatorBg: this.data.result.creator.backgroundUrl,
-          playlistSongs: this.data.result.tracks,
-          playlistCreateTime: this.createTime,
-          playCount: this.data.result.playCount
+          result: this.data.result
         };
 
         this.$.ajaxStore.body = data;

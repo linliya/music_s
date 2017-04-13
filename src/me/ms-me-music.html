@@ -7,6 +7,8 @@
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href=".././music_disk/ms-disk-detail-list.html">
 
+<script src="../../bower_components/moment/moment.js"></script>
+
 <dom-module id="ms-me-music">
   <template>
     <style>
@@ -176,7 +178,7 @@
         align-items: center;
       }
 
-      #text button:hover {
+      #text #play:hover {
         background: #2179d0;
       }
 
@@ -217,6 +219,7 @@
       #tag {
         margin-top: 20px;
         color: #666;
+        display: flex;
       }
 
       #tag button {
@@ -228,6 +231,9 @@
         border-radius: 20px;
         margin-left: 8px;
         color: #666;
+        display: flex;
+        justify-content: center;
+        margin-left: 10px;
       }
 
       #intro {
@@ -269,11 +275,11 @@
 
         <iron-selector attr-for-selected="data-path" selected="{{path}}" id="selector">
             <template is="dom-repeat" items="[[data]]">
-              <a href$="/me/music/[[item.id]]" data-path$="/me/music/[[item.id]]" class="items" on-tap="_getSelectedItem">
-                <img src="[[item.bg]]" width="40px" height="40px">
+              <a href$="/me/music/[[item.result.id]]" data-path$="/me/music/[[item.result.id]]" class="items" on-tap="_getSelectedItem">
+                <img src="[[item.result.creator.backgroundUrl]]" width="40px" height="40px">
                 <div class="itemName">
-                  <p>[[item.name]]</p>
-                  <p class="num">[[item.tracks.length]]首</p>
+                  <p>[[item.result.name]]</p>
+                  <p class="num">[[item.result.tracks.length]]首</p>
                 </div>
               </a>
             </template>
@@ -283,28 +289,28 @@
       <div>
         <section id="detail">
           <div id="photo">
-            <img src="[[selectedItem.pic]]" alt="" width="188px" height="188px">
+            <img src="[[selectedItem.result.coverImgUrl]]" alt="" width="188px" height="188px">
           </div>
 
           <div id="text">
             <h3 id="name">
-              <i></i>[[selectedItem.name]]
+              <i></i>[[selectedItem.result.name]]
             </h3>
 
             <div>
               <p id="author">
-                <img src="[[selectedItem.bg]]" width="35px" height="35px">
-                <a href="#">[[selectedItem.author]]</a>
-                <span>[[selectedItem.createTime]] 创建</span>
+                <img src="[[selectedItem.result.creator.backgroundUrl]]" width="35px" height="35px">
+                <a href="#">[[selectedItem.creator.name]]</a>
+                <span>[[createTime]] 创建</span>
               </p>
-              <button type="button" name="button">
+              <button id="play" type="button" name="button">
                 <i></i>
                 播放
               </button>
 
               <div id="tag">
                 标签:
-                <template is="dom-repeat" items="[[data.result.tags]]">
+                <template is="dom-repeat" items="[[selectedItem.result.tags]]">
                   <button>[[item]]</button>
                 </template>
 
@@ -319,7 +325,7 @@
           </div>
         </section>
 
-        <section id="list" hidden$="[[selectedItem.tracks]]">
+        <section id="list" hidden$="[[selectedItem.result.tracks]]">
           <h3>
             歌曲列表
             <span>0首歌</span>
@@ -332,7 +338,7 @@
         </section>
 
         <div id="diskList">
-          <ms-disk-detail-list list="[[selectedItem.tracks]]" play-count="[[selectedItem.playCount]]"></ms-disk-detail-list>
+          <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
         </div>
       </div>
     </div>
@@ -353,6 +359,12 @@
           type: Object,
           notify: true,
           observer: '_observeSelectedItem'
+        },
+
+        createTime: {
+          type: String,
+          notify: true,
+          computed: '_computeCreateTime(selectedItem)'
         }
       },
 
@@ -362,7 +374,18 @@
 
       handleResponse() {
         this.playlistNum = this.data.length;
-        console.log(this.data);
+        this.selectedItem = this.data[0];
+
+      },
+
+      _computeCreateTime(selectedItem){
+        if (!selectedItem) {
+          return;
+        }
+
+        let ctime = selectedItem.result.createTime;
+        let formatTime = window.moment(ctime).format('YYYY-MM-DD');
+        return formatTime;
       },
 
       _getSelectedItem(e) {
@@ -371,7 +394,7 @@
         let selectedId = split[split.length - 1];
 
         for(let i = 0; i < this.data.length; i++) {
-          if(this.data[i].id === selectedId) {
+          if(this.data[i].result.id == selectedId) {
             this.selectedItem = this.data[i];
             break;
           }
