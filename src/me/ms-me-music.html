@@ -2,10 +2,15 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../bower_components/tk-confirm-dialog/tk-confirm-dialog.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href=".././music_disk/ms-disk-detail-list.html">
+<link rel="import" href="./ms-create-playlist-dialog.html">
 
 <script src="../../bower_components/moment/moment.js"></script>
 
@@ -116,6 +121,15 @@
         word-wrap: normal;
       }
 
+      .itemName iron-icon {
+        color: #999;
+        width: 16px;
+        height: 16px;
+        float: right;
+        padding-right: 10px;
+        /*display: none;*/
+      }
+
       #detail {
         width: 660px;
         margin: 30px 0 0 30px;
@@ -222,6 +236,10 @@
         display: flex;
       }
 
+      #tag span {
+        line-height: 32px;
+      }
+
       #tag button {
         width: 80px;
         border: none;
@@ -257,6 +275,15 @@
       url="[[serverUrl]]/store/[[loginUser.id]]"
       on-response="handleResponse"></iron-ajax>
 
+    <iron-ajax
+      id="ajaxDel"
+      method="DELETE"
+      handle-as="json"
+      headers="[[authHeader]]"
+      login-user="[[loginUser]]"
+      url="[[serverUrl]]/store/delete/[[selectedItem.id]]"
+      on-response="handleDeleteResponse"></iron-ajax>
+
     <ms-topbar user="[[user]]"></ms-topbar>
     <div id="wrap">
       <!-- 左边 -->
@@ -267,7 +294,7 @@
             <span>我的歌单([[playlistNum]])</span>
           </div>
 
-          <button type="button" name="button" id="create">
+          <button type="button" name="button" id="create" on-tap="_create">
             <iron-icon icon="add"></iron-icon>
             新建
           </button>
@@ -276,10 +303,20 @@
         <iron-selector attr-for-selected="data-path" selected="{{path}}" id="selector">
             <template is="dom-repeat" items="[[data]]">
               <a href$="/me/music/[[item.result.id]]" data-path$="/me/music/[[item.result.id]]" class="items" on-tap="_getSelectedItem">
-                <img src="[[item.result.creator.backgroundUrl]]" width="40px" height="40px">
+                <img hidden$="[[!item.result.creator.backgroundUrl]]" src="[[item.result.creator.backgroundUrl]]" width="40px" height="40px">
+                <img hidden$="[[item.result.creator.backgroundUrl]]" src="../../images/my_disk.jpg" width="40px" height="40px">
+
                 <div class="itemName">
                   <p>[[item.result.name]]</p>
-                  <p class="num">[[item.result.tracks.length]]首</p>
+                  <p class="num" hidden$="[[item.result.tracks.length]]">
+                    <span>0首</span>
+                     <iron-icon icon="delete" on-tap="delete"></iron-icon>
+                  </p>
+                  <p class="num" hidden$="[[!item.result.tracks.length]]">
+                    <span>[[item.result.tracks.length]]首</span>
+                     <iron-icon icon="delete" on-tap='delete'></iron-icon>
+                  </p>
+
                 </div>
               </a>
             </template>
@@ -289,7 +326,11 @@
       <div>
         <section id="detail">
           <div id="photo">
-            <img src="[[selectedItem.result.coverImgUrl]]" alt="" width="188px" height="188px">
+
+            <img hidden$="[[!selectedItem.result.coverImgUrl]]" src="[[selectedItem.result.coverImgUrl]]" alt="" width="188px" height="188px">
+            <img hidden$="[[selectedItem.result.coverImgUrl]]" src="../../images/my_disk_big.jpg" alt="" width="188px" height="188px">
+
+
           </div>
 
           <div id="text">
@@ -299,7 +340,10 @@
 
             <div>
               <p id="author">
-                <img src="[[selectedItem.result.creator.backgroundUrl]]" width="35px" height="35px">
+
+                <img hidden$="[[!selectedItem.result.creator.backgroundUrl]]" src="[[selectedItem.result.creator.backgroundUrl]]" width="35px" height="35px">
+                <img hidden$="[[selectedItem.result.creator.backgroundUrl]]" src="../../public/uploads/[[loginUser.id]].png" width="35px" height="35px">
+
                 <a href="#">[[selectedItem.creator.name]]</a>
                 <span>[[createTime]] 创建</span>
               </p>
@@ -308,12 +352,11 @@
                 播放
               </button>
 
-              <div id="tag">
-                标签:
+              <div id="tag" hidden$="[[!selectedItem.result.tags]]">
+                <span>标签:</span>
                 <template is="dom-repeat" items="[[selectedItem.result.tags]]">
                   <button>[[item]]</button>
                 </template>
-
               </div>
 
               <section id="intro">
@@ -331,18 +374,23 @@
             <span>0首歌</span>
           </h3>
 
-          <section id="content">
+          <section id="content" >
             <p>暂无音乐</p>
             马上去<a href="/main">发现音乐</a>
           </section>
         </section>
 
-        <div id="diskList">
+        <div id="diskList" hidden$="[[!selectedItem.result.tracks]]">
           <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
         </div>
       </div>
     </div>
-
+    <ms-create-playlist-dialog id="dialog" login-user="[[loginUser]]"></ms-create-playlist-dialog>
+    <tk-confirm-dialog id="confirmDialog"
+                       close-by-cancel
+                       title="确认删除？"
+                       on-tk-confirm-dialog-confirm="_dealConfirm">
+    </tk-confirm-dialog>
   </template>
   <script>
     Polymer({
@@ -368,6 +416,12 @@
         }
       },
 
+      attached() {
+        this.addEventListener('ms-create-playlist-success', () => {
+          this.refresh();
+        });
+      },
+
       refresh() {
         this.$.ajaxGex.generateRequest();
       },
@@ -375,7 +429,10 @@
       handleResponse() {
         this.playlistNum = this.data.length;
         this.selectedItem = this.data[0];
+      },
 
+      _create() {
+        this.$.dialog.open();
       },
 
       _computeCreateTime(selectedItem){
@@ -393,16 +450,31 @@
         let split = id.split('/');
         let selectedId = split[split.length - 1];
 
+
         for(let i = 0; i < this.data.length; i++) {
           if(this.data[i].result.id == selectedId) {
             this.selectedItem = this.data[i];
+            this.selected = i;
             break;
           }
         }
       },
 
+      delete() {
+        this.$.confirmDialog.opened = true;
+      },
+
+      _dealConfirm() {
+        this.$.ajaxDel.generateRequest();
+      },
+
       _observeSelectedItem() {
 
+      },
+
+      handleDeleteResponse() {
+        this.refresh();
+        this.$.confirmDialog.opened = false;
       }
     });
   </script>

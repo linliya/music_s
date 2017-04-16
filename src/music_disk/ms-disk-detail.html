@@ -1,5 +1,7 @@
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
@@ -81,7 +83,7 @@
         padding-right: 8px;
       }
 
-      #msg button {
+      #msg paper-button {
         width: 66px;
         height: 32px;
         background: #fff;
@@ -98,7 +100,7 @@
         box-shadow: 0px 1px 0px #ddd;
       }
 
-      #msg button i {
+      #msg paper-button i {
         display: inline-block;
         width: 18px;
         height: 18px;
@@ -157,25 +159,25 @@
     <ms-topbar></ms-topbar>
     <ms-secondbar></ms-secondbar>
     <iron-ajax id="ajax"
-               loading="{{loading}}"
-               url="[[serverUrl]]/playlist/[[songId]]"
-               handle-as="json"
-               content-type="application/json"
                headers="[[authHeader]]"
                login-user="[[loginUser]]"
+               loading="{{loading}}"
+               url="[[serverUrl]]/playlist/[[songId]]"
                last-response="{{data}}"
                on-response="handleResponse">
     </iron-ajax>
 
-    <iron-ajax id="ajaxStore"
-               method="POST"
-               url="[[serverUrl]]/store/add"
-               handle-as="json"
-               content-type="application/json"
-               headers="[[authHeader]]"
-               login-user="[[loginUser]]"
-               on-response="handleStoreResponse">
-    </iron-ajax>
+    <iron-ajax
+      id="ajaxStore"
+      method="POST"
+      url="[[serverUrl]]/store/add"
+      handle-as="json"
+      content-type="application/json"
+      headers="[[authHeader]]"
+      login-user="[[loginUser]]"
+      on-response="handleStoreResponse"></iron-ajax>
+
+    <paper-toast text="收藏成功" id="toast"></paper-toast>
 
     <div id="wrap">
       <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
@@ -198,22 +200,22 @@
               <span id="createTime"><span>[[createTime]]创建</span>
             </p>
 
-            <button type="button" name="button" id="play">
+            <paper-button id="play">
               <i></i>
               播放
-            </button>
-            <button type="button" name="button" id="store" on-tap="store">
+            </paper-button>
+            <paper-button id="store" on-tap="store">
               <i></i>
               收藏
-            </button>
-            <button type="button" name="button" id="download">
+            </paper-button>
+            <paper-button id="download">
               <iron-icon icon="file-download"></iron-icon>
               下载
-            </button>
-            <button type="button" name="button" id="commentNum">
+            </paper-button>
+            <paper-button id="commentNum">
               <i></i>
               ([[commentLength]])
-            </button>
+            </paper-button>
           </div>
 
           <div id="tag">
@@ -293,6 +295,7 @@
 
       store() {
         let data = {
+          id: this.data.result.id,
           userId: this.loginUser.id,
           result: this.data.result
         };
@@ -308,7 +311,8 @@
       },
 
       handleStoreResponse() {
-        console.log("收藏成功");
+        this.$.toast.open();
+        this.fire('ms-store-change', null, null);
       }
     });
   </script>
