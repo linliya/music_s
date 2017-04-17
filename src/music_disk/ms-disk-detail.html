@@ -125,12 +125,6 @@
         background: url('../../images/button2.png') no-repeat -10px -1469px;
       }
 
-      #msg #download iron-icon {
-        width: 18px;
-        height: 18px;
-        padding-top: 4px;
-      }
-
       #tag {
         margin-top: 20px;
         color: #666;
@@ -171,7 +165,6 @@
       id="ajaxStore"
       method="POST"
       url="[[serverUrl]]/store/add"
-      handle-as="json"
       content-type="application/json"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -207,10 +200,6 @@
             <paper-button id="store" on-tap="store">
               <i></i>
               收藏
-            </paper-button>
-            <paper-button id="download">
-              <iron-icon icon="file-download"></iron-icon>
-              下载
             </paper-button>
             <paper-button id="commentNum">
               <i></i>
@@ -294,13 +283,13 @@
       },
 
       store() {
-        let data = {
+        let value = {
           id: this.data.result.id,
           userId: this.loginUser.id,
           result: this.data.result
         };
 
-        this.$.ajaxStore.body = data;
+        this.$.ajaxStore.body = value;
         this.$.ajaxStore.generateRequest();
       },
 
@@ -312,6 +301,7 @@
 
       handleStoreResponse() {
         this.$.toast.open();
+        // this.$.store.disabled = true;
         this.fire('ms-store-change', null, null);
       }
     });

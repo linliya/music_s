@@ -1,0 +1,186 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
+
+<dom-module id="ms-upload-song-dialog">
+  <template>
+    <style>
+    paper-dialog {
+      margin: 0;
+      padding: 0;
+      border-radius: 3px 3px 0 0;
+      width: 530px;
+      height: 300px;
+    }
+
+    paper-dialog > header {
+      margin: 0;
+    }
+
+    header {
+      box-sizing: border-box;
+      background-color: #2d2d2d;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);
+      line-height: 38px;
+      color: #fff;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header iron-icon {
+      width: 18px;
+      height: 18px;
+      margin-right: -8px;
+      cursor: pointer;
+    }
+
+    #content {
+      width: 350px;
+      margin: 0 auto;
+    }
+
+    paper-button {
+      width: 90px;
+      margin-top: 18px;
+      color: #fff;
+      margin-left: 0px;
+      background: var(--paper-blue-500);
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+      font-size: 12px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #lookup {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    #lookup paper-input {
+      width: 250px;
+    }
+
+    #lookup paper-button {
+      background: #999;
+      width: 60px;
+      height:28px;
+      margin: 24px 0 0 30px;
+    }
+
+    #file {
+      display: none;
+    }
+    </style>
+
+    <iron-ajax
+      id="ajax"
+      method="POST"
+      headers="[[authHeader]]"
+      login-user="[[loginUser]]"
+      url="[[serverUrl]]/upload/music/[[loginUser.id]]"
+      on-response="handleResponse"
+      on-error="handleError"></iron-ajax>
+
+    <paper-dialog id="dialog" with-backdrop no-cancel-on-outside-click>
+      <header>
+        <span>上传音乐</span>
+        <iron-icon icon="close" on-tap="close"></iron-icon>
+      </header>
+
+      <div id="content">
+        <form is="iron-form" id="ajaxForm">
+          <paper-input label="请输入歌曲名"
+                       name="songName"
+                       auto-validate
+                       required></paper-input>
+          <paper-input label="请输入歌手"
+                       name="singer"
+                       auto-validate
+                       require></paper-input>
+           <div id="lookup">
+             <paper-input placeholder="支持上传mp3格式的歌曲" id="fileName"></paper-input>
+             <paper-button raised on-tap="_handleLookup">浏览</paper-button>
+           </div>
+
+           <input type="file" id="file" accept="audio/*" on-change="_handleUpload">
+          <paper-button raised on-tap="upload">上传</paper-button>
+        </form>
+      </div>
+      <paper-toast id="toast"></paper-toast>
+    </paper-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-upload-song-dialog',
+      behaviors: [Polymer.msConnectBehavior],
+
+      properties: {
+        file: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      open() {
+        this.$.dialog.opened = true;
+      },
+
+      close() {
+        this.$.dialog.opened = false;
+      },
+
+      upload() {
+        if (this.$.ajaxForm.validate() === false) {
+          return;
+        }
+
+        let text = this.$.ajaxForm.serialize();
+        let duration = this.file.duration;
+
+        let formData = new FormData();
+        formData.append('file', this.file);
+        formData.append('name', text.songName);
+        formData.append('singer', text.singer);
+
+        this.$.ajax.body = formData;
+        this.$.ajax.generateRequest();
+      },
+
+      _handleLookup() {
+        this.$.file.click();
+      },
+
+      _handleUpload() {
+        this.file = this.$.file.files[0];
+        console.log(this.file);
+        this.$.fileName.value = this.file.name;
+      },
+
+      handleResponse() {
+        this.close();
+        this.fire('ms-upload-music-success', null, null);
+      },
+
+      handleError(e) {
+        if(e) {
+          
+        }
+      }
+    });
+
+  </script>
+</dom-module>

@@ -14,7 +14,7 @@
 <dom-module id="ms-music-detail">
   <template>
     <style>
-      h3, p {
+      h3, h4, p {
         margin: 0;
         padding: 0;
       }
@@ -130,15 +130,15 @@
       #lyric p {
         color: #333;
       }
+
+
     </style>
 
     <ms-topbar></ms-topbar>
     <ms-secondbar></ms-secondbar>
    <iron-ajax id="ajaxGet"
-              method="GET"
               loading="{{loading}}"
               url="[[serverUrl]]/music/[[songId]]"
-              handle-as="json"
               content-type="application/json"
               headers="[[authHeader]]"
               login-user="[[loginUser]]"
@@ -146,9 +146,7 @@
    </iron-ajax>
 
    <iron-ajax id="ajaxGetLyric"
-              method="GET"
               url="[[serverUrl]]/music/lyric/[[songId]]"
-              handle-as="json"
               content-type="application/json"
               headers="[[authHeader]]"
               login-user="[[loginUser]]"
@@ -156,6 +154,16 @@
               on-response="handleGetLyricResponse">
    </iron-ajax>
 
+   <iron-ajax
+     id="ajaxStore"
+     method="POST"
+     url="[[serverUrl]]/store/add/song"
+     content-type="application/json"
+     headers="[[authHeader]]"
+     login-user="[[loginUser]]"
+     on-response="handleStoreResponse"></iron-ajax>
+
+   <paper-toast text="收藏成功" id="toast"></paper-toast>
 
     <div id="wrap">
       <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
@@ -214,7 +222,7 @@
               <i></i>
               播放
             </paper-button>
-            <paper-button id="store">
+            <paper-button id="store" on-tap="_store">
               <i></i>
               收藏
             </paper-button>
@@ -248,7 +256,8 @@
       properties: {
         commentLength: {
           type: Number,
-          notify: true
+          notify: true,
+          value: 0
         },
 
         songId: {
@@ -284,6 +293,16 @@
         let name = this.data.name || this.data.songs[0].name;
         let singer = this.data.singer || this.data.songs[0].artists[0].name;
         this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+      },
+
+      _store() {
+        let data = {
+          songId: this.songId
+          // playlistId: ,
+        }
+
+        this.$.ajaxStore.body = data;
+        this.$.ajaxStore.generateRequest();
       },
 
       handleGetLyricResponse(e) {

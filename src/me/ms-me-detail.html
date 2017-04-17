@@ -1,9 +1,21 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="./ms-upload-song-dialog.html">
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href=".././index/ms-topbar.html">
 <dom-module id="ms-me-detail">
   <template>
     <style>
+      h3, h4, p {
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: #666;
+      }
+
       ms-topbar:after {
         content: '';
         display: block;
@@ -62,7 +74,7 @@
         background: #eee;
       }
 
-      #music_disk {
+      #music_disk, #my_upload {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
@@ -74,11 +86,42 @@
       }
 
       #music_disk h3 {
+        margin-bottom: 20px;
+      }
+
+      #music_disk h3, #my_upload h3 {
         border-bottom: 2px solid #2783ca;
         width: 880px;
         font-size: 20px;
         padding-bottom: 6px;
       }
+
+      #music_disk p {
+        width: 140px;
+        word-wrap: nowrap;
+      }
+
+      #my_upload h4 {
+        width: 880px;
+        color: #212121;
+        background: #f4f4f4;
+        line-height: 32px;
+        font-weight: normal;
+        border-bottom: 1px solid #d9d9d9;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #my_upload h4 span {
+        width: 200px;
+        display: inline-block;
+      }
+
+      #my_upload #upload {
+        color: #212121;
+        text-decoration: underline;
+      }
+
     </style>
 
     <iron-ajax
@@ -88,6 +131,23 @@
         headers="[[authHeader]]"
         last-response="{{user}}">
     </iron-ajax>
+
+    <iron-ajax
+      id="ajaxGet"
+      auto
+      headers="[[authHeader]]"
+      login-user="[[loginUser]]"
+      url="[[serverUrl]]/store/[[loginUser.id]]"
+      last-response="{{data}}"
+      on-response="handleGetResponse"></iron-ajax>
+
+    <iron-ajax
+      id="ajaxGetUpload"
+      headers="[[authHeader]]"
+      login-user="[[loginUser]]"
+      url="[[serverUrl]]/upload/music"
+      last-response="{{songs}}"
+      on-response="handleGetUploadResponse"></iron-ajax>
 
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
 
@@ -112,34 +172,74 @@
       </div>
 
       <div id="music_disk">
-        <h3 id="title">我创建的歌单</h3>
-        <div>
-          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
-          <p>我喜欢的音乐</p>
-        </div>
-        <div>
-          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
-          <p>晴天</p>
-        </div>
-        <div>
-          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
-          <p>雨天</p>
-        </div>
-        <div>
-          <img src="../../images/me_photo.jpg" alt="歌单" width="140px" height="140px">
-          <p>阴天</p>
-        </div>
+        <h3 class="title">我的歌单</h3>
+        <template is="dom-repeat" items="[[data]]">
+          <div>
+            <a href="/me/music/[[item.id]]">
+              <img hidden$="[[!item.result.coverImgUrl]]" src="[[item.result.coverImgUrl]]" alt="" width="140px" height="140px">
+              <img hidden$="[[item.result.coverImgUrl]]" src="../../images/my_disk_big.jpg" alt="歌单" width="140px" height="140px">
+              <p>[[item.result.name]]</p>
+            </a>
+          </div>
+        </template>
+      </div>
+
+      <div id="my_upload">
+        <h3 class="title">我上传的音乐</h3>
+
+        <p>暂无音乐,去<a href="javascript:;" id="upload" on-tap="_upload">上传</a></p>
+        <h4>
+          <span class="num"></span>
+          <span class="title">歌曲标题</span>
+          <span class="time">时长</span>
+          <span class="singer">歌手</span>
+          <span class="disk">专辑</span>
+        </h4>
+
+        <ul>
+          <!-- <template is="dom-repeat" items="[[list]]">
+            <li>
+              <span class="num"><i></i></span>
+              <span class="title"><a href="/musicDetail?id=[[item.id]]">[[item.name]]</a></span>
+              <span class="time">
+                <ms-time-translator input="[[item.duration]]"></ms-time-translator>
+              </span>
+
+              <span class="singer">
+                <template is="dom-repeat" items="[[item.artists]]">
+                  [[item.name]]
+                </template>
+              </span>
+              <span class="disk">[[item.album.name]]</span>
+            </li>
+          </template> -->
+        </ul>
       </div>
     </div>
+
+    <ms-upload-song-dialog id="uploadDialog" login-user="[[loginUser]]"></ms-upload-song-dialog>
     </template>
     <script>
     Polymer({
       is: 'ms-me-detail',
-      behaviors: [[Polymer.msConnectBehavior]],
+      behaviors: [Polymer.msConnectBehavior],
+
+      properties: {
+
+      },
 
       attached() {
-        this.$.ajax.generateRequest();
+        // this.$.ajax.generateRequest();
+        this.$.ajaxGetUpload.generateRequest();
+        this.addEventListener('ms-upload-music-success', () => {
+          this.$.ajaxGetUpload.generateRequest();
+        });
+      },
+
+      _upload() {
+        this.$.uploadDialog.open();
       }
+
     });
     </script>
 </dom-module>
