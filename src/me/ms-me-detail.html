@@ -57,6 +57,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: 10px;
+      }
+
+      #detail #text p {
+        line-height: 28px;
       }
 
       #name a {
@@ -122,6 +127,10 @@
         text-decoration: underline;
       }
 
+      #area {
+        margin-top: 20px;
+      }
+
     </style>
 
     <iron-ajax
@@ -158,11 +167,11 @@
 
       <div id="detail">
         <h3 id="name">
-          [[user.username]]
+          <span>[[user.username]]</span>
           <a href="/me/edit">编辑个人资料</a>
         </h3>
 
-        <div>
+        <div id="text">
           <p id="area">所在地区: [[user.area]]</p>
           <p id="intro">个人介绍: [[user.intro]]</p>
           <p id="sex">性别: [[user.sex]]</p>
