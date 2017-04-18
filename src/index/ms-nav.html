@@ -143,11 +143,11 @@
       attached() {
         let srcArr = ['../../images/bannerImg1.png', '../../images/bannerImg2.png',
                       '../../images/bannerImg3.png', '../../images/bannerImg4.png',
-                      '../../images/bannerImg5.png', '../../images/bannerImg6.png'
+                      '../../images/bannerImg5.png'
                     ];
         let srcBg = ['../../images/bannerBg1.png', '../../images/bannerBg2.png',
                       '../../images/bannerBg3.png', '../../images/bannerBg4.png',
-                      '../../images/bannerBg5.png', '../../images/bannerBg6.png'
+                      '../../images/bannerBg5.png'
                     ];
         this.srcArr = srcArr;
         this.srcBg = srcBg;
@@ -181,7 +181,7 @@
 
       prev() {
         if(this.num <= 0) {
-          this.num = 5;
+          this.num = 4;
         }
         this.num--;
         this.src = this.srcArr[this.num];
@@ -189,7 +189,7 @@
       },
 
       next() {
-        if(this.num >= 4) {
+        if(this.num >= 3) {
           this.num = -1;
         }
         this.num++;

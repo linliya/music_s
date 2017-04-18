@@ -1,12 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
 <link rel="import" href="./ms-upload-song-dialog.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href=".././index/ms-topbar.html">
 <dom-module id="ms-me-detail">
   <template>
     <style>
-      h3, h4, p {
+      h3, h4, p, ul {
         margin: 0;
         padding: 0;
       }
@@ -14,6 +16,10 @@
       a {
         text-decoration: none;
         color: #666;
+      }
+
+      li {
+        list-style: none;
       }
 
       ms-topbar:after {
@@ -29,6 +35,7 @@
       #wrap {
         width: 960px;
         margin: 0px auto;
+        margin-bottom: 100px;
         border: 1px solid #ccc;
         background: #fff;
         display: flex;
@@ -57,11 +64,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 10px;
+        margin-top: 18px;
       }
 
       #detail #text p {
-        line-height: 28px;
+        line-height: 30px;
       }
 
       #name a {
@@ -92,18 +99,32 @@
 
       #music_disk h3 {
         margin-bottom: 20px;
+        font-size: 20px;
       }
 
       #music_disk h3, #my_upload h3 {
         border-bottom: 2px solid #2783ca;
         width: 880px;
-        font-size: 20px;
         padding-bottom: 6px;
       }
 
       #music_disk p {
         width: 140px;
         word-wrap: nowrap;
+      }
+
+      #my_upload h3 span {
+        font-size: 20px;
+      }
+
+      #my_upload paper-button {
+        float: right;
+        font-weight: normal;
+        color: #000;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 14px;
       }
 
       #my_upload h4 {
@@ -118,7 +139,7 @@
       }
 
       #my_upload h4 span {
-        width: 200px;
+        width: 300px;
         display: inline-block;
       }
 
@@ -127,8 +148,25 @@
         text-decoration: underline;
       }
 
-      #area {
-        margin-top: 20px;
+      ul li {
+        line-height: 38px;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      ul li span {
+        width: 294px;
+        display: inline-block;
+      }
+
+      ul li .num i {
+        width: 18px;
+        height: 18px;
+        margin-left: 32px;
+        vertical-align: middle;
+        cursor: pointer;
+        display: inline-block;
+        background: url('../../images/icons.png') no-repeat -45px -634px;
       }
 
     </style>
@@ -152,10 +190,11 @@
 
     <iron-ajax
       id="ajaxGetUpload"
+      auto
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
-      url="[[serverUrl]]/upload/music"
-      last-response="{{songs}}"
+      url="[[serverUrl]]/upload/music/[[loginUser.id]]"
+      last-response="{{music}}"
       on-response="handleGetUploadResponse"></iron-ajax>
 
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
@@ -194,35 +233,33 @@
       </div>
 
       <div id="my_upload">
-        <h3 class="title">我上传的音乐</h3>
-
-        <p>暂无音乐,去<a href="javascript:;" id="upload" on-tap="_upload">上传</a></p>
-        <h4>
+        <h3 class="title">
           <span class="num"></span>
-          <span class="title">歌曲标题</span>
-          <span class="time">时长</span>
-          <span class="singer">歌手</span>
-          <span class="disk">专辑</span>
-        </h4>
+          <span>我上传的音乐</span>
+          <paper-button on-tap="_upload">上传</paper-button>
+        </h3>
 
-        <ul>
-          <!-- <template is="dom-repeat" items="[[list]]">
-            <li>
-              <span class="num"><i></i></span>
-              <span class="title"><a href="/musicDetail?id=[[item.id]]">[[item.name]]</a></span>
-              <span class="time">
-                <ms-time-translator input="[[item.duration]]"></ms-time-translator>
-              </span>
+        <p hidden$="[[music]]">暂无音乐,去<a href="javascript:;" id="upload" on-tap="_upload">上传</a></p>
 
-              <span class="singer">
-                <template is="dom-repeat" items="[[item.artists]]">
-                  [[item.name]]
-                </template>
-              </span>
-              <span class="disk">[[item.album.name]]</span>
-            </li>
-          </template> -->
-        </ul>
+        <div hidden$="[[!music]]">
+          <h4>
+            <span class="num"><i></i></span>
+            <span class="title">歌曲标题</span>
+            <span class="singer">歌手</span>
+          </h4>
+
+          <ul>
+            <template is="dom-repeat" items="[[music]]">
+              <li>
+                <span class="num"><i></i></span>
+                <span class="title"><a href="/musicDetail/[[item.id]]">[[item.name]]</a></span>
+                <span class="singer">
+                  [[item.singer]]
+                </span>
+              </li>
+            </template>
+          </ul>
+         </div>
       </div>
     </div>
 
@@ -234,11 +271,13 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
-
+        item: {
+          type: Object,
+          notify: true
+        }
       },
 
       attached() {
-        // this.$.ajax.generateRequest();
         this.$.ajaxGetUpload.generateRequest();
         this.addEventListener('ms-upload-music-success', () => {
           this.$.ajaxGetUpload.generateRequest();

@@ -47,7 +47,6 @@
        id="ajax"
        method="POST"
        url="[[serverUrl]]/store/create"
-       handle-as="json"
        content-type="application/json"
        headers="[[authHeader]]"
        login-user="[[loginUser]]"
@@ -98,6 +97,7 @@
       handleResponse() {
         console.log('创建成功');
         this.close();
+        this.$.playlistName.value = '';
         this.fire('ms-create-playlist-success', null, null);
       }
     });

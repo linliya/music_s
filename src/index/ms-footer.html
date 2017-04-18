@@ -3,22 +3,61 @@
 <dom-module id="ms-footer">
   <template>
     <style>
-      #wrap {
+
+      a {
+        text-decoration: none;
+        color: #b1b3b9;
+      }
+
+      .footerWrapper{
         width: 100%;
-        height: 80px;
-        background: #f9f9f9;
-        border-top: 1px solid #ccc;
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-around;
-        line-height: 80px;
+        color:#b1b3b9;
+        background:#2c323b;
+        /*margin-bottom: 44px;*/
+        padding-bottom: 10px;
+        font-size: 12px;
+      }
+
+      .footer .links {
+        text-align: center;
+        padding:10px 0;
+      }
+
+      .footer .copyright p {
+        line-height:16px;
+        text-align:center;
+      }
+
+      .footer .copyright a.office-verification {
+        margin-left:5px;
+        padding:5px 10px;
+        background:url(http://www.kugou.com/common/images/logo_down.png) no-repeat;
+        background-size:20px 20px;
+      }
+
+      .footer .copyright a.office-verification img {
+        width:20px;
+        height:20px;
+        vertical-align:top;
+      }
+
+      .footer .copyright a {
+        color:#999;
       }
     </style>
-    <div id="wrap">
-      <div class="footer">footer</div>
-      <div class="footer">footer</div>
-      <div class="footer">footer</div>
-
+    <div class="footerWrapper">
+      <div class="footer">
+        <div class="links">
+          <a href="javascript:;" target="_blank">关于我们</a>
+        </div>
+        <div class="copyright">
+          <p>我们致力于推动网络正版音乐发展，相关版权合作请联系copyrights@music.com</p>
+          <p>信息网络传播视听节目许可证 1910564 增值电信业务经营许可证粤B2-20060339 &nbsp;&nbsp;&nbsp;<a hidefocus="true" href="javascript:;">&nbsp;&nbsp;&nbsp;&nbsp;</a></span></p>
+          <p>Copyright&nbsp;&nbsp;&copy;&nbsp;&nbsp;2004-2017 Inc.All Rights Reserved
+              <a hidefocus="true" class="office-verification" href="http://netadreg.gzaic.gov.cn/ntmm/WebSear/WebLogoPub.aspx?logo=440106106022006022000209" target="_blank"></a>
+          </p>
+        </div>
+      </div>
     </div>
   </template>
   <script>

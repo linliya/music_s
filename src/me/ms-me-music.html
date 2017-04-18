@@ -113,7 +113,7 @@
       }
 
       .itemName > p{
-        width: 173px;
+        width: 160px;
         margin-bottom: -10px;
         text-overflow: ellipsis;
 	      overflow: hidden;
@@ -126,7 +126,6 @@
         width: 16px;
         height: 16px;
         float: right;
-        padding-right: 10px;
         /*display: none;*/
       }
 
@@ -276,7 +275,6 @@
     <iron-ajax
       id="ajaxDel"
       method="DELETE"
-      content-type="application/json"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/store/delete/[[selectedItem.id]]"
