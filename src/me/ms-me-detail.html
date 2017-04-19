@@ -173,7 +173,6 @@
 
     <iron-ajax
         id="ajax"
-        auto
         url="[[serverUrl]]/user/[[loginUser.id]]"
         headers="[[authHeader]]"
         last-response="{{user}}">
@@ -181,7 +180,6 @@
 
     <iron-ajax
       id="ajaxGet"
-      auto
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/store/[[loginUser.id]]"
@@ -190,7 +188,6 @@
 
     <iron-ajax
       id="ajaxGetUpload"
-      auto
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/upload/music/[[loginUser.id]]"
@@ -278,7 +275,10 @@
       },
 
       attached() {
+        this.$.ajax.generateRequest();
+        this.$.ajaxGet.generateRequest();
         this.$.ajaxGetUpload.generateRequest();
+
         this.addEventListener('ms-upload-music-success', () => {
           this.$.ajaxGetUpload.generateRequest();
         });

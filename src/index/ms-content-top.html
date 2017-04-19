@@ -135,7 +135,6 @@
 
     </style>
     <iron-ajax id="ajax"
-
                loading="{{loading}}"
                url="[[serverUrl]]/main/playlist"
                handle-as="json"
@@ -186,6 +185,10 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
+      },
+
+      attached() {
+        this.$.ajax.generateRequest();
       },
 
       handleResponse(e) {

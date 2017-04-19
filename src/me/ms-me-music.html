@@ -265,7 +265,6 @@
 
     <iron-ajax
       id="ajaxGex"
-      auto
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       last-response="{{data}}"
@@ -413,6 +412,8 @@
       },
 
       attached() {
+        this.refresh();
+        
         this.addEventListener('ms-create-playlist-success', () => {
           this.refresh();
         });
