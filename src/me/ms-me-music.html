@@ -9,8 +9,8 @@
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
-<link rel="import" href=".././music_disk/ms-disk-detail-list.html">
 <link rel="import" href="./ms-create-playlist-dialog.html">
+<link rel="import" href="./ms-me-music-page.html">
 
 <script src="../../bower_components/moment/moment.js"></script>
 
@@ -92,7 +92,7 @@
         cursor: pointer;
       }
 
-      .items {
+      #items {
         height: 54px;
         font-size: 12px;
         color: #333;
@@ -103,12 +103,12 @@
         align-items: center;
       }
 
-      .items p {
+      #items p {
         margin: -8px 0 0 10px;
         padding: 7px 0;
       }
 
-      .items p.num {
+      #items p.num {
         color: #999;
       }
 
@@ -129,136 +129,12 @@
         /*display: none;*/
       }
 
-      #detail {
-        width: 660px;
-        margin: 30px 0 0 30px;
-        display: flex;
-        justify-content: flex-start;
+      #selector a:hover{
+        background-color: #ddd;
       }
 
-      #detail #photo img {
-        padding: 4px;
-        border: 1px solid #ccc;
-      }
-
-      #detail #text {
-        margin-left: 20px;
-      }
-
-      #detail h3, #list h3 {
-        font-size: 20px;
-        color: #333;
-        font-weight: normal;
-        display: flex;
-        align-items: center;
-      }
-
-      #text h3 i {
-        display: inline-block;
-        width: 54px;
-        height: 26px;
-        background: url('../../images/icons.png') no-repeat 0 -242px;
-        padding-right: 8px;
-      }
-
-      #author {
-        margin: 10px 0 20px;
-        display: flex;
-        align-items: center;
-      }
-
-      #author a {
-        padding-left: 10px;
-      }
-
-      #author span {
-        color: #999;
-        font-size: 12px;
-        padding-left: 10px;
-      }
-
-      #text button {
-        width: 66px;
-        height: 32px;
-        color: #fff;
-        border-radius: 4px;
-        background: #2475c3;
-        border: none;
-        outline: none;
-        border: 1px solid #2475c3;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-      }
-
-      #text #play:hover {
-        background: #2179d0;
-      }
-
-      #text button i {
-        display: inline-block;
-        width: 18px;
-        height: 18px;
-        margin-right: 4px;
-        background: url('../../images/icon.png') no-repeat 0px -59px;
-      }
-
-      #list {
-        width: 660px;
-        padding: 30px;
-      }
-
-      #list h3 {
-        border-bottom: 2px solid #2783ca;
-        padding-bottom: 2px;
-      }
-
-      #list h3 span {
-        font-size: 13px;
-        color: #666;
-        margin: 0 0  -8px 20px;
-      }
-
-      #content {
-        line-height: 24px;
-        text-align: center;
-        margin-top: 100px;
-      }
-
-      #diskList {
-        padding: 30px;
-      }
-
-      #tag {
-        margin-top: 20px;
-        color: #666;
-        display: flex;
-      }
-
-      #tag span {
-        line-height: 32px;
-      }
-
-      #tag button {
-        width: 80px;
-        border: none;
-        outline: none;
-        border: 1px solid #ddd;
-        background: #fff;
-        border-radius: 20px;
-        margin-left: 8px;
-        color: #666;
-        display: flex;
-        justify-content: center;
-        margin-left: 10px;
-      }
-
-      #intro {
-        margin: 50px 0 100px 0;
-      }
-
-      #intro p {
-        color: #666;
+      .iron-selected .reslutName{
+        font-weight: bold;
       }
 
     </style>
@@ -266,6 +142,7 @@
     <iron-ajax
       id="ajaxGex"
       auto
+      loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       last-response="{{data}}"
@@ -282,6 +159,9 @@
 
     <ms-topbar user="[[user]]"></ms-topbar>
     <div id="wrap">
+
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+
       <!-- 左边 -->
       <section id="disk">
         <h3>
@@ -296,14 +176,14 @@
           </button>
         </h3>
 
-        <iron-selector attr-for-selected="data-path" selected="{{path}}" id="selector">
+        <iron-selector attr-for-selected="data-path" selected="[[_selected]]" id="selector">
             <template is="dom-repeat" items="[[data]]">
-              <a href$="/me/music/[[item.result.id]]" data-path$="/me/music/[[item.result.id]]" class="items" on-tap="_getSelectedItem">
+              <a href$="/me/music/[[item.result.id]]" data-path$="/music/[[item.result.id]]" id="items">
                 <img hidden$="[[!item.result.creator.backgroundUrl]]" src="[[item.result.creator.backgroundUrl]]" width="40px" height="40px">
                 <img hidden$="[[item.result.creator.backgroundUrl]]" src="../../images/my_disk.jpg" width="40px" height="40px">
 
                 <div class="itemName">
-                  <p>[[item.result.name]]</p>
+                  <p class="reslutName">[[item.result.name]]</p>
                   <p class="num" hidden$="[[item.result.tracks.length]]">
                     <span>0首</span>
                      <iron-icon icon="delete" on-tap="delete"></iron-icon>
@@ -320,66 +200,13 @@
 
       </section>
       <!-- 右边 -->
-      <div >
-        <section id="detail">
-          <div id="photo">
+      <template is="dom-repeat" items="[[data]]">
+        
+      </template>
+      <ms-me-music-page selected-item="[[selectedItem]]"
+                        create-time="[[createTime]]">
+      </ms-me-music-page>
 
-            <img hidden$="[[!selectedItem.result.coverImgUrl]]" src="[[selectedItem.result.coverImgUrl]]" alt="" width="188px" height="188px">
-            <img hidden$="[[selectedItem.result.coverImgUrl]]" src="../../images/my_disk_big.jpg" alt="" width="188px" height="188px">
-
-          </div>
-
-          <div id="text">
-            <h3 id="name">
-              <i></i>[[selectedItem.result.name]]
-            </h3>
-
-            <div>
-              <p id="author">
-
-                <img hidden$="[[!selectedItem.result.creator.backgroundUrl]]" src="[[selectedItem.result.creator.backgroundUrl]]" width="35px" height="35px">
-                <img hidden$="[[selectedItem.result.creator.backgroundUrl]]" src="../../public/uploads/[[loginUser.id]].png" width="35px" height="35px">
-
-                <a href="#">[[selectedItem.creator.name]]</a>
-                <span>[[createTime]] 创建</span>
-              </p>
-              <button id="play" type="button" name="button">
-                <i></i>
-                播放
-              </button>
-
-              <div id="tag" hidden$="[[!selectedItem.result.tags]]">
-                <span>标签:</span>
-                <template is="dom-repeat" items="[[selectedItem.result.tags]]">
-                  <button>[[item]]</button>
-                </template>
-              </div>
-
-              <section id="intro">
-                <template is="dom-repeat" items="[[description]]">
-                  <p>[[item]]</p>
-                </template>
-              </section>
-            </div>
-          </div>
-        </section>
-
-        <section id="list" hidden$="[[selectedItem.result.tracks]]">
-          <h3>
-            歌曲列表
-            <span>0首歌</span>
-          </h3>
-
-          <section id="content" >
-            <p>暂无音乐</p>
-            马上去<a href="/main">发现音乐</a>
-          </section>
-        </section>
-
-        <div id="diskList" hidden$="[[!selectedItem.result.tracks]]">
-          <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
-        </div>
-      </div>
     </div>
     <ms-create-playlist-dialog id="dialog" login-user="[[loginUser]]"></ms-create-playlist-dialog>
     <tk-confirm-dialog id="confirmDialog"
@@ -409,11 +236,20 @@
           type: String,
           notify: true,
           computed: '_computeCreateTime(selectedItem)'
+        },
+
+        path: {
+          type: String,
+          notify: true
+        },
+
+        _selected: {
+          type: String
         }
       },
 
       attached() {
-        
+
         this.addEventListener('ms-create-playlist-success', () => {
           this.refresh();
         });

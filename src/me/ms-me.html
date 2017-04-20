@@ -22,7 +22,7 @@
     <iron-pages attr-for-selected="id" selected="{{_routeData.page}}" id="selector">
       <ms-me-detail id="detail" is-login="{{isLogin}}" route="{{tail}}" login-user="[[loginUser]]"></ms-me-detail>
       <ms-me-edit id="edit" route="{{tail}}" login-user="[[loginUser]]"></ms-me-edit>
-      <ms-me-music id="music" route="{{tail}}" login-user="[[loginUser]]"></ms-me-music>
+      <ms-me-music id="music" path="{{route.path}}" login-user="[[loginUser]]"></ms-me-music>
       <ms-no-login id="noLogin" route="{{tail}}"></ms-no-login>
     </iron-pages>
   </template>
