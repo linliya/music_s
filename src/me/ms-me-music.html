@@ -176,7 +176,7 @@
           </button>
         </h3>
 
-        <iron-selector attr-for-selected="data-path" selected="[[_selected]]" id="selector">
+        <iron-selector attr-for-selected="data-path" selected="[[path]]" id="selector">
             <template is="dom-repeat" items="[[data]]">
               <a href$="/me/music/[[item.result.id]]" data-path$="/music/[[item.result.id]]" id="items">
                 <img hidden$="[[!item.result.creator.backgroundUrl]]" src="[[item.result.creator.backgroundUrl]]" width="40px" height="40px">
@@ -200,12 +200,15 @@
 
       </section>
       <!-- 右边 -->
-      <template is="dom-repeat" items="[[data]]">
-        
-      </template>
-      <ms-me-music-page selected-item="[[selectedItem]]"
-                        create-time="[[createTime]]">
-      </ms-me-music-page>
+
+      <iron-pages attr-for-selected="data-path" selected="[[path]]" id="page">
+        <template is="dom-repeat" items="[[data]]">
+          <ms-me-music-page data-path$="/music/[[item.result.id]]"
+                            selected-item="[[item]]"
+                            create-time="[[createTime]]">
+          </ms-me-music-page>
+        </template>
+      </iron-pages>
 
     </div>
     <ms-create-playlist-dialog id="dialog" login-user="[[loginUser]]"></ms-create-playlist-dialog>
@@ -228,8 +231,7 @@
 
         selectedItem: {
           type: Object,
-          notify: true,
-          observer: '_observeSelectedItem'
+          notify: true
         },
 
         createTime: {
@@ -240,16 +242,12 @@
 
         path: {
           type: String,
-          notify: true
-        },
-
-        _selected: {
-          type: String
+          notify: true,
+          observer: '_observePath'
         }
       },
 
       attached() {
-
         this.addEventListener('ms-create-playlist-success', () => {
           this.refresh();
         });
@@ -261,7 +259,10 @@
 
       handleResponse() {
         this.playlistNum = this.data.length;
-        this.selectedItem = this.data[0];
+        if(this.path === '/music') {
+          this.path = '/music/' + this.data[0].id;
+          this.selectedItem = this.data[0];
+        }
       },
 
       _create() {
@@ -278,17 +279,20 @@
         return formatTime;
       },
 
-      _getSelectedItem(e) {
-        let id = window.location.href;
-        let split = id.split('/');
-        let selectedId = split[split.length - 1];
+      // 根据path的变化获得当前选择的对象
+      _observePath() {
+          let path = this.path;
+          let split = path.split('/music/');
+          let selectedId = split[1];
 
-        for(let i = 0; i < this.data.length; i++) {
-          if(this.data[i].result.id == selectedId) {
-            this.selectedItem = this.data[i];
-            break;
+          if (this.data) {
+            for(let i = 0; i < this.data.length; i++) {
+              if(this.data[i].result.id == selectedId) {
+                this.selectedItem = this.data[i];
+                break;
+              }
+            }
           }
-        }
       },
 
       delete() {
@@ -299,13 +303,10 @@
         this.$.ajaxDel.generateRequest();
       },
 
-      _observeSelectedItem() {
-
-      },
-
       handleDeleteResponse() {
         this.refresh();
         this.$.confirmDialog.opened = false;
+        this.path = '/music/' + this.data[0].id;
       }
     });
   </script>

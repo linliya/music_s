@@ -33,15 +33,26 @@
       Polymer({
         is: 'ms-me',
         behaviors: '[Polymer.msConnectBehavior]',
+        properties: {
+          route: {
+            type: Object,
+            notify: true,
+            observer: '_observePath'
+          }
+        },
 
         attached() {
           if(this.$.selector.selected === undefined) {
             this.$.selector.select('detail');
           }
+        },
+
+        _observePath(route) {
+          if(route.path === '/music') {
+            this.$.music.refresh();
+          }
         }
-
       });
-
     })();
     </script>
 </dom-module>

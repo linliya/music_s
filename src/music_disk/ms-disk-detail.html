@@ -30,6 +30,7 @@
         width: 0;
         height:0;
       }
+
       #wrap {
         width: 960px;
         margin: 0px auto;
@@ -173,7 +174,7 @@
 
     <paper-toast id="toast"></paper-toast>
 
-    <div id="wrap">
+    <div id="wrap" scroll="no">
       <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
 
       <section id="detail">
@@ -281,6 +282,7 @@
         this.$.ajax.generateRequest();
         this.$.comment.refresh();
         this.commentLength = this.$.comment.commentLength;
+
       },
 
       store() {

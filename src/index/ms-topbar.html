@@ -39,8 +39,7 @@
       }
 
       #logo {
-        width: 200px;
-        color: #fff;
+        display: flex;
       }
 
       header {
@@ -58,7 +57,7 @@
         width: 400px;
         line-height: 60px;
         color: #fff;
-
+        margin-left: -10px;
       }
 
       #activeTab {
@@ -151,7 +150,11 @@
     <div id="wrap">
       <header>
 
-        <span id="logo"><img src="../../images/logo.png" width="144px" height="48px"></span>
+        <span id="logo">
+          <img src="../../images/logo.png" width="70px" height="38px">
+
+          <img src="../../images/text.png" width="140px" height="38px">
+        </span>
 
         <div id="tabs">
           <a href="/main" id="activeTab" class="tab" active>发现音乐<i></i></a>
