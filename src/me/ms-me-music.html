@@ -93,6 +93,8 @@
       }
 
       #items {
+        margin-top: 2px;
+        margin-bottom: 2px;
         height: 54px;
         font-size: 12px;
         color: #333;
@@ -112,7 +114,7 @@
         color: #999;
       }
 
-      .itemName > p{
+      .itemName > p {
         width: 160px;
         margin-bottom: -10px;
         text-overflow: ellipsis;
@@ -126,22 +128,26 @@
         width: 16px;
         height: 16px;
         float: right;
-        /*display: none;*/
+        display: none;
+        margin-top: 3px;
       }
 
-      #selector a:hover{
+      #selector a:hover {
         background-color: #ddd;
       }
 
-      .iron-selected .reslutName{
+      .iron-selected .reslutName {
         font-weight: bold;
+      }
+
+      .iron-selected iron-icon {
+        display: block;
       }
 
     </style>
 
     <iron-ajax
       id="ajaxGex"
-      auto
       loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -197,7 +203,6 @@
               </a>
             </template>
          </iron-selector>
-
       </section>
       <!-- 右边 -->
 
@@ -205,6 +210,7 @@
         <template is="dom-repeat" items="[[data]]">
           <ms-me-music-page data-path$="/music/[[item.result.id]]"
                             selected-item="[[item]]"
+                            login-user="[[loginUser]]"
                             create-time="[[createTime]]">
           </ms-me-music-page>
         </template>
@@ -223,6 +229,11 @@
       is: 'ms-me-music',
       behaviors: [Polymer.msConnectBehavior],
       properties: {
+        loginUser: {
+          type: Object,
+          observer: '_observeLoginUser'
+        },
+
         playlistNum: {
           type: Number,
           notify: true,
@@ -262,6 +273,12 @@
         if(this.path === '/music') {
           this.path = '/music/' + this.data[0].id;
           this.selectedItem = this.data[0];
+        }
+      },
+
+      _observeLoginUser() {
+        if(this.loginUser) {
+          this.refresh();
         }
       },
 
@@ -306,7 +323,7 @@
       handleDeleteResponse() {
         this.refresh();
         this.$.confirmDialog.opened = false;
-        this.path = '/music/' + this.data[0].id;
+        this.path = '/music';
       }
     });
   </script>

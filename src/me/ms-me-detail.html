@@ -172,10 +172,10 @@
     </style>
 
     <iron-ajax
-        id="ajax"
-        url="[[serverUrl]]/user/[[loginUser.id]]"
-        headers="[[authHeader]]"
-        last-response="{{user}}">
+      id="ajax"
+      url="[[serverUrl]]/user/[[loginUser.id]]"
+      headers="[[authHeader]]"
+      last-response="{{user}}">
     </iron-ajax>
 
     <iron-ajax
@@ -183,16 +183,14 @@
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/store/[[loginUser.id]]"
-      last-response="{{data}}"
-      on-response="handleGetResponse"></iron-ajax>
+      last-response="{{data}}"></iron-ajax>
 
     <iron-ajax
       id="ajaxGetUpload"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/upload/music/[[loginUser.id]]"
-      last-response="{{music}}"
-      on-response="handleGetUploadResponse"></iron-ajax>
+      last-response="{{music}}"></iron-ajax>
 
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
 
@@ -268,6 +266,11 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
+        loginUser: {
+          type: Object,
+          observer: '_observeLoginUser'
+        },
+
         item: {
           type: Object,
           notify: true
@@ -275,13 +278,21 @@
       },
 
       attached() {
-        this.$.ajax.generateRequest();
-        this.$.ajaxGet.generateRequest();
-        this.$.ajaxGetUpload.generateRequest();
-
         this.addEventListener('ms-upload-music-success', () => {
           this.$.ajaxGetUpload.generateRequest();
         });
+      },
+
+      refresh() {
+        this.$.ajax.generateRequest();
+        this.$.ajaxGet.generateRequest();
+        this.$.ajaxGetUpload.generateRequest();
+      },
+
+      _observeLoginUser() {
+        if(this.loginUser) {
+          this.refresh();
+        }
       },
 
       _upload() {

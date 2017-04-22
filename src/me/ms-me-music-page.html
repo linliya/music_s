@@ -4,6 +4,11 @@
 <dom-module id="ms-me-music-page">
   <template>
     <style>
+    a {
+      color: #333;
+      text-decoration: none;
+    }
+
     #detail {
       width: 660px;
       margin: 30px 0 0 30px;
@@ -135,6 +140,11 @@
     #intro p {
       color: #666;
     }
+
+    #find {
+      text-decoration: underline;
+      color: #2475c3;
+    }
     </style>
 
     <div>
@@ -157,7 +167,7 @@
               <img hidden$="[[!selectedItem.result.creator.backgroundUrl]]" src="[[selectedItem.result.creator.backgroundUrl]]" width="35px" height="35px">
               <img hidden$="[[selectedItem.result.creator.backgroundUrl]]" src="../../public/uploads/[[loginUser.id]].png" width="35px" height="35px">
 
-              <a href="#">[[selectedItem.creator.name]]</a>
+              <a href="#">[[selectedItem.result.creator.name]]</a>
               <span>[[createTime]] 创建</span>
             </p>
             <button id="play" type="button" name="button">
@@ -189,14 +199,14 @@
 
         <section id="content" >
           <p>暂无音乐</p>
-          马上去<a href="/main">发现音乐</a>
+          马上去<a href="/main" id="find">发现音乐</a>
         </section>
       </section>
 
       <div id="diskList" hidden$="[[!selectedItem.result.tracks]]">
         <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
       </div>
-      
+
     </div>
   </template>
   <script>
