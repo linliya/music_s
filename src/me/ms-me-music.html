@@ -259,8 +259,9 @@
       },
 
       attached() {
-        this.addEventListener('ms-create-playlist-success', () => {
+        this.addEventListener('ms-create-playlist-success', (e) => {
           this.refresh();
+          this.createTime = e.detail.createTime;
         });
       },
 
