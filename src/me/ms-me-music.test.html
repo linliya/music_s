@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-me-music</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-me-music.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-me-music>
+    </ms-me-music>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-me-music tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('selectedItem在页面初始化时会得到值且当path为/music时会拼接上id', function() {
+        assert.notOk(element.selectedItem);
+        element.data = [
+          {
+            id: '1',
+            result: {
+              id: '11'
+            }
+          }
+        ];
+        element.path = '/music';
+
+        element.handleResponse();
+
+        assert.equal(element.path, '/music/1');
+        assert.ok(element.selectedItem);
+      });
+
+      test('_observePath能根据path的变化获得当前选择的对象', function() {
+        element.data = [
+          {
+            id: '1',
+            result: {
+              id: '11'
+            }
+          },
+          {
+            id: '2',
+            result: {
+              id: '22'
+            }
+          }
+        ];
+
+        element.path = '/music/22';
+        assert.equal(element.selectedItem, element.data[1]);
+      });
+
+      test('createTime由selectedItem computed', function() {
+        element.selectedItem = {
+          result: {
+            createTime: '1336081182'
+          }
+        };
+
+        assert.equal(element.createTime.length, 12);
+      });
+    });
+  </script>
+
+  </body>
+</html>
