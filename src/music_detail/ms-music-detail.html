@@ -129,6 +129,7 @@
 
       #lyric p {
         color: #333;
+        padding-left: 10px;
       }
 
 
@@ -307,8 +308,8 @@
 
       handleGetLyricResponse(e) {
         let lyric = e.detail.response;
-        if(lyric.uncollected === true) {
-          this.lyricData = '暂无歌词';
+        if(lyric.uncollected === true || lyric.nolyric === true) {
+          this.lyricData = ['暂无歌词'];
           return;
         }
 
@@ -323,7 +324,6 @@
           time.push(RegExp.$1);
           txt.push(RegExp.$2);
         }
-
         this.lyricData = txt;
       }
     });

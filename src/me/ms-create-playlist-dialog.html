@@ -8,6 +8,8 @@
 
 <link rel="import" href="../behavior/ms-connect-behavior.html">
 
+<script src="../../bower_components/moment/moment.js"></script>
+
 
 <dom-module id="ms-create-playlist-dialog">
   <template>
@@ -95,9 +97,12 @@
       },
 
       handleResponse() {
+        let ctime = new Date();
+        let formatTime = window.moment(ctime).format('YYYY-MM-DD');
+        
         this.close();
         this.$.playlistName.value = '';
-        this.fire('ms-create-playlist-success', null, null);
+        this.fire('ms-create-playlist-success', {createTime: formatTime}, null);
       }
     });
   </script>
