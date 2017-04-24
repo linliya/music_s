@@ -319,10 +319,10 @@
       search(s, offset, limit, type) {
         this.isAlbum = false;
         let data = {
-          "s": s,
-          "offset": offset,
-          "limit": limit,
-          "type": type
+          's': s,
+          'offset': offset,
+          'limit': limit,
+          'type': type
         };
         this.value = decodeURI(data.s);
         this.typeNum = data.type;
@@ -367,12 +367,10 @@
       },
 
       _searchAlbums() {
-        let a = this.$.tabs.querySelectorAll('a');
         let s = this.localValue;
         let s_encode = encodeURI(s);
         this.fire('ms-search-albums', {s: s_encode}, null);
         this.isAlbum = true;
-        console.log(this.data);
       },
 
       handleResponse() {

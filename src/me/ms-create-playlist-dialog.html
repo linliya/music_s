@@ -57,7 +57,7 @@
 
       <div id="create">
         <paper-input placeholder="歌单名" id="playlistName"></paper-input>
-        <paper-button raised on-tap="_handleCreate">新建</paper-button>
+        <paper-button raised on-tap="create">新建</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -75,7 +75,7 @@
         this.$.dialog.opened = false;
       },
 
-      _handleCreate() {
+      create() {
         let id = (Math.random() * 1000000000).toFixed(0);
 
         let data = {
@@ -95,7 +95,6 @@
       },
 
       handleResponse() {
-        console.log('创建成功');
         this.close();
         this.$.playlistName.value = '';
         this.fire('ms-create-playlist-success', null, null);

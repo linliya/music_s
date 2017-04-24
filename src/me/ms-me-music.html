@@ -201,7 +201,7 @@
       </section>
       <!-- 右边 -->
       <template is="dom-repeat" items="[[data]]">
-        
+
       </template>
       <ms-me-music-page selected-item="[[selectedItem]]"
                         create-time="[[createTime]]">
@@ -278,7 +278,7 @@
         return formatTime;
       },
 
-      _getSelectedItem(e) {
+      _getSelectedItem() {
         let id = window.location.href;
         let split = id.split('/');
         let selectedId = split[split.length - 1];

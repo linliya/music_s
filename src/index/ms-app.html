@@ -108,15 +108,15 @@
             this.$.player.src = e.detail.mp3Url;
             this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
             this.$.player.play();
-          })
+          });
 
           this.addEventListener('ms-search', (e) => {
             this.path = '/search';
-            this.$.search.search(e.detail.s, "0", "20", "1");
+            this.$.search.search(e.detail.s, '0', '20', '1');
           });
 
           this.addEventListener('ms-search-albums', (e) => {
-            this.$.search.search(e.detail.s, "0", "20", "10");
+            this.$.search.search(e.detail.s, '0', '20', '10');
           });
 
           this._initLogoutListen();

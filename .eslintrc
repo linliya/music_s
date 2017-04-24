@@ -1,0 +1,19 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "html",
+        "eslint-plugin-html"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "semi": 2,
+        "quotes": [2, "single"],
+        "no-unused-vars": 2
+    }
+}

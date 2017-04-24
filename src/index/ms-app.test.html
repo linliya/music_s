@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-app</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-app.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-app>
+      </ms-app>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-app tests', function() {
+      let app;
+
+      setup(function() {
+        app = fixture('basic');
+      });
+
+      test('当window触发"logout"事件后，会清空用户数据', done => {
+        app.user = {username: 'Tony'};
+        app.$.localUser.saveUser(app.user);
+        app.fire('logout', null, {node: window});
+        setTimeout(() => {
+          assert.notOk(app.user);
+          assert.notOk(window.localStorage.getItem('tkAppLocalUser'));
+          done();
+        }, 50);
+      });
+
+      test('监听到ms-search事件,跳转到/search页面', function(done) {
+        this.timeout(100);
+        app.addEventListener('ms-search', () => {
+          assert.equal(app.path, '/search');
+          done();
+        });
+        app.fire('ms-search', {s: 'aaa'}, null);
+      });
+
+    });
+  </script>
+
+  </body>
+</html>

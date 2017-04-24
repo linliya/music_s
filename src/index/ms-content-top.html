@@ -141,8 +141,7 @@
                content-type="application/json"
                headers="[[authHeader]]"
                login-user="[[loginUser]]"
-               last-response="{{data}}"
-               on-response="handleResponse">
+               last-response="{{data}}">
     </iron-ajax>
 
     <div id="wrap">
@@ -189,10 +188,6 @@
 
       attached() {
         this.$.ajax.generateRequest();
-      },
-
-      handleResponse(e) {
-        console.log(e.detail.response);
       }
     });
   </script>
