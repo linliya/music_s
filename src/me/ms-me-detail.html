@@ -2,6 +2,8 @@
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
+
 <link rel="import" href="./ms-upload-song-dialog.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
 <link rel="import" href=".././index/ms-topbar.html">
@@ -33,6 +35,7 @@
       }
 
       #wrap {
+        position: relative;
         width: 960px;
         margin: 0px auto;
         margin-bottom: 100px;
@@ -173,6 +176,8 @@
 
     <iron-ajax
       id="ajax"
+      auto
+      loading="{{loading}}"
       url="[[serverUrl]]/user/[[loginUser.id]]"
       headers="[[authHeader]]"
       last-response="{{user}}">
@@ -180,6 +185,8 @@
 
     <iron-ajax
       id="ajaxGet"
+      auto
+      loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/store/[[loginUser.id]]"
@@ -187,6 +194,8 @@
 
     <iron-ajax
       id="ajaxGetUpload"
+      auto
+      loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
       url="[[serverUrl]]/upload/music/[[loginUser.id]]"
@@ -195,6 +204,8 @@
     <ms-topbar login-user="[[loginUser]]"></ms-topbar>
 
     <div id="wrap">
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+
       <div id="photo">
         <img src="[[user.photo]]" alt="" width="188px" height="188px">
       </div>
@@ -266,11 +277,6 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
-        loginUser: {
-          type: Object,
-          observer: '_observeLoginUser'
-        },
-
         item: {
           type: Object,
           notify: true
@@ -287,12 +293,6 @@
         this.$.ajax.generateRequest();
         this.$.ajaxGet.generateRequest();
         this.$.ajaxGetUpload.generateRequest();
-      },
-
-      _observeLoginUser() {
-        if(this.loginUser) {
-          this.refresh();
-        }
       },
 
       _upload() {
