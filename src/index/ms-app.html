@@ -103,6 +103,10 @@
           }
 
           this.addEventListener('ms-music-play', (e) => {
+            if(this.$.player.error === true) {
+              console.log('error');
+            }
+
             this.$.player.style.display = 'block';
 
             this.$.player.src = e.detail.mp3Url;

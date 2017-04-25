@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-music-comment</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-music-comment.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-music-comment>
+    </ms-music-comment>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-music-comment tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      // test('执行comment方法会发送请求', function() {
+      //   let fakeApi = sinon.mock(element.$.ajaxAdd);
+      //
+      //   fakeApi.expects('generateRequest').once();
+      //   element.comment();
+      //
+      //   fakeApi.verify();
+      // });
+
+      test('comment success会fire ms-comment-change事件', function(done) {
+        this.timeout(100);
+        // element.commentLength = 2;
+
+        element.addEventListener('ms-comment-change', () => {
+          done();
+        });
+
+        element.handleAddResponse();
+      });
+    });
+  </script>
+
+  </body>
+</html>

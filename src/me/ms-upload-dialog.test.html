@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-upload-dialog</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-upload-dialog.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-upload-dialog>
+      </ms-upload-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-upload-dialog tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      // test('执行upload方法会发送请求', function() {
+      //   let fakeApi = sinon.mock(element.$.ajax);
+      //
+      //   fakeApi.expects('generateRequest').once();
+      //   element.upload();
+      //
+      //   fakeApi.verify();
+      // });
+
+      test('uploas success会fire ms-upload-photo-success事件', function(done) {
+        this.timeout(100);
+
+        element.addEventListener('ms-upload-photo-success', () => {
+          done();
+        });
+
+        element._handleResponse();
+      });
+    });
+  </script>
+
+  </body>
+</html>

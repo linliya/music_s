@@ -60,9 +60,10 @@
     </style>
     <iron-ajax id="ajax"
                method="POST"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
                url="[[serverUrl]]/user/upload/[[loginUser.id]]"
-               handle-as="json"
-               on-response="handleResponse"></iron-ajax>
+               on-response="_handleResponse"></iron-ajax>
     <paper-dialog id="dialog">
       <h2>更换头像</h2>
 
@@ -99,22 +100,15 @@
 
       upload() {
         let formData = new FormData();
-        let url = this.serverUrl + '/user/upload/' + this.loginUser.id;
         formData.append('file', this.file);
 
-        let xhr = new XMLHttpRequest();
-        let that = this;
-        xhr.addEventListener('readystatechange', function (){
-          if (this.readyState === 4) {
-            that.fire('ms-upload-photo-success', {path: this.responseText}, null);
-            that.close();
-          }
-        });
+        this.$.ajax.body = formData;
+        this.$.ajax.generateRequest();
+      },
 
-        xhr.open('POST', url);
-
-        xhr.setRequestHeader('Authorization', 'Token ' + this.loginUser.token);
-        xhr.send(formData);
+      _handleResponse() {
+        this.fire('ms-upload-photo-success', {path: this.responseText}, null);
+        this.close();
       },
 
       _handleLookup() {

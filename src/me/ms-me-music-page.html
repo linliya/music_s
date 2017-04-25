@@ -1,6 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href=".././music_disk/ms-disk-detail-list.html">
 
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
+
 <dom-module id="ms-me-music-page">
   <template>
     <style>
@@ -57,7 +61,7 @@
       padding-left: 10px;
     }
 
-    #text button {
+    #text  paper-button {
       width: 66px;
       height: 32px;
       color: #fff;
@@ -170,10 +174,10 @@
               <a href="#">[[selectedItem.result.creator.name]]</a>
               <span>[[createTime]] 创建</span>
             </p>
-            <button id="play" type="button" name="button">
+            <paper-button id="play" on-tap="play">
               <i></i>
               播放
-            </button>
+            </paper-button>
 
             <div id="tag" hidden$="[[!selectedItem.result.tags]]">
               <span>标签:</span>
@@ -211,7 +215,17 @@
   </template>
   <script>
     Polymer({
-      is: 'ms-me-music-page'
+      is: 'ms-me-music-page',
+      behaviors: '[Polymer.msConnectBehavior]',
+      properties: {
+      },
+
+      play() {
+        let mp3Url = this.selectedItem.result.tracks[0].mp3Url;
+        let name = this.selectedItem.result.tracks[0].name;
+        let singer = this.selectedItem.result.tracks[0].artists[0].name;
+        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+      }
     });
   </script>
 </dom-module>
