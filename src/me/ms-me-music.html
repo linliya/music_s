@@ -148,6 +148,7 @@
 
     <iron-ajax
       id="ajaxGex"
+      auto
       loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -205,7 +206,6 @@
          </iron-selector>
       </section>
       <!-- 右边 -->
-
       <iron-pages attr-for-selected="data-path" selected="[[path]]" id="page">
         <template is="dom-repeat" items="[[data]]">
           <ms-me-music-page data-path$="/music/[[item.result.id]]"
@@ -277,12 +277,6 @@
         }
       },
 
-      _observeLoginUser() {
-        if(this.loginUser) {
-          this.refresh();
-        }
-      },
-
       _create() {
         this.$.dialog.open();
       },
@@ -299,18 +293,18 @@
 
       // 根据path的变化获得当前选择的对象
       _observePath() {
-          let path = this.path;
-          let split = path.split('/music/');
-          let selectedId = split[1];
+        let path = this.path;
+        let split = path.split('/music/');
+        let selectedId = split[1];
 
-          if (this.data) {
-            for(let i = 0; i < this.data.length; i++) {
-              if(this.data[i].result.id == selectedId) {
-                this.selectedItem = this.data[i];
-                break;
-              }
+        if (this.data) {
+          for(let i = 0; i < this.data.length; i++) {
+            if(this.data[i].result.id == selectedId) {
+              this.selectedItem = this.data[i];
+              break;
             }
           }
+        }
       },
 
       delete() {

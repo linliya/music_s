@@ -1,0 +1,24 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "html",
+        "eslint-plugin-html"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "rules": {
+        "semi": 2,
+        "quotes": [2, "single"],
+        'max-len': ["error", 150],
+        "no-unused-vars": 2,
+        'no-console': ["error", {'allow': ["warn", "error"]}],
+        'quote-props': ["error", "consistent"],
+        'dot-notation': ["error", { "allowPattern": "^[a-z]+(_[a-z]+)+$" }]
+    }
+}

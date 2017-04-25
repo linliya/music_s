@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-login-dialog</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-login-dialog.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-login-dialog>
+      </ms-login-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-login-dialog tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('执行open方法后opened值为true', function() {
+        element.open();
+        assert.equal(element.opened, true);
+      });
+
+      test('执行close方法后opened值为false', function() {
+        element.opened = true;
+        element.close();
+        assert.equal(element.opened, false);
+      });
+
+      test('执行login方法会发送请求', function() {
+        element.$.username.value = 'username';
+        element.$.password.value = 'password';
+
+        let fakeApi = sinon.mock(element.$.ajax);
+
+        fakeApi.expects('generateRequest').once();
+        element.login();
+
+        fakeApi.verify();
+      });
+
+      test('登录成功后是否触发ms-login-success', function(done) {
+        let e = {
+          detail: {
+            response: {name: 'aaa'}
+          }
+        };
+
+        this.timeout(100);
+        element.addEventListener('ms-login-success', () => {
+          done();
+        });
+
+        element._handleResponse(e);
+      });
+
+    });
+  </script>
+
+  </body>
+</html>

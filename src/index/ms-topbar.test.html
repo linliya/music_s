@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-topbar</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-topbar.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-topbar>
+      </ms-topbar>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-topbar tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('isLogin根据user computed', function() {
+        element.user = {username: 'aaa'};
+        assert.ok(element.isLogin);
+
+        element.user = null;
+        assert.notOk(element.isLogin);
+      });
+
+      test('href根据user computed', function() {
+        element.user = {username: 'aaa'};
+        assert.equal(element.href, '/me/music');
+
+        element.user = null;
+        assert.equal(element.href, '/me/noLogin');
+      });
+
+      test('当window触发"logout"事件后，会清空用户数据', done => {
+        element.user = {username: 'Tony'};
+        element.$.localUser.saveUser(element.user);
+        element.fire('logout', null, {node: window});
+        setTimeout(() => {
+          assert.notOk(element.user);
+          assert.notOk(window.localStorage.getItem('tkAppLocalUser'));
+          done();
+        }, 50);
+      });
+    });
+  </script>
+
+  </body>
+</html>

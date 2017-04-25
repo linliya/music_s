@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-me-edit</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-me-edit.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-me-edit>
+    </ms-me-edit>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-me-edit tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('isUpdatePassword默认为false', function() {
+        assert.notOk(element.isUpdatePassword);
+      });
+
+      test('_isSamePwd为false时，验证不通过', function() {
+        element._isSamePwd = false;
+        assert.ok(element.$.repeatPassword.invalid);
+      });
+
+      test('执行savePsw方法会发送请求', function() {
+        element.$.oldPassword.value = 'oldPassword';
+        element.$.newPassword.value = 'newPassword';
+        element.$.repeatPassword.value = 'repeatPassword';
+
+        let fakeApi = sinon.mock(element.$.pswAjax);
+
+        fakeApi.expects('generateRequest').once();
+        element.savePsw();
+
+        fakeApi.verify();
+      });
+
+      test('执行saveMsg方法会发送请求', function() {
+        let fakeApi = sinon.mock(element.$.msgAjax);
+
+        fakeApi.expects('generateRequest').once();
+        element.saveMsg();
+
+        fakeApi.verify();
+      });
+    });
+  </script>
+
+  </body>
+</html>

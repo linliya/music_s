@@ -295,7 +295,7 @@
         this.$.ajaxStore.generateRequest();
       },
 
-      _handleResponse(e) {
+      _handleResponse() {
         let description = this.data.result.description;
         let split = description.split('，');
         this.description = split;

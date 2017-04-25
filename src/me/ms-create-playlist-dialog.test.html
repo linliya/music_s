@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-create-playlist-dialog</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-create-playlist-dialog.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-create-playlist-dialog>
+      </ms-create-playlist-dialog>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-create-playlist-dialog tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('执行open方法后opened值为true', function() {
+        element.open();
+        assert.ok(element.$.dialog.opened);
+      });
+
+      test('执行close方法后opened值为false', function() {
+        element.$.dialog.opened = true;
+        element.close();
+        assert.notOk(element.$.dialog.opened);
+      });
+
+      test('执行create方法会发送请求', function() {
+        element.loginUser = {
+          id: '1',
+          username: 'testname'
+        };
+
+        element.$.playlistName.value = 'aaa';
+
+        let fakeApi = sinon.mock(element.$.ajax);
+
+        fakeApi.expects('generateRequest').once();
+        element.create();
+
+        fakeApi.verify();
+      });
+
+      test('创建成功后是否触发ms-create-playlist-success事件', function(done) {
+        this.timeout(100);
+        element.addEventListener('ms-create-playlist-success', () => {
+          done();
+        });
+
+        element.handleResponse();
+      });
+
+    });
+  </script>
+
+  </body>
+</html>
