@@ -28,18 +28,24 @@
         element = fixture('basic');
       });
 
-      // test('执行comment方法会发送请求', function() {
-      //   let fakeApi = sinon.mock(element.$.ajaxAdd);
-      //
-      //   fakeApi.expects('generateRequest').once();
-      //   element.comment();
-      //
-      //   fakeApi.verify();
-      // });
+      test('执行comment方法会发送请求', function() {
+        element.commentId = '1';
+        element.loginUser = {
+          username: 'username',
+          id: '11'
+        };
+        element.$.commentContent.value = 'comment content';
+
+        let fakeApi = sinon.mock(element.$.ajaxAdd);
+
+        fakeApi.expects('generateRequest').once();
+        element.comment();
+
+        fakeApi.verify();
+      });
 
       test('comment success会fire ms-comment-change事件', function(done) {
         this.timeout(100);
-        // element.commentLength = 2;
 
         element.addEventListener('ms-comment-change', () => {
           done();

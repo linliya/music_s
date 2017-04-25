@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-search</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-search.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-search>
+      </ms-search>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-search tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('typeString由localType computed', function() {
+        element.localType = '1';
+        assert.equal(element.typeString, '单曲');
+
+        element.localType = '10';
+        assert.equal(element.typeString, '专辑');
+
+        element.localType = '100';
+        assert.equal(element.typeString, '歌手');
+      });
+
+      test('执行_searchMusic会fire ms-search事件且isAlbum为false', function(done) {
+        element.localValue = '晴天';
+        element.isAlbum = true;
+        this.timeout(100);
+
+        element.addEventListener('ms-search', () => {
+          done();
+        });
+
+        element._searchMusic();
+        assert.notOk(element.isAlbum);
+      });
+
+      test('执行_searchAlbums会fire ms-search-albums事件且isAlbum为true', function(done) {
+        assert.notOk(element.isAlbum);
+
+        element.localValue = '晴天';
+        this.timeout(100);
+
+        element.addEventListener('ms-search-albums', () => {
+          done();
+        });
+
+        element._searchAlbums();
+        assert.ok(element.isAlbum);
+      });
+    });
+  </script>
+
+  </body>
+</html>

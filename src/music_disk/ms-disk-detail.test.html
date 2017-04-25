@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-disk-detail</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-disk-detail.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-disk-detail>
+      </ms-disk-detail>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-disk-detail tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('createTime由data computed', function() {
+        element.data = {
+          result: {
+            createTime: '1336081182'
+          }
+        };
+
+        assert.equal(element.createTime.length, 12);
+      });
+
+      test('执行store方法会发送请求', function() {
+        element.data = {
+          result: {
+            id: '1',
+            createTime: '1336081182'
+          }
+        };
+        element.loginUser = {
+          id: '11'
+        };
+
+        let fakeApi = sinon.mock(element.$.ajaxStore);
+
+        fakeApi.expects('generateRequest').once();
+        element.store();
+
+        fakeApi.verify();
+      });
+
+      test('store success会fire ms-store-change事件', function(done) {
+        this.timeout(100);
+
+        element.addEventListener('ms-store-change', () => {
+          done();
+        });
+
+        element._handleStoreResponse();
+      });
+
+    });
+  </script>
+
+  </body>
+</html>

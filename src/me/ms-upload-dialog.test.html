@@ -28,16 +28,27 @@
         element = fixture('basic');
       });
 
-      // test('执行upload方法会发送请求', function() {
-      //   let fakeApi = sinon.mock(element.$.ajax);
-      //
-      //   fakeApi.expects('generateRequest').once();
-      //   element.upload();
-      //
-      //   fakeApi.verify();
-      // });
+      test('执行open方法后opened值为true', function() {
+        element.open();
+        assert.ok(element.$.dialog.opened);
+      });
 
-      test('uploas success会fire ms-upload-photo-success事件', function(done) {
+      test('执行close方法后opened值为false', function() {
+        element.$.dialog.opened = true;
+        element.close();
+        assert.notOk(element.$.dialog.opened);
+      });
+
+      test('执行upload方法会发送请求', function() {
+        let fakeApi = sinon.mock(element.$.ajax);
+
+        fakeApi.expects('generateRequest').once();
+        element.upload();
+
+        fakeApi.verify();
+      });
+
+      test('upload success会fire ms-upload-photo-success事件', function(done) {
         this.timeout(100);
 
         element.addEventListener('ms-upload-photo-success', () => {
