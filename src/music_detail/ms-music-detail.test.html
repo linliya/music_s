@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ms-music-detail</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="./ms-music-detail.html">
+
+  </head>
+  <body>
+
+  <test-fixture id="basic">
+    <template>
+      <ms-music-detail>
+    </ms-music-detail>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('ms-music-detail tests', function() {
+      let element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('执行_download方法会将download置空并发送请求', function() {
+        let fakeApi = sinon.mock(element.$.ajaxDownload);
+
+        fakeApi.expects('generateRequest').once();
+        element._download();
+
+        assert.equal(element.$.downloadHref.download, '');
+
+        fakeApi.verify();
+      });
+
+      test('执行_handleDownloadResponse方法会根据url是否存在显示提示信息', function() {
+        element.music = {
+          data: {
+            url: null
+          }
+        };
+        element._handleDownloadResponse();
+
+        assert.equal(element.$.toast.text, '版权受限,无法下载!');
+
+        element.music = {
+          data: {
+            url: 'http://test.music.com/'
+          }
+        };
+
+        element._handleDownloadResponse();
+
+        assert.equal(element.$.downloadHref.href, 'http://test.music.com/');
+        assert.equal(element.$.downloadHref.download, 'http://test.music.com/');
+      });
+
+
+    });
+  </script>
+
+  </body>
+</html>

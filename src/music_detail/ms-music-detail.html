@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
 
@@ -147,6 +148,7 @@
    </iron-ajax>
 
    <iron-ajax id="ajaxGetLyric"
+              loading="{{loading}}"
               url="[[serverUrl]]/music/lyric/[[songId]]"
               content-type="application/json"
               headers="[[authHeader]]"
@@ -155,14 +157,23 @@
               on-response="handleGetLyricResponse">
    </iron-ajax>
 
-   <iron-ajax
-     id="ajaxStore"
-     method="POST"
-     url="[[serverUrl]]/store/add/song"
-     content-type="application/json"
-     headers="[[authHeader]]"
-     login-user="[[loginUser]]"
-     on-response="handleStoreResponse"></iron-ajax>
+   <iron-ajax id="ajaxStore"
+              method="POST"
+              url="[[serverUrl]]/store/add/song"
+              content-type="application/json"
+              headers="[[authHeader]]"
+              login-user="[[loginUser]]"
+              on-response="handleStoreResponse">
+   </iron-ajax>
+
+   <iron-ajax id="ajaxDownload"
+              url="[[serverUrl]]/download/[[songId]]"
+              headers="[[authHeader]]"
+              cache-control="no-cache"
+              login-user="[[loginUser]]"
+              last-response="{{music}}"
+              on-response="_handleDownloadResponse">
+   </iron-ajax>
 
    <paper-toast text="收藏成功" id="toast"></paper-toast>
 
@@ -227,10 +238,14 @@
               <i></i>
               收藏
             </paper-button>
-            <paper-button id="download">
-              <iron-icon icon="file-download"></iron-icon>
-              下载
-            </paper-button>
+
+            <a href="#" id="downloadHref">
+              <paper-button id="download" on-tap="_download">
+                <iron-icon icon="file-download"></iron-icon>
+                下载
+              </paper-button>
+            </a>
+
             <paper-button id="commentNum">
               <i></i>
               ([[commentLength]])
@@ -244,8 +259,8 @@
           </section>
         </div>
       </section>
-
       <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
+      <paper-toast id="toast"></paper-toast>
 
     </div>
   </template>
@@ -255,6 +270,11 @@
       behaviors: [Polymer.msConnectBehavior],
 
       properties: {
+        loading: {
+          type: Boolean,
+          notify: true
+        },
+
         commentLength: {
           type: Number,
           notify: true,
@@ -269,6 +289,11 @@
         lyricData: {
           type: Array,
           notify: true
+        },
+
+        music: {
+          type: Object,
+          notify: true
         }
       },
 
@@ -276,6 +301,12 @@
         this.addEventListener('ms-comment-change', (e) => {
           this.commentLength = e.detail.length;
         });
+      },
+
+      _toast(msg) {
+        let toast = this.$.toast;
+        toast.text = msg;
+        toast.open();
       },
 
       refresh() {
@@ -289,6 +320,7 @@
         this.$.comment.refresh();
       },
 
+      // 音乐播放
       _play() {
         let mp3Url = this.data.playUrl || this.data.songs[0].mp3Url;
         let name = this.data.name || this.data.songs[0].name;
@@ -296,6 +328,7 @@
         this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
       },
 
+      // 音乐收藏
       _store() {
         let data = {
           songId: this.songId
@@ -306,10 +339,33 @@
         this.$.ajaxStore.generateRequest();
       },
 
+      // 文件下载
+      _download() {
+        this.$.downloadHref.href = '#';
+        this.$.downloadHref.download = '';
+        this.$.ajaxDownload.generateRequest();
+      },
+
+      // 文件下载处理
+      _handleDownloadResponse() {
+        if (this.music.data.url === null) {
+          this._toast('版权受限,无法下载!');
+          return;
+        }
+
+        this.$.downloadHref.href = this.music.data.url;
+        this.$.downloadHref.download = this.music.data.url;
+        this.$.downloadHref.click();
+      },
+
       handleGetLyricResponse(e) {
         let lyric = e.detail.response;
         if(lyric.uncollected === true || lyric.nolyric === true) {
           this.lyricData = ['暂无歌词'];
+          return;
+        }
+
+        if(!lyric) {
           return;
         }
 
