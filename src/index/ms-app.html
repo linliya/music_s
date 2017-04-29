@@ -94,6 +94,19 @@
             type: String,
             notify: true,
             observer: '_observePath'
+          },
+
+          tracks: {
+            type: Array,
+            notify: true,
+            value: []
+          },
+
+          // 音乐列表中的顺序
+          musicIndex: {
+            type: Number,
+            notify: true,
+            value: 1
           }
         },
 
@@ -103,15 +116,43 @@
           }
 
           this.addEventListener('ms-music-play', (e) => {
-            if(this.$.player.error === true) {
-              console.log('error');
-            }
 
             this.$.player.style.display = 'block';
 
+            if (e.detail.tracks) {
+              this.tracks = e.detail.tracks;
+            }
+
             this.$.player.src = e.detail.mp3Url;
             this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
-            this.$.player.play();
+            this.$.player.playPause();
+          });
+
+          this.addEventListener('ms-play-to-end', () => {
+            if (this.tracks != []) {
+              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
+              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
+              this.$.player.playPause();
+              this.musicIndex++;
+            }
+          });
+
+          this.addEventListener('ms-play-error', () => {
+            if (this.tracks != []) {
+              this.musicIndex++;
+              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
+              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
+              this.$.player.playPause();
+            }
+          });
+
+          this.addEventListener('ms-play-next', () => {
+            if (this.tracks != []) {
+              this.musicIndex++;
+              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
+              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
+              this.$.player.play();
+            }
           });
 
           this.addEventListener('ms-search', (e) => {

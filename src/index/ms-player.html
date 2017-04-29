@@ -34,8 +34,14 @@
         }
       },
 
-      play() {
+      // 暂停时则播放,播放时则暂停
+      playPause() {
         this.$.player.playPause();
+      },
+
+      // 直接播放
+      play() {
+        this.$.player.play();
       }
 
     });
