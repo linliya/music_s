@@ -288,7 +288,8 @@
         let value = {
           id: this.data.result.id,
           userId: this.loginUser.id,
-          result: this.data.result
+          result: this.data.result,
+          name: this.data.result.name
         };
 
         this.$.ajaxStore.body = value;

@@ -191,15 +191,18 @@
 
                 <div class="itemName">
                   <p class="reslutName">[[item.result.name]]</p>
-                  <p class="num" hidden$="[[item.result.tracks.length]]">
-                    <span>0首</span>
-                     <iron-icon icon="delete" on-tap="delete"></iron-icon>
-                  </p>
-                  <p class="num" hidden$="[[!item.result.tracks.length]]">
-                    <span>[[item.result.tracks.length]]首</span>
-                     <iron-icon icon="delete" on-tap='delete'></iron-icon>
-                  </p>
-
+                  <template is="dom-if" if="[[!item.result.tracks.length]]">
+                    <p class="num">
+                      <span>0首</span>
+                       <iron-icon icon="delete" on-tap="delete"></iron-icon>
+                    </p>
+                  </template>
+                  <template is="dom-if" if="[[item.result.tracks.length]]">
+                    <p class="num">
+                      <span>[[item.result.tracks.length]]首</span>
+                       <iron-icon icon="delete" on-tap='delete'></iron-icon>
+                    </p>
+                  </template>
                 </div>
               </a>
             </template>

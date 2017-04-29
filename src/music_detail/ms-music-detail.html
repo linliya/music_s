@@ -11,6 +11,7 @@
 <link rel="import" href=".././index/ms-secondbar.html">
 <link rel="import" href=".././music_detail/ms-music-comment.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
+<link rel="import" href="./ms-store-music.dialog.html">
 
 <dom-module id="ms-music-detail">
   <template>
@@ -157,15 +158,6 @@
               on-response="handleGetLyricResponse">
    </iron-ajax>
 
-   <iron-ajax id="ajaxStore"
-              method="POST"
-              url="[[serverUrl]]/store/add/song"
-              content-type="application/json"
-              headers="[[authHeader]]"
-              login-user="[[loginUser]]"
-              on-response="handleStoreResponse">
-   </iron-ajax>
-
    <iron-ajax id="ajaxDownload"
               url="[[serverUrl]]/download/[[songId]]"
               headers="[[authHeader]]"
@@ -259,6 +251,7 @@
           </section>
         </div>
       </section>
+      <ms-store-music-dialog id="storeDialog" login-user="[[loginUser]]" music="[[data]]"></ms-store-music-dialog>
       <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
       <paper-toast id="toast"></paper-toast>
 
@@ -330,13 +323,9 @@
 
       // 音乐收藏
       _store() {
-        let data = {
-          songId: this.songId
-          // playlistId: ,
-        };
-
-        this.$.ajaxStore.body = data;
-        this.$.ajaxStore.generateRequest();
+        this.$.storeDialog.open();
+        this.$.storeDialog.refresh();
+        console.log(this.data);
       },
 
       // 文件下载

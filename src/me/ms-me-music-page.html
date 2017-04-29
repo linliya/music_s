@@ -106,7 +106,7 @@
     #content {
       line-height: 24px;
       text-align: center;
-      margin-top: 100px;
+      margin-top: 10px;
     }
 
     #diskList {
@@ -195,21 +195,25 @@
         </div>
       </section>
 
-      <section id="list" hidden$="[[selectedItem.result.tracks]]">
-        <h3>
-          歌曲列表
-          <span>0首歌</span>
-        </h3>
+      <template is="dom-if" if="[[!selectedItem.result.tracks.length]]">
+        <section id="list">
+          <h3>
+            歌曲列表
+            <span>0首歌</span>
+          </h3>
 
-        <section id="content" >
-          <p>暂无音乐</p>
-          马上去<a href="/main" id="find">发现音乐</a>
+          <section id="content" >
+            <p>暂无音乐</p>
+            马上去<a href="/main" id="find">发现音乐</a>
+          </section>
         </section>
-      </section>
+      </template>
 
-      <div id="diskList" hidden$="[[!selectedItem.result.tracks]]">
-        <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
-      </div>
+      <template is="dom-if" if="[[selectedItem.result.tracks.length]]">
+        <div id="diskList">
+          <ms-disk-detail-list list="[[selectedItem.result.tracks]]" play-count="[[selectedItem.result.playCount]]"></ms-disk-detail-list>
+        </div>
+      </template>
 
     </div>
   </template>

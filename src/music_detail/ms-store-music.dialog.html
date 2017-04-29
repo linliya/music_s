@@ -1,0 +1,147 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="ms-store-music-dialog">
+  <template>
+    <style>
+      paper-dialog {
+        margin: 0;
+        padding: 0;
+        border-radius: 3px 3px 0 0;
+        width: 530px;
+        height: 300px;
+      }
+
+      paper-dialog > header {
+        margin: 0;
+      }
+
+      header {
+        box-sizing: border-box;
+        background-color: #2783ca;
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);
+        line-height: 38px;
+        color: #fff;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header iron-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: -8px;
+        cursor: pointer;
+      }
+
+      #content {
+        width: 400px;
+        margin: 0px auto;
+        margin-top: 40px;
+      }
+
+      #content select {
+        background: transparent;
+        height: 40px;
+        color: #333;
+        cursor: pointer;
+      }
+
+      #content paper-button {
+        margin-left: 20px;
+        color: #fff;
+        background: #2475c3;
+      }
+
+    </style>
+    <iron-ajax id="ajax"
+               auto
+               loading="{{loading}}"
+               headers="[[authHeader]]"
+               last-response="{{data}}"
+               url="[[serverUrl]]/store/[[loginUser.id]]">
+    </iron-ajax>
+
+    <iron-ajax id="ajaxStore"
+               method="POST"
+               url="[[serverUrl]]/store/add/song"
+               content-type="application/json"
+               headers="[[authHeader]]"
+               on-response="_handleStoreResponse"
+               on-error="_handleStoreError">
+    </iron-ajax>
+
+    <paper-dialog id="storeDialog" with-backdrop no-cancel-on-outside-click>
+      <header>
+        <span>收藏到歌单</span>
+        <iron-icon icon="close" on-tap="close"></iron-icon>
+      </header>
+
+      <div id="content">
+        <select id="select">
+          <template is="dom-repeat" items="[[data]]">
+            <option value ="[[item.result.name]]" >[[item.result.name]]</option>
+          </template>
+        </select>
+        <paper-button raised on-tap="store">确定</paper-button>
+      </div>
+    </paper-dialog>
+    <paper-toast id="toast"></paper-toast>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-store-music-dialog',
+      behaviors: [Polymer.msConnectBehavior],
+      properties: {
+
+      },
+
+      _toast(msg) {
+        this.$.toast.text = msg;
+        this.$.toast.open();
+      },
+
+      open() {
+        this.$.storeDialog.opened = true;
+      },
+
+      close() {
+        this.$.storeDialog.opened = false;
+      },
+
+      refresh() {
+        this.$.ajax.generateRequest();
+      },
+
+      store() {
+        let music;
+
+        if (this.music.songs) {
+          music = this.music.songs[0];
+        } else {
+          music = this.music;
+        }
+
+        let data = {
+          music: music,
+          playlist: this.$.select.value
+        };
+
+        this.$.ajaxStore.body = data;
+        this.$.ajaxStore.generateRequest();
+      },
+
+      _handleStoreResponse() {
+        this.close();
+        this._toast('收藏成功!');
+      },
+
+      _handleStoreError() {
+        this._toast('歌曲已存在,收藏失败!');
+      }
+    });
+  </script>
+</dom-module>

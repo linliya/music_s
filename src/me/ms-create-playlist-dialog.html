@@ -83,12 +83,14 @@
         let data = {
           id: id,
           userId: this.loginUser.id,
+          name: this.$.playlistName.value,
           result: {
             name: this.$.playlistName.value,
             id: id,
             creator: {
               name: this.loginUser.username
-            }
+            },
+            tracks: []
           }
         };
 
@@ -99,7 +101,7 @@
       handleResponse() {
         let ctime = new Date();
         let formatTime = window.moment(ctime).format('YYYY-MM-DD');
-        
+
         this.close();
         this.$.playlistName.value = '';
         this.fire('ms-create-playlist-success', {createTime: formatTime}, null);
