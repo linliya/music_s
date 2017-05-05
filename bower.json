@@ -31,7 +31,8 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.5.0",
     "tk-loading-backdrop": "butterandfly/tk-loading-backdrop#^0.1.2",
     "moment": "^2.18.1",
-    "iron-selector": "PolymerElements/iron-selector#^1.5.2"
+    "iron-selector": "PolymerElements/iron-selector#^1.5.2",
+    "tk-pagination": "cloudgz/tk-pagination#^0.5.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

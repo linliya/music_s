@@ -8,6 +8,7 @@
 <link rel="import" href=".././me/ms-me.html">
 <link rel="import" href=".././music_detail/ms-music-detail.html">
 <link rel="import" href=".././music_disk/ms-disk-detail.html">
+<link rel="import" href=".././music_disk/ms-albums-detail.html">
 <link rel="import" href=".././toplist/ms-toplist.html">
 <link rel="import" href=".././playlist/ms-playlist.html">
 <link rel="import" href=".././search/ms-search.html">
@@ -39,6 +40,7 @@
       <ms-me route="{{tail}}" id="me" login-user="[[user]]"></ms-me>
       <ms-music-detail id="musicDetail" login-user="[[user]]"></ms-music-detail>
       <ms-disk-detail id="diskDetail" login-user="[[user]]"></ms-disk-detail>
+      <ms-albums-detail id="albumsDetail" login-user="[[user]]"></ms-albums-detail>
       <ms-toplist id="toplist" login-user="[[user]]"></ms-toplist>
       <ms-playlist id="playlist" login-user="[[user]]"></ms-playlist>
       <ms-search id="search" login-user="[[user]]"></ms-search>
@@ -176,6 +178,10 @@
 
           if(path === '/diskDetail') {
             this.$.diskDetail.refresh();
+          }
+
+          if(path === '/albumsDetail') {
+            this.$.albumsDetail.refresh();
           }
         },
 

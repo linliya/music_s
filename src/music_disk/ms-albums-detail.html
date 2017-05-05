@@ -1,0 +1,275 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href=".././index/ms-topbar.html">
+<link rel="import" href=".././index/ms-secondbar.html">
+<link rel="import" href=".././music_detail/ms-music-comment.html">
+<link rel="import" href=".././music_disk/ms-disk-detail-list.html">
+<link rel="import" href=".././behavior/ms-connect-behavior.html">
+
+<link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
+
+<script src="../../bower_components/moment/moment.js"></script>
+
+<dom-module id="ms-albums-detail">
+  <template>
+    <style>
+      h3, p {
+        margin: 0;
+        padding: 0;
+      }
+
+      .clear:after {
+        content: '';
+        display: block;
+        clear: both;
+        width: 0;
+        height:0;
+      }
+
+      #wrap {
+        width: 960px;
+        margin: 0px auto;
+        padding: 30px 0 100px 30px;
+        border: 1px solid #dedede;
+        background: #fff;
+        font-size: 14px;
+        position: relative;
+      }
+
+      #detail #photo img {
+        padding: 4px;
+        border: 1px solid #dedede;
+        margin-right: 20px;
+      }
+
+      #detail {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #detail h3 {
+        font-size: 20px;
+        color: #333;
+        font-weight: normal;
+        display: flex;
+        align-items: center;
+      }
+
+      #text p {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        color: #999;
+        font-size: 12px;
+      }
+
+      #author .author_name, #disk .disk_name {
+        color: #0c73c2;
+      }
+
+      #author span {
+        padding-right: 10px;
+      }
+
+      #text #name i {
+        display: inline-block;
+        width: 54px;
+        height: 26px;
+        background: url('../../images/icons.png') no-repeat 0 -241px;
+        padding-right: 8px;
+      }
+
+      #msg paper-button {
+        width: 66px;
+        height: 32px;
+        background: #fff;
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        color: #666;
+        display: flex;
+        align-items: center;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 0px 1px 0px #ddd;
+      }
+
+      #msg paper-button i {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 4px;
+      }
+
+      #msg #play {
+        color: #fff;
+        background: #2475c3;
+        border: 1px solid #2475c3;
+      }
+
+      #msg #play i {
+        background: url('../../images/icon.png') no-repeat 0px -59px;
+      }
+
+      #msg #store i {
+        background: url('../../images/icons.png') no-repeat -44px -107px;
+      }
+
+      #msg #commentNum i {
+        background: url('../../images/button2.png') no-repeat -10px -1469px;
+      }
+
+      #intro {
+        margin: 50px 0 100px 0;
+      }
+
+      #intro p {
+        color: #666;
+      }
+    </style>
+
+    <ms-topbar></ms-topbar>
+    <ms-secondbar></ms-secondbar>
+    <iron-ajax id="ajax"
+               headers="[[authHeader]]"
+               login-user="[[loginUser]]"
+               loading="{{loading}}"
+               url="[[serverUrl]]/albums/[[songId]]"
+               last-response="{{data}}"
+               on-response="_handleResponse">
+    </iron-ajax>
+
+    <paper-toast id="toast"></paper-toast>
+
+    <div id="wrap">
+      <tk-loading-backdrop opened="[[loading]]"></tk-loading-backdrop>
+
+      <section id="detail">
+        <div id="photo">
+          <img src="[[data.album.picUrl]]" alt="" width="188px" height="188px">
+        </div>
+
+        <div id="text">
+          <h3 id="name">
+            <i></i>[[data.album.name]]
+          </h3>
+
+          <div class="clear" id="msg">
+            <p id="author">
+              <span><img src="[[data.album.artist.picUrl]]" width="30px" height="30px"></span>
+              <span class="author_name"> [[data.album.artist.name]]</span>
+              <i></i>
+              <span id="createTime"><span>[[createTime]]创建</span>
+            </p>
+
+            <paper-button id="play" on-tap="play">
+              <i></i>
+              播放
+            </paper-button>
+            <paper-button id="commentNum">
+              <i></i>
+              ([[commentLength]])
+            </paper-button>
+          </div>
+
+          <section id="intro">
+            <!-- <template is="dom-repeat" items="[[description]]">
+              <p>[[item]]</p>
+            </template> -->
+          </section>
+        </div>
+      </section>
+
+      <ms-disk-detail-list list="[[data.album.songs]]"
+                           play-count="10000">
+      </ms-disk-detail-list>
+      <ms-music-comment comment-id="[[songId]]" id="comment" login-user="[[loginUser]]"></ms-music-comment>
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ms-albums-detail',
+      behaviors: [Polymer.msConnectBehavior],
+      properties: {
+        data: {
+          type: Object,
+          notify: true
+        },
+
+        songId: {
+          type: String,
+          notify: true
+        },
+
+        createTime: {
+          type: String,
+          notify: true,
+          computed: '_computeCreateTime(data)'
+        },
+
+        description: {
+          type: Array
+        }
+      },
+
+      attached() {
+        this.addEventListener('ms-comment-change', (e) => {
+          this.commentLength = e.detail.length;
+        });
+      },
+
+
+      _computeCreateTime(data){
+        if (!data) {
+          return;
+        }
+
+        let ctime = this.data.album.publishTime;
+        let formatTime = window.moment(ctime).format('YYYY-MM-DD');
+        return formatTime;
+      },
+
+      refresh() {
+        let id = window.location.search;
+        let split = id.split('=');
+        this.songId = split[1];
+        this.$.ajax.generateRequest();
+        this.$.comment.refresh();
+        this.commentLength = this.$.comment.commentLength;
+      },
+
+      play() {
+        let mp3Url = this.data.album.songs[0].mp3Url;
+        let name = this.data.album.songs[0].name;
+        let singer = this.data.album.songs[0].artists[0].name;
+        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer, songs: this.data.album.songs}, null);
+      },
+
+      store() {
+        let value = {
+          id: this.data.result.id,
+          userId: this.loginUser.id,
+          result: this.data.result,
+          name: this.data.result.name
+        };
+
+        this.$.ajaxStore.body = value;
+        this.$.ajaxStore.generateRequest();
+      },
+
+      _handleResponse() {
+        let description = this.data.album.description;
+        let split = description.split(' ');
+        this.description = split;
+      }
+    });
+  </script>
+</dom-module>
