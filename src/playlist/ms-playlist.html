@@ -183,7 +183,6 @@
     <iron-ajax id="ajax"
                loading="{{loading}}"
                url="[[serverUrl]]/playlist?order=[[order]]&category=[[category]]"
-               handle-as="json"
                content-type="application/json"
                headers="[[authHeader]]"
                login-user="[[loginUser]]"
@@ -243,7 +242,7 @@
         </ul>
       </section>
 
-      <!-- <ms-page></ms-page> -->
+      <ms-page></ms-page>
     </div>
   </template>
   <script>

@@ -22,7 +22,7 @@
       #content {
         width: 920px;
         height: 336px;
-        margin: 0 auto;
+        margin: 0 auto; 
         display: flex;
         justify-content: center;
         position: relative;
@@ -91,15 +91,6 @@
         <img src="[[src]]" width="920px" height="336px">
         <span id="pre" on-tap="prev"></span>
         <span id="next"on-tap="next"></span>
-        <!-- <div id="dot">
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-        </div> -->
       </div>
     </div>
   </template>
@@ -158,16 +149,6 @@
 
 
       },
-
-      // _dotActive() {
-      //   let dotArr = this.$.dot.querySelectorAll('ul li');
-      //
-      //   for (var i = 0; i < dotArr.length; i++) {
-      //     dotArr[i].index = i;
-      //     dotArr[i].setAttribute('class', 'style-scope ms-nav');
-      //     dotArr[i]
-      //   }
-      // },
 
       _play() {
         this.timer = setInterval(() => {

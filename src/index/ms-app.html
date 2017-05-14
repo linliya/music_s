@@ -159,11 +159,11 @@
 
           this.addEventListener('ms-search', (e) => {
             this.path = '/search';
-            this.$.search.search(e.detail.s, '0', '20', '1');
+            this.$.search.search(e.detail.s, e.detail.offset, '10', '1');
           });
 
           this.addEventListener('ms-search-albums', (e) => {
-            this.$.search.search(e.detail.s, '0', '20', '10');
+            this.$.search.search(e.detail.s, e.detail.offset, '10', '10');
           });
 
           this._initLogoutListen();

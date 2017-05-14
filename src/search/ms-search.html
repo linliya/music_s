@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 
 <link rel="import" href="../../bower_components/tk-loading-backdrop/tk-loading-backdrop.html">
+<link rel="import" href="../../bower_components/tk-pagination/tk-pagination.html">
 
 <link rel="import" href=".././index/ms-topbar.html">
 <link rel="import" href=".././behavior/ms-connect-behavior.html">
@@ -190,7 +191,11 @@
       background: url('../../images/coverall.png') 0 -845px no-repeat;
     }
 
-
+    #pageBox {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0 100px 0;
+    }
     </style>
     <iron-ajax  id="ajax"
                 method="POST"
@@ -262,6 +267,23 @@
         </div>
       </div>
     </div>
+    <div id="pageBox">
+      <tk-pagination id="page"
+                     hidden$="[[isAlbum]]"
+                     total="[[localData.result.songCount]]"
+                     page-size="20"
+                     max-length="10"
+                     current-page="{{currentPage}}">
+      </tk-pagination>
+      <tk-pagination id="page"
+                     hidden$="[[!isAlbum]]"
+                     total="[[localData.result.albumCount]]"
+                     page-size="20"
+                     max-length="10"
+                     current-page="{{currentPage}}">
+      </tk-pagination>
+    </div>
+
   </template>
   <script>
     Polymer({
@@ -301,6 +323,17 @@
           notify: true,
           value: false,
           observer: '_observeIsAlbum'
+        },
+
+        currentPage: {
+          type: Number,
+          observer: '_observeCurrentPage'
+        },
+
+        offset: {
+          type: Number,
+          notify: true,
+          value: 0
         }
       },
 
@@ -359,17 +392,26 @@
         }
       },
 
+      _observeCurrentPage() {
+        this.offset = (this.currentPage - 1)*20;
+        let s = this.localValue;
+        let s_encode = encodeURI(s);
+        this.fire('ms-search', {s: s_encode, offset: this.offset}, null);
+      },
+
       _searchMusic() {
         let s = this.localValue;
         let s_encode = encodeURI(s);
-        this.fire('ms-search', {s: s_encode}, null);
+        this.fire('ms-search', {s: s_encode, offset: this.offset}, null);
+        this.currentPage = 1;
         this.isAlbum = false;
       },
 
       _searchAlbums() {
         let s = this.localValue;
         let s_encode = encodeURI(s);
-        this.fire('ms-search-albums', {s: s_encode}, null);
+        this.fire('ms-search-albums', {s: s_encode, offset: this.offset}, null);
+        this.currentPage = 1;
         this.isAlbum = true;
       },
 
@@ -388,7 +430,8 @@
         if (e.keyCode === 13) {
           let s = e.target.value;
           let s_encode = encodeURI(s);
-          this.fire('ms-search', {s: s_encode}, null);
+          this.fire('ms-search', {s: s_encode, offset: this.offset}, null);
+          this.currentPage = 1;
           this.isAlbum = false;
         }
       },
@@ -396,7 +439,8 @@
       _clickSearch() {
         let s = this.$.search.value;
         let s_encode = encodeURI(s);
-        this.fire('ms-search', {s: s_encode}, null);
+        this.fire('ms-search', {s: s_encode, offset: this.offset}, null);
+        this.currentPage = 1;
         this.isAlbum = false;
       }
     });
