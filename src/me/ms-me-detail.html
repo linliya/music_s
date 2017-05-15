@@ -176,7 +176,6 @@
 
     <iron-ajax
       id="ajax"
-      auto
       loading="{{loading}}"
       url="[[serverUrl]]/user/[[loginUser.id]]"
       headers="[[authHeader]]"
@@ -185,7 +184,6 @@
 
     <iron-ajax
       id="ajaxGet"
-      auto
       loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -194,7 +192,6 @@
 
     <iron-ajax
       id="ajaxGetUpload"
-      auto
       loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -280,6 +277,18 @@
         item: {
           type: Object,
           notify: true
+        }
+      },
+
+      observers: [
+        '_observeLoginUser(loginUser)'
+      ],
+
+      _observeLoginUser(loginUser) {
+        if(loginUser) {
+          this.$.ajax.generateRequest();
+          this.$.ajaxGet.generateRequest();
+          this.$.ajaxGetUpload.generateRequest();
         }
       },
 

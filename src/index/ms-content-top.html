@@ -148,13 +148,6 @@
       <paper-toolbar>
         <iron-icon icon="av:album" id="avIcon"></iron-icon>
         <span>热门推荐</span>
-        <!-- <paper-tabs selected="0" noink no-bar>
-          <paper-tab active>华语</paper-tab>
-          <paper-tab>流行</paper-tab>
-          <paper-tab>摇滚</paper-tab>
-          <paper-tab>民谣</paper-tab>
-          <paper-tab class="last">电子</paper-tab>
-        </paper-tabs> -->
         <span id="more"><a href="/playlist">更多</a><iron-icon icon="arrow-forward"></iron-icon></span>
       </paper-toolbar>
 
@@ -183,11 +176,14 @@
       is: 'ms-content-top',
       behaviors: [Polymer.msConnectBehavior],
 
-      properties: {
-      },
+      observers: [
+        '_observeLoginUser(loginUser)'
+      ],
 
-      attached() {
-        this.$.ajax.generateRequest();
+      _observeLoginUser(loginUser) {
+        if(loginUser) {
+          this.$.ajax.generateRequest();
+        }
       }
     });
   </script>

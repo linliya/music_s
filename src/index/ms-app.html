@@ -127,14 +127,14 @@
 
             this.$.player.src = e.detail.mp3Url;
             this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
-            this.$.player.playPause();
+            this.$.player.play();
           });
 
           this.addEventListener('ms-play-to-end', () => {
             if (this.tracks != []) {
               this.$.player.src = this.tracks[this.musicIndex].mp3Url;
               this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
-              this.$.player.playPause();
+              this.$.player.play();
               this.musicIndex++;
             }
           });
@@ -144,7 +144,7 @@
               this.musicIndex++;
               this.$.player.src = this.tracks[this.musicIndex].mp3Url;
               this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
-              this.$.player.playPause();
+              this.$.player.play();
             }
           });
 

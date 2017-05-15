@@ -148,7 +148,6 @@
 
     <iron-ajax
       id="ajaxGex"
-      auto
       loading="{{loading}}"
       headers="[[authHeader]]"
       login-user="[[loginUser]]"
@@ -257,6 +256,16 @@
           type: String,
           notify: true,
           observer: '_observePath'
+        }
+      },
+
+      observers: [
+        '_observeLoginUser(loginUser)'
+      ],
+
+      _observeLoginUser(loginUser) {
+        if(loginUser) {
+          this.refresh();
         }
       },
 

@@ -57,7 +57,6 @@
 
     </style>
     <iron-ajax id="ajax"
-               auto
                loading="{{loading}}"
                headers="[[authHeader]]"
                last-response="{{data}}"
@@ -95,8 +94,15 @@
     Polymer({
       is: 'ms-store-music-dialog',
       behaviors: [Polymer.msConnectBehavior],
-      properties: {
 
+      observers: [
+        '_observeLoginUser(loginUser)'
+      ],
+
+      _observeLoginUser(loginUser) {
+        if(loginUser) {
+          this.$.ajax.generateRequest();
+        }
       },
 
       _toast(msg) {
