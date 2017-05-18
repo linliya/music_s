@@ -22,7 +22,7 @@
       #content {
         width: 920px;
         height: 336px;
-        margin: 0 auto; 
+        margin: 0 auto;
         display: flex;
         justify-content: center;
         position: relative;
@@ -88,7 +88,7 @@
 
     <div id="wrap">
       <div id="content" on-mouseover="_stop" on-mouseout="_play">
-        <img src="[[src]]" width="920px" height="336px">
+        <a href="[[href]]"><img src="[[src]]" width="920px" height="336px"></a>
         <span id="pre" on-tap="prev"></span>
         <span id="next"on-tap="next"></span>
       </div>
@@ -128,6 +128,16 @@
 
         totalNum: {
           type: Number
+        },
+
+        hrefArr: {
+          type: Array,
+          notify: true
+        },
+
+        href: {
+          type: String,
+          notify: true
         }
       },
 
@@ -140,14 +150,17 @@
                       '../../images/bannerBg3.png', '../../images/bannerBg4.png',
                       '../../images/bannerBg5.png','../../images/bannerBg6.png'
                     ];
+        let href = ['/musicDetail?id=442870006', '/diskDetail?id=329808400',
+                    '/musicDetail?id=466122271', '/diskDetail?id=700656413',
+                    '/musicDetail?id=462688682', '/musicDetail?id=473740829', ];
         this.srcArr = srcArr;
         this.srcBg = srcBg;
+        this.hrefArr = href;
         this.src = srcArr[this.num];
+        this.href = href[this.num];
         this.$.wrap.style.backgroundImage = 'url('+this.srcBg[this.num]+')';
 
         this._play();
-
-
       },
 
       _play() {
@@ -166,6 +179,7 @@
         }
         this.num--;
         this.src = this.srcArr[this.num];
+        this.href = this.hrefArr[this.num];
         this.$.wrap.style.backgroundImage = 'url('+this.srcBg[this.num]+')';
       },
 
@@ -175,6 +189,7 @@
         }
         this.num++;
         this.src = this.srcArr[this.num];
+        this.href = this.hrefArr[this.num];
         this.$.wrap.style.backgroundImage = 'url('+this.srcBg[this.num]+')';
       }
   });
