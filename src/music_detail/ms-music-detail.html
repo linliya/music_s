@@ -167,6 +167,12 @@
               on-response="_handleDownloadResponse">
    </iron-ajax>
 
+   <iron-ajax
+     id="ajaxGetUrl"
+     url="http://localhost:4000/music/url?id=[[songId]]"
+     on-response="_handleGetUrlResponse"
+     last-response="{{urlData}}"></iron-ajax>
+
    <paper-toast text="收藏成功" id="toast"></paper-toast>
 
     <div id="wrap">
@@ -287,6 +293,12 @@
         music: {
           type: Object,
           notify: true
+        },
+
+        urlData: {
+          type: String,
+          notify: true,
+          observer: '_observerUrlData(songId)'
         }
       },
 
@@ -315,7 +327,7 @@
 
       // 音乐播放
       _play() {
-        let mp3Url = this.data.playUrl || this.data.songs[0].mp3Url;
+        let mp3Url = this.urlData.url;
         let name = this.data.name || this.data.songs[0].name;
         let singer = this.data.singer || this.data.songs[0].artists[0].name;
         this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
@@ -333,6 +345,12 @@
         this.$.downloadHref.href = '#';
         this.$.downloadHref.download = '';
         this.$.ajaxDownload.generateRequest();
+      },
+
+      _observerUrlData(songId) {
+        if(songId) {
+          this.$.ajaxGetUrl.generateRequest();
+        }
       },
 
       // 文件下载处理

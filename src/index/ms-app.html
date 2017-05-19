@@ -127,7 +127,7 @@
 
             this.$.player.src = e.detail.mp3Url;
             this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
-            this.$.player.play();
+            this.$.player.playPause();
           });
 
           this.addEventListener('ms-play-to-end', () => {
