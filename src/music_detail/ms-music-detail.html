@@ -298,9 +298,12 @@
         urlData: {
           type: String,
           notify: true,
-          observer: '_observerUrlData(songId)'
         }
       },
+
+      observers: [
+        '_observerUrlData(songId)'
+      ],
 
       attached() {
         this.addEventListener('ms-comment-change', (e) => {
@@ -327,17 +330,18 @@
 
       // 音乐播放
       _play() {
-        let mp3Url = this.urlData.url;
-        let name = this.data.name || this.data.songs[0].name;
-        let singer = this.data.singer || this.data.songs[0].artists[0].name;
-        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+        if(this.urlData) {
+          let mp3Url = this.urlData.data[0].url;
+          let name = this.data.name || this.data.songs[0].name;
+          let singer = this.data.singer || this.data.songs[0].artists[0].name;
+          this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+        }
       },
 
       // 音乐收藏
       _store() {
         this.$.storeDialog.open();
         this.$.storeDialog.refresh();
-        console.log(this.data);
       },
 
       // 文件下载
@@ -388,6 +392,10 @@
           txt.push(RegExp.$2);
         }
         this.lyricData = txt;
+      },
+
+      _handleGetUrlResponse(e) {
+        console.log(e.detail.response);
       }
     });
   </script>
