@@ -118,44 +118,17 @@
           }
 
           this.addEventListener('ms-music-play', (e) => {
-
             this.$.player.style.display = 'block';
-
-            if (e.detail.tracks) {
-              this.tracks = e.detail.tracks;
-            }
-
-            this.$.player.src = e.detail.mp3Url;
-            this.$.player.musicName = e.detail.name + ' - ' + e.detail.singer;
-            this.$.player.play();
+            this.$.player.songId = e.detail.songId;
+            this.$.player.playlist = false;
           });
 
-          this.addEventListener('ms-play-to-end', () => {
-            if (this.tracks != []) {
-              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
-              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
-              this.$.player.play();
-              this.musicIndex++;
-            }
+          this.addEventListener('ms-playlist-play', (e) => {
+            this.$.player.style.display = 'block';
+            this.$.player.songId = e.detail.id;
+            this.$.player.playlist = true;
           });
 
-          this.addEventListener('ms-play-error', () => {
-            if (this.tracks != []) {
-              this.musicIndex++;
-              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
-              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
-              this.$.player.play();
-            }
-          });
-
-          this.addEventListener('ms-play-next', () => {
-            if (this.tracks != []) {
-              this.musicIndex++;
-              this.$.player.src = this.tracks[this.musicIndex].mp3Url;
-              this.$.player.musicName = this.tracks[this.musicIndex].name + ' - ' + this.tracks[this.musicIndex].artists[0].name;
-              this.$.player.play();
-            }
-          });
 
           this.addEventListener('ms-search', (e) => {
             this.path = '/search';

@@ -225,10 +225,7 @@
       },
 
       play() {
-        let mp3Url = this.selectedItem.result.tracks[0].mp3Url;
-        let name = this.selectedItem.result.tracks[0].name;
-        let singer = this.selectedItem.result.tracks[0].artists[0].name;
-        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer, tracks: this.selectedItem.result.tracks}, null);
+        this.fire('ms-playlist-play', {id: this.selectedItem.result.id}, null);
       }
     });
   </script>

@@ -331,11 +331,10 @@
       // 音乐播放
       _play() {
         if(this.urlData) {
-          let mp3Url = this.urlData.data[0].url;
-          let name = this.data.name || this.data.songs[0].name;
-          let singer = this.data.singer || this.data.songs[0].artists[0].name;
-          this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer }, null);
+          // let mp3Url = this.urlData.data[0].url;
         }
+        this.fire('ms-music-play', {songId: this.songId }, null);
+
       },
 
       // 音乐收藏

@@ -1,47 +1,81 @@
  <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-audio-player/paper-audio-player.html">
 <dom-module id="ms-player">
   <template>
     <style>
-      paper-audio-player {
-        width: 100%;
-        height: 24px;
-        line-height: 24px;
-        position: fixed;
-        left: 0;
-        bottom: 20px;
-        --paper-audio-player-color: #242323;
+      :host {
+        position: relative;
       }
+
+      #box {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 45px;
+        background: #fff;
+        text-align: center;
+        color: #e6e6e6;
+        display: block;
+        z-index: 1000;
+      }
+
+      #player {
+        position: fixed;
+        bottom: 0;
+      }
+
+      .icon {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        left: 104px;
+        bottom: 400px;
+        background: #fff;
+        z-index: 1000;
+      }
+
+      .icon2 {
+        width: 30px;
+        height: 30px;
+        position: fixed;
+        left: 80px;
+        bottom: 40px;
+        background: #fff;
+        z-index: 1000;
+      }
+
     </style>
-    <div>
-      <paper-audio-player src="[[src]]" title="[[musicName]]" id="player"></paper-audio-player>
-    </div>
+    <template is="dom-if" if="[[playlist]]">
+      <div id="box">壹零音乐</div>
+      <div class="icon"></div>
+      <iframe id="player" src="http://music.163.com/outchain/player?type=0&amp;id=[[songId]]&amp;auto=1&amp;height=430" width="100%" height="450" frameborder="no" marginwidth="0" marginheight="0"></iframe>
+    </template>
+
+    <template is="dom-if" if="[[!playlist]]">
+      <iframe id="player" frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="http://music.163.com/outchain/player?type=2&id=[[songId]]&auto=1&height=66"></iframe>
+      <div class="icon2"></div>
+    </template>
+
   </template>
   <script>
     Polymer({
       is: 'ms-player',
       properties: {
-        src: {
+        songId: {
           type: String,
           notify: true,
-          value: '../../mp3/test.mp3'
+          value: ''
         },
 
-        musicName: {
-          type: String,
+        playlist: {
+          type: Boolean,
           notify: true,
-          value: 'music'
+          value: false
         }
-      },
-
-      // 暂停时则播放,播放时则暂停
-      playPause() {
-        this.$.player.playPause();
       },
 
       // 直接播放
       play() {
-        this.$.player.play();
+        // this.$.player.songId = this.songId;
       }
 
     });
