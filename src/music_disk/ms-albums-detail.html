@@ -247,22 +247,7 @@
       },
 
       play() {
-        let mp3Url = this.data.album.songs[0].mp3Url;
-        let name = this.data.album.songs[0].name;
-        let singer = this.data.album.songs[0].artists[0].name;
-        this.fire('ms-music-play', {mp3Url: mp3Url, name: name, singer: singer, songs: this.data.album.songs}, null);
-      },
-
-      store() {
-        let value = {
-          id: this.data.result.id,
-          userId: this.loginUser.id,
-          result: this.data.result,
-          name: this.data.result.name
-        };
-
-        this.$.ajaxStore.body = value;
-        this.$.ajaxStore.generateRequest();
+        this.fire('ms-albums-play', {id: this.songId}, null);
       },
 
       _handleResponse() {

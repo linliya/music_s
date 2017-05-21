@@ -13,9 +13,11 @@
         height: 45px;
         background: #fff;
         text-align: center;
-        color: #e6e6e6;
+        color: #252525;
+        font-size: 12px;
+        line-height: 45px;
         display: block;
-        z-index: 1000;
+        z-index: 10;
       }
 
       #player {
@@ -30,7 +32,7 @@
         left: 104px;
         bottom: 400px;
         background: #fff;
-        z-index: 1000;
+        z-index: 10;
       }
 
       .icon2 {
@@ -40,20 +42,28 @@
         left: 80px;
         bottom: 40px;
         background: #fff;
-        z-index: 1000;
+        z-index: 10;
       }
 
     </style>
-    <template is="dom-if" if="[[playlist]]">
-      <div id="box">壹零音乐</div>
-      <div class="icon"></div>
-      <iframe id="player" src="http://music.163.com/outchain/player?type=0&amp;id=[[songId]]&amp;auto=1&amp;height=430" width="100%" height="450" frameborder="no" marginwidth="0" marginheight="0"></iframe>
-    </template>
 
-    <template is="dom-if" if="[[!playlist]]">
-      <iframe id="player" frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="http://music.163.com/outchain/player?type=2&id=[[songId]]&auto=1&height=66"></iframe>
-      <div class="icon2"></div>
-    </template>
+    <div id="wrap">
+      <template is="dom-if" if="[[playlist]]">
+        <div id="box">壹零音乐</div>
+        <div class="icon"></div>
+        <iframe id="player" src="http://music.163.com/outchain/player?type=0&amp;id=[[songId]]&amp;auto=1&amp;height=430" width="100%" height="450" frameborder="no" marginwidth="0" marginheight="0"></iframe>
+      </template>
+
+      <template is="dom-if" if="[[!playlist]]">
+        <iframe id="player" frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="http://music.163.com/outchain/player?type=2&id=[[songId]]&auto=1&height=66"></iframe>
+        <div class="icon2"></div>
+      </template>
+
+      <template is="dom-if" if="[[albums]]">
+        <iframe id="player" frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="http://music.163.com/outchain/player?type=1&id=[[songId]]&auto=1&height=66"></iframe>
+        <div class="icon2"></div>
+      </template>
+    </div>
 
   </template>
   <script>
@@ -70,14 +80,14 @@
           type: Boolean,
           notify: true,
           value: false
+        },
+
+        albums: {
+          type: Boolean,
+          notify: true,
+          value: false
         }
-      },
-
-      // 直接播放
-      play() {
-        // this.$.player.songId = this.songId;
       }
-
     });
   </script>
 </dom-module>

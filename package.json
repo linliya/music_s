@@ -9,6 +9,7 @@
   "author": "linli",
   "license": "ISC",
   "dependencies": {
+    "aplayer": "^1.6.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",

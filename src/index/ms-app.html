@@ -24,6 +24,14 @@
       #player {
         display: none;
       }
+
+      #show {
+        width: 100%;
+        height: 20px;
+        background: transparent;
+        position: fixed;
+        bottom: 0;
+      }
     </style>
     <app-location id="location" path="{{path}}" route="{{route}}"></app-location>
 
@@ -46,7 +54,9 @@
       <ms-search id="search" login-user="[[user]]"></ms-search>
     </iron-pages>
 
-    <ms-player id="player"></ms-player>
+    <ms-player id="player" on-mouseout="_handleMouseOut"></ms-player>
+    <div id="show" on-mouseover="_showPlayer"></div>
+
   </template>
 
   <script>
@@ -118,17 +128,29 @@
           }
 
           this.addEventListener('ms-music-play', (e) => {
+            this.$.player.songId = '';
+            this.$.player.albums = false;
             this.$.player.style.display = 'block';
             this.$.player.songId = e.detail.songId;
             this.$.player.playlist = false;
           });
 
           this.addEventListener('ms-playlist-play', (e) => {
+            this.$.player.songId = '';
             this.$.player.style.display = 'block';
             this.$.player.songId = e.detail.id;
             this.$.player.playlist = true;
           });
 
+
+          this.addEventListener('ms-albums-play', (e) => {
+            this.$.player.songId = '';
+            this.$.player.playlist = false;
+            this.$.player.albums = false;
+            this.$.player.style.display = 'block';
+            this.$.player.songId = e.detail.id;
+            this.$.player.albums = true;
+          });
 
           this.addEventListener('ms-search', (e) => {
             this.path = '/search';
@@ -142,6 +164,21 @@
           this._initLogoutListen();
           let user = this.$.localUser.getUser();
           this.user = user;
+        },
+
+        // 控制播放器的显示
+        _showPlayer() {
+          if(this.$.player.style.display == 'none' && this.$.player.playlist == true) {
+            this.$.player.style.display = 'block';
+          }
+        },
+
+        _handleMouseOut() {
+          if (this.$.player.style.display == 'block' && this.$.player.playlist == true) {
+            setTimeout(() => {
+              this.$.player.style.display = 'none';
+            }, 2000);
+          }
         },
 
         _observePath(path) {
@@ -162,6 +199,7 @@
           window.addEventListener('logout', () => {
             this.user = null;
             this.$.localUser.clearUser();
+            window.location.reload();
           });
         }
       });

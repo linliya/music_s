@@ -135,12 +135,10 @@
 
     </style>
     <iron-ajax id="ajax"
+               auto
                loading="{{loading}}"
                url="[[serverUrl]]/main/playlist"
-               handle-as="json"
                content-type="application/json"
-               headers="[[authHeader]]"
-               login-user="[[loginUser]]"
                last-response="{{data}}">
     </iron-ajax>
 
@@ -174,17 +172,7 @@
   <script>
     Polymer({
       is: 'ms-content-top',
-      behaviors: [Polymer.msConnectBehavior],
-
-      observers: [
-        '_observeLoginUser(loginUser)'
-      ],
-
-      _observeLoginUser(loginUser) {
-        if(loginUser) {
-          this.$.ajax.generateRequest();
-        }
-      }
+      behaviors: [Polymer.msConnectBehavior]
     });
   </script>
 </dom-module>
